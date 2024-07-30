@@ -5,12 +5,26 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import useAdminAuth from "@/hooks/useAdminAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import ThemeSwitch from "../atoms/ThemeSwitch";
 import RegisterForm from "../molecules/auth/RegisterForm";
 import UserNav from "../molecules/UserNav";
 import { Layout } from "../templates/Layout";
 
 const UserCreateForAdminPage = () => {
+    const navigate = useNavigate();
+    const isAdmin = useAdminAuth();
+
+    useEffect(() => {
+        if (!isAdmin) {
+            toast.warning("Login as a Admin");
+            navigate("/login/admin");
+        }
+    }, [isAdmin, navigate]);
+
     return (
         <Layout>
             <Layout.Header>
