@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,11 +11,17 @@ import {
 } from "@/components/ui/select";
 
 import { useUserRegisterMutation } from "@/features/auth/authApi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const RegisterForm = () => {
+    const navigate = useNavigate();
+    const [isActive, setIsActive] = useState(true);
+    const [profileImage, setProfileImage] = useState(null);
+    const [imageError, setImageError] = useState("");
+
     const {
         register,
         handleSubmit,
@@ -23,10 +30,34 @@ const RegisterForm = () => {
         watch,
         control
     } = useForm();
-
     const watchPassword = watch("password");
 
-    const [userRegister, { isSuccess, isLoading, error }] = useUserRegisterMutation();
+    const [userRegister, { data, isSuccess, isLoading, error }] = useUserRegisterMutation();
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+            const isValidType = validTypes.includes(file.type);
+            const isValidSize = file.size <= 2 * 1024 * 1024; // 2 MB
+
+            if (!isValidType) {
+                setImageError("Only jpg, jpeg, and png formats are allowed.");
+                setProfileImage(null);
+                return;
+            }
+
+            if (!isValidSize) {
+                setImageError("File size should not exceed 2 MB.");
+                setProfileImage(null);
+                return;
+            }
+
+            setImageError("");
+            setProfileImage(file);
+        }
+    };
 
     const handleRegister = (formData) => {
         const payload = {
@@ -35,7 +66,9 @@ const RegisterForm = () => {
             password: formData.password,
             password_confirmation: formData.confirmPassword,
             role: formData.role,
-            phone: formData.phone
+            phone: formData.phone,
+            active_status: isActive,
+            picture: profileImage
         }
 
         userRegister(payload);
@@ -50,11 +83,13 @@ const RegisterForm = () => {
                 message: `Something went wrong: ${error?.data?.message}`
             });
         }
+        console.log(data)
 
-        if (isSuccess) {
-            toast.success("User cretaed successfullt");
+        if (isSuccess && data?.data) {
+            toast.success(data?.message);
+            navigate("/admin/users");
         }
-    }, [error, setError, isSuccess]);
+    }, [error, setError, isSuccess, data, navigate]);
 
     return (
         <form onSubmit={handleSubmit(handleRegister)} >
@@ -134,17 +169,15 @@ const RegisterForm = () => {
                 <div className="grid gap-2">
                     <Label htmlFor="picture">Profile Imge</Label>
                     <Input
-                        {...register("picture", {
-                            minLength: {
-                                value: 8,
-                                message: "Your file size not more than 2mb",
-                            },
-                        })}
+                        {...register("picture")}
                         id="picture"
                         name="picture"
                         type="file"
+                        accept="image/jpeg, image/jpg, image/png"
+                        onChange={handleImageChange}
                     />
-                    {errors.img && <span className="text-red-600">{errors.img.message}</span>}
+                    {imageError && <span className="text-red-600">{imageError}</span>}
+                    {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
                 </div>
 
                 {/* password */}
@@ -178,6 +211,21 @@ const RegisterForm = () => {
                         type="password"
                     />
                     {errors.confirmPassword && <span className="text-red-600">{errors.confirmPassword.message}</span>}
+                </div>
+
+                {/* Active status */}
+                <div className="flex items-center space-x-2">
+                    <Checkbox
+                        id="active_status"
+                        checked={isActive}
+                        onCheckedChange={(checked) => setIsActive(checked)}
+                    />
+                    <label
+                        htmlFor="active_status"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Active Status
+                    </label>
                 </div>
 
                 <Button disabled={isLoading}>
