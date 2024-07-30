@@ -1,11 +1,25 @@
 import { columns } from "@/dashboard/data/columns";
 import { users } from "@/dashboard/data/users";
+import useAdminAuth from "@/hooks/useAdminAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import ThemeSwitch from "../atoms/ThemeSwitch";
 import UserNav from "../molecules/UserNav";
 import { DataTable } from "../templates/DataTable";
 import { Layout } from "../templates/Layout";
 
 const UserListForAdminPage = () => {
+    const navigate = useNavigate();
+    const isAdmin = useAdminAuth();
+
+    useEffect(() => {
+        if (!isAdmin) {
+            toast.warning("Login as a Admin");
+            navigate("/login/admin");
+        }
+    }, [isAdmin, navigate]);
+
     return (
         <Layout>
             <Layout.Header>
