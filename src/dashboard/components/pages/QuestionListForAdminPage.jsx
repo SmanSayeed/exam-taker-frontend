@@ -1,4 +1,4 @@
-import { questionsColumns } from "@/dashboard/data/columns";
+import { questionsColumns } from "@/dashboard/data/columns/questionsColumns";
 import { ictQuestions } from "@/dashboard/data/questions";
 import Search from "../atoms/Search";
 import ThemeSwitch from "../atoms/ThemeSwitch";

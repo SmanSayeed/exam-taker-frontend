@@ -24,11 +24,11 @@ export function DataTableRowActions() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>Make a copy</DropdownMenuItem>
-                <DropdownMenuItem>Favorite</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+                {/* <DropdownMenuItem>Make a copy</DropdownMenuItem> */}
+                {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
                     Delete
                     <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>

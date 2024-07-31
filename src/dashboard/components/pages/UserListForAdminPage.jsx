@@ -1,4 +1,4 @@
-import { columns } from "@/dashboard/data/columns";
+import { userColumns } from "@/dashboard/data/columns/userColumns";
 import { users } from "@/dashboard/data/users";
 import useAdminAuth from "@/hooks/useAdminAuth";
 import { useEffect } from "react";
@@ -39,7 +39,7 @@ const UserListForAdminPage = () => {
                     </div>
                 </div>
                 <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-                    <DataTable data={users} columns={columns} />
+                    <DataTable data={users} columns={userColumns} />
                 </div>
             </Layout.Body>
         </Layout>
