@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DataTableColumnHeader } from "../components/molecules/DataTableColumnHeader";
-import { DataTableRowActions } from "../components/molecules/DataTableRowActions";
-import { labels, statuses } from "./data";
+import { DataTableColumnHeader } from "@/dashboard/components/molecules/DataTableColumnHeader";
+import { DataTableRowActions } from "@/dashboard/components/molecules/DataTableRowActions";
+import { labels, statuses } from "../data";
 
-export const columns = [
+export const userColumns = [
     {
         id: "select",
         header: ({ table }) => (

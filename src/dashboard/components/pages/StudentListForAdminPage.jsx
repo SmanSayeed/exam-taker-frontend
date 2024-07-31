@@ -1,4 +1,4 @@
-import { columns } from "@/dashboard/data/columns";
+import { userColumns } from "@/dashboard/data/columns/userColumns";
 import { students } from "@/dashboard/data/students";
 import Search from "../atoms/Search";
 import ThemeSwitch from "../atoms/ThemeSwitch";
@@ -27,7 +27,7 @@ const StudentListForAdminPage = () => {
                     </div>
                 </div>
                 <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-                    <DataTable data={students} columns={columns} />
+                    <DataTable data={students} columns={userColumns} />
                 </div>
             </Layout.Body>
         </Layout>

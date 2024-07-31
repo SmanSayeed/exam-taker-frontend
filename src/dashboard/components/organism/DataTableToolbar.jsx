@@ -10,7 +10,7 @@ export function DataTableToolbar({ table }) {
         <div className="flex items-center justify-between">
             <div className="flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2">
                 <Input
-                    placeholder="Filter students..."
+                    placeholder="Search..."
                     value={table.getColumn("title")?.getFilterValue() ?? ""}
                     onChange={event =>
                         table.getColumn("title")?.setFilterValue(event.target.value)

@@ -14,6 +14,12 @@ import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminP
 
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
+import QuestionListForAdminPage from "@/dashboard/components/pages/QuestionListForAdminPage";
+import QuestionCreateForAdminPage from "@/dashboard/components/pages/QuestionCreateForAdminPage";
+import ExamTypeCreateForAdmin from "@/dashboard/components/pages/ExamTypeCreateForAdmin";
+import SectionForAdminPage from "@/dashboard/components/pages/questions/SectionForAdminPage";
+import SubSectionForAdminPage from "@/dashboard/components/pages/questions/SubSectionForAdminPage";
+import YearForAdminPage from "@/dashboard/components/pages/questions/YearForAdminPage";
 
 const router = createBrowserRouter([
     {
@@ -57,6 +63,26 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/student/create",
                         element: <StudentCreateForAdminPage />
+                    },
+                    {
+                        path: "/admin/questions/section",
+                        element: <SectionForAdminPage />
+                    },
+                    {
+                        path: "/admin/questions/sub-section",
+                        element: <SubSectionForAdminPage />
+                    },
+                    {
+                        path: "/admin/questions/year",
+                        element: <YearForAdminPage />
+                    },
+                    {
+                        path: "/admin/question/create",
+                        element: <QuestionCreateForAdminPage />
+                    },
+                    {
+                        path: "/admin/exam/type",
+                        element: <ExamTypeCreateForAdmin />
                     },
                 ]
             },
