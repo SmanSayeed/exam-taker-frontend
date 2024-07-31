@@ -3,7 +3,7 @@ import {
     Settings,
     User,
     UserPlus,
-    Users, FileQuestion, BookOpenCheck
+    Users, FileQuestion, BookOpenCheck, CalendarFold, Group
 } from "lucide-react";
 
 export const sidelinks = [
@@ -75,7 +75,13 @@ export const sidelinks = [
                 title: "Year",
                 label: "",
                 href: "/admin/questions/year",
-                icon: <FileQuestion size={18} />
+                icon: <CalendarFold size={18} />
+            },
+            {
+                title: "Group",
+                label: "",
+                href: "/admin/questions/group",
+                icon: <Group size={18} />
             },
             {
                 title: "Questions List",

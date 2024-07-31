@@ -20,6 +20,7 @@ import ExamTypeCreateForAdmin from "@/dashboard/components/pages/ExamTypeCreateF
 import SectionForAdminPage from "@/dashboard/components/pages/questions/SectionForAdminPage";
 import SubSectionForAdminPage from "@/dashboard/components/pages/questions/SubSectionForAdminPage";
 import YearForAdminPage from "@/dashboard/components/pages/questions/YearForAdminPage";
+import GroupForAdminPage from "@/dashboard/components/pages/questions/GroupForAdminPage";
 
 const router = createBrowserRouter([
     {
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/questions/year",
                         element: <YearForAdminPage />
+                    },
+                    {
+                        path: "/admin/questions/group",
+                        element: <GroupForAdminPage />
                     },
                     {
                         path: "/admin/question/create",
