@@ -7,7 +7,7 @@ import { DataTable } from "../../templates/DataTable";
 import { sections } from "@/dashboard/data/sections";
 import { sectionColumns } from "@/dashboard/data/columns/sectionColumns";
 
-const SectionForAdminPage = () => {
+const SectionForQuestionPage = () => {
   return (
     <Layout>
           <Layout.Header>
@@ -19,7 +19,7 @@ const SectionForAdminPage = () => {
             </Layout.Header>
 
             <Layout.Body>
-              <QuestionCategoryForm inputType={"text"} title={"Section"} placeholder={"Enter section"} />
+              <QuestionCategoryForm  inputTypeForTitle={"text"} />
 
               <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
                     <div>
@@ -36,4 +36,4 @@ const SectionForAdminPage = () => {
         </Layout>
   )
 }
-export default SectionForAdminPage
+export default SectionForQuestionPage

@@ -1,13 +1,13 @@
-import ThemeSwitch from "./../../atoms/ThemeSwitch";
-import UserNav from "./../../molecules/UserNav";
-import { Layout } from "./../../templates/Layout";
+import ThemeSwitch from "../../atoms/ThemeSwitch";
+import UserNav from "../../molecules/UserNav";
+import { Layout } from "../../templates/Layout";
 import QuestionCategoryForm from "../../molecules/QuestionCategoryForm";
 import PageTitle from "../../atoms/PageTitle";
 import { DataTable } from "../../templates/DataTable";
 import { sectionYears } from "@/dashboard/data/years";
 import { yearsColumns } from "@/dashboard/data/columns/yearsColumns";
 
-const YearForAdminPage = () => {
+const YearForQuestionPage = () => {
   return (
     <Layout>
           <Layout.Header>
@@ -35,4 +35,4 @@ const YearForAdminPage = () => {
         </Layout>
   )
 }
-export default YearForAdminPage
+export default YearForQuestionPage

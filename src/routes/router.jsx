@@ -14,13 +14,12 @@ import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminP
 
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
-import QuestionListForAdminPage from "@/dashboard/components/pages/QuestionListForAdminPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/QuestionCreateForAdminPage";
 import ExamTypeCreateForAdmin from "@/dashboard/components/pages/ExamTypeCreateForAdmin";
-import SectionForAdminPage from "@/dashboard/components/pages/questions/SectionForAdminPage";
-import SubSectionForAdminPage from "@/dashboard/components/pages/questions/SubSectionForAdminPage";
-import YearForAdminPage from "@/dashboard/components/pages/questions/YearForAdminPage";
-import GroupForAdminPage from "@/dashboard/components/pages/questions/GroupForAdminPage";
+import  SectionForQuestionPage  from '@/dashboard/components/pages/questions/SectionForQuestionPage';
+import SubSectionForQuestionPage from "@/dashboard/components/pages/questions/SubSectionForQuestionPage";
+import YearForQuestionPage from "@/dashboard/components/pages/questions/YearForQuestionPage";
+import GroupForQuestionPage from "@/dashboard/components/pages/questions/GroupForQuestionPage";
 
 const router = createBrowserRouter([
     {
@@ -67,19 +66,19 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/admin/questions/section",
-                        element: <SectionForAdminPage />
+                        element: <SectionForQuestionPage />
                     },
                     {
                         path: "/admin/questions/sub-section",
-                        element: <SubSectionForAdminPage />
+                        element: <SubSectionForQuestionPage />
                     },
                     {
                         path: "/admin/questions/year",
-                        element: <YearForAdminPage />
+                        element: <YearForQuestionPage />
                     },
                     {
                         path: "/admin/questions/group",
-                        element: <GroupForAdminPage />
+                        element: <GroupForQuestionPage />
                     },
                     {
                         path: "/admin/question/create",
