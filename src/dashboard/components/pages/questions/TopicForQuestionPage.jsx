@@ -4,14 +4,14 @@ import { Layout } from "../../templates/Layout";
 import QuestionCategoryForm from "../../molecules/QuestionCategoryForm";
 import PageTitle from "../../atoms/PageTitle";
 import { DataTable } from "../../templates/DataTable";
-import { questionGroups } from "@/dashboard/data/groups";
-import { groupsColumns } from "@/dashboard/data/columns/groupsColumns";
+import { examTypes } from "@/dashboard/data/examTypes";
+import { examTypeColumns } from "@/dashboard/data/columns/examTypeColumns";
 
-const GroupForQuestionPage = () => {
+const TopicForQuestionPage = () => {
   return (
     <Layout>
           <Layout.Header>
-                  <PageTitle title={"Group"}/>
+                  <PageTitle title={"Topic"}/>
               <div className='ml-auto flex items-center space-x-4'>
                     <ThemeSwitch />
                     <UserNav />
@@ -19,20 +19,20 @@ const GroupForQuestionPage = () => {
             </Layout.Header>
 
             <Layout.Body>
-        <QuestionCategoryForm inputType={"text"} title={"Section group"} placeholder={"Enter section group"} />
-        <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
+              <QuestionCategoryForm  />
+              <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
                     <div>
                         <h2 className='text-2xl font-bold tracking-tight'>Welcome back!</h2>
                         <p className='text-muted-foreground'>
-                            Here&apos;s a list of exam section group!
+                            Here&apos;s a list of exam years!
                         </p>
                     </div>
                 </div>
                 <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-                   <DataTable  data={questionGroups} columns={groupsColumns} />
+                   <DataTable  data={examTypes} columns={examTypeColumns} />
                 </div>
             </Layout.Body>
         </Layout>
   )
 }
-export default GroupForQuestionPage
+export default TopicForQuestionPage

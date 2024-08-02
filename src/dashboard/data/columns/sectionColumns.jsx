@@ -57,9 +57,9 @@ export const sectionColumns =[
         }
     },
     {
-        accessorKey: "timestamps",
+        accessorKey: "status",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Timestamps" />
+            <DataTableColumnHeader column={column} title="Status" />
         ),
         cell: ({ row }) => {
             const label = labels.find(label => label.value === row.original.label)
@@ -68,7 +68,25 @@ export const sectionColumns =[
                 <div className="flex space-x-2">
                     {label && <Badge variant="outline">{label.label}</Badge>}
                     <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
-                        {row.getValue("timestamps")}
+                        {row.getValue("status")}
+                    </span>
+                </div>
+            )
+        }
+    },
+    {
+        accessorKey: "details",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Details" />
+        ),
+        cell: ({ row }) => {
+            const label = labels.find(label => label.value === row.original.label)
+
+            return (
+                <div className="flex space-x-2">
+                    {label && <Badge variant="outline">{label.label}</Badge>}
+                    <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                        {row.getValue("details")}
                     </span>
                 </div>
             )

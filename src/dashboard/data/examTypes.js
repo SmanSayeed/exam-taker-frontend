@@ -1,4 +1,4 @@
-export const sections = [
+export const examTypes = [
   {
     id: 1,
     title: "Introduction to Algorithms",

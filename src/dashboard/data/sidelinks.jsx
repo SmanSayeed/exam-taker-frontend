@@ -3,7 +3,7 @@ import {
     Settings,
     User,
     UserPlus,
-    Users, FileQuestion, BookOpenCheck, CalendarFold, Group
+    Users, FileQuestion, BookOpenCheck, Captions, CalendarFold, Group
 } from "lucide-react";
 
 export const sidelinks = [
@@ -66,10 +66,22 @@ export const sidelinks = [
                 icon: <FileQuestion size={18} />
             },
             {
-                title: "Sub-Section",
+                title: "Exam Type",
                 label: "",
-                href: "/admin/questions/sub-section",
+                href: "/admin/questions/exam-type",
                 icon: <FileQuestion size={18} />
+            },
+            {
+                title: "Exam Sub-Type",
+                label: "",
+                href: "/admin/questions/exam-sub-type",
+                icon: <Group size={18} />
+            },
+            {
+                title: "Topics",
+                label: "",
+                href: "/admin/questions/topic",
+                icon: <Captions size={18} />
             },
             {
                 title: "Year",

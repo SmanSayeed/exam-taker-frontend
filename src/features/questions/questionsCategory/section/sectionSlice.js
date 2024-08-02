@@ -5,5 +5,4 @@ const sectionSlice = () => {
     </div>
   )
 }
-
 export default sectionSlice

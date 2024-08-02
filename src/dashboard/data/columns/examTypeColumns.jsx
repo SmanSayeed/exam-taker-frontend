@@ -4,7 +4,7 @@ import { DataTableRowActions } from "@/dashboard/components/molecules/DataTableR
 import { labels} from "../data";
 import { Badge } from "@/components/ui/badge";
 
-export const subSectionColumns =[
+export const examTypeColumns =[
     {
         id: "select",
         header: ({ table }) => (
@@ -57,9 +57,9 @@ export const subSectionColumns =[
         }
     },
     {
-        accessorKey: "exam_type_id",
+        accessorKey: "status",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Exam type Id" />
+            <DataTableColumnHeader column={column} title="Status" />
         ),
         cell: ({ row }) => {
             const label = labels.find(label => label.value === row.original.label)
@@ -68,7 +68,25 @@ export const subSectionColumns =[
                 <div className="flex space-x-2">
                     {label && <Badge variant="outline">{label.label}</Badge>}
                     <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
-                        {row.getValue("exam_type_id")}
+                        {row.getValue("status")}
+                    </span>
+                </div>
+            )
+        }
+    },
+    {
+        accessorKey: "details",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Details" />
+        ),
+        cell: ({ row }) => {
+            const label = labels.find(label => label.value === row.original.label)
+
+            return (
+                <div className="flex space-x-2">
+                    {label && <Badge variant="outline">{label.label}</Badge>}
+                    <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                        {row.getValue("details")}
                     </span>
                 </div>
             )
