@@ -21,11 +21,9 @@ const ExamTypeCreateForm = () => {
         handleSubmit,
         formState: { errors },
         setError,
-        watch,
         control
     } = useForm();
 
-    const watchPassword = watch("password");
 
     const [userRegister, { isSuccess, isLoading, error }] = useUserRegisterMutation();
 

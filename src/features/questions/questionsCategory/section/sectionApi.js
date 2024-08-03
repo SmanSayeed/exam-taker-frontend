@@ -8,12 +8,22 @@ export const sectionApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags:["Section"]
+      invalidatesTags: ["Section"],
     }),
     getSections: builder.query({
       query: () => "/questions/sections",
     }),
+    deleteSection: builder.mutation({
+      query: (sectionId) => ({
+        url: `/questions/section/${sectionId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useCreateSectionMutation, useGetSectionsQuery } = sectionApi;
+export const {
+  useCreateSectionMutation,
+  useGetSectionsQuery,
+  useDeleteSectionMutation,
+} = sectionApi;

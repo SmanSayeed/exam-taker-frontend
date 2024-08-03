@@ -5,14 +5,13 @@ import QuestionCategoryForm from "../../molecules/QuestionCategoryForm";
 import PageTitle from "../../atoms/PageTitle";
 import { DataTable } from "../../templates/DataTable";
 import { sectionColumns } from "@/dashboard/data/columns/sectionColumns";
-import { useGetSectionsQuery } from "@/features/questions/questionsCategory/section/sectionApi";
+import { useGetSectionsQuery, useDeleteSectionMutation } from "@/features/questions/questionsCategory/section/sectionApi";
 import Loading from "../../atoms/Loading";
 
 
 const SectionForQuestionPage = () => {
 
     const { data, isLoading, isSuccess } = useGetSectionsQuery()
-
 
     return (
         <Layout>
