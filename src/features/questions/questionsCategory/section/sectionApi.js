@@ -8,8 +8,12 @@ export const sectionApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags:["Section"]
+    }),
+    getSections: builder.query({
+      query: () => "/questions/sections",
     }),
   }),
 });
 
-export const { useCreateSectionMutation } = sectionApi;
+export const { useCreateSectionMutation, useGetSectionsQuery } = sectionApi;
