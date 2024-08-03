@@ -24,7 +24,7 @@ const SectionForQuestionPage = () => {
             </Layout.Header>
 
             <Layout.Body>
-                <QuestionCategoryForm inputTypeForTitle={"text"} />
+                <QuestionCategoryForm questionsCategoryEndPoint={"sections"} />
 
                 <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
                     <div>

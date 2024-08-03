@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateSectionMutation } from "@/features/questions/questionsCategory/section/sectionApi";
+import { useCreateQuestionsCategoryMutation, useGet_questionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const QuestionCategoryForm = () => {
+const QuestionCategoryForm = ({ questionsCategoryEndPoint }) => {
     const [statusCheck, setStatusCheck] = useState(false);
     const [image, setImage] = useState(null);
     const [imageError, setImageError] = useState("");
@@ -21,7 +22,8 @@ const QuestionCategoryForm = () => {
         setError
     } = useForm();
 
-    const [createSection, { data, isSuccess, isLoading, error }] = useCreateSectionMutation();
+    // const [createSection, { data, isSuccess, isLoading, error }] = useCreateSectionMutation();
+    const [createQuestionsCategory, { data, isSuccess, isLoading, error }] = useCreateQuestionsCategoryMutation();
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -52,8 +54,10 @@ const QuestionCategoryForm = () => {
             details: formData.details,
             picture: image
         }
+        console.log("payload" , payload)
 
-        createSection(payload);
+        createQuestionsCategory({ payload, questionsCategoryEndPoint })
+        // createSection(payload);
     }
 
     useEffect(() => {
