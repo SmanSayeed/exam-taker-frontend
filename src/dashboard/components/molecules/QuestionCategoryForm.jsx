@@ -48,15 +48,19 @@ const QuestionCategoryForm = ({ questionsCategoryEndPoint }) => {
     };
 
     const handleCreate = (formData) => {
-        const payload = {
-            title: formData.title,
-            status: statusCheck,
-            details: formData.details,
-            picture: image
-        }
-        console.log("payload" , payload)
-
-        createQuestionsCategory({ payload, questionsCategoryEndPoint })
+        // const payload = {
+        //     title: formData.title,
+        //     status: statusCheck,
+        //     details: formData.details,
+        //     picture: image
+        // }
+        createQuestionsCategory({
+            data: {
+                title: formData.title,
+                status: statusCheck,
+                details: formData.details,
+                picture: image
+            } , questionsCategoryEndPoint })
         // createSection(payload);
     }
 

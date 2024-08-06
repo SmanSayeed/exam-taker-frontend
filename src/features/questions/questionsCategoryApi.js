@@ -8,11 +8,14 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Section"],
+      invalidatesTags: (result, error, arg) => [
+        { type: arg, id: arg.id },
+      ],
     }),
     get_questionsCategory: builder.query({
       query: (questionsCategoryEndPoint) =>
         `/questions/${questionsCategoryEndPoint}`,
+      providesTags: (result, error, arg) => [{ type: arg, id: arg.id }],
     }),
     delete_questionsCategory: builder.mutation({
       query: ({ sectionId, questionsCategoryEndPoint }) => ({
