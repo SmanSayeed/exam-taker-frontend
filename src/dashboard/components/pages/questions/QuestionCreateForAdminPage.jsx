@@ -6,7 +6,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import QuestionCreateForm from "../../molecules/QuestionCreateForm";
+import QuestionCreateForm from "../../organism/QuestionCreateForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
@@ -22,8 +22,8 @@ const QuestionCreateForAdminPage = () => {
 
             <Layout.Body>
                 <div className="flex flex-col-reverse md:flex-row items-start gap-5">
-                    <div className="body w-full md:w-[65%]  ">
-                        <Card className="container ">
+                    <div className="body w-full">
+                        <Card className="container">
                             <CardHeader>
                                 <CardTitle className="text-xl">Question Creation</CardTitle>
                                 <CardDescription>
@@ -33,18 +33,6 @@ const QuestionCreateForAdminPage = () => {
 
                             <CardContent>
                                 <QuestionCreateForm />
-                            </CardContent>
-                        </Card>
-                    </div>
-                    <div className="aside w-full md:w-[35%]  ">
-                        <Card className="container " >
-                            <CardHeader>
-                                <CardTitle className="text-xl">Questions Category</CardTitle>
-                                <CardDescription>
-                                    Enter your questions information for go ahead
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
                             </CardContent>
                         </Card>
                     </div>

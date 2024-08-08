@@ -3,6 +3,10 @@ import { DataTableColumnHeader } from "@/dashboard/components/molecules/datatabl
 import useTypeProvider from "@/hooks/useTypeProvider";
 import { DataTableRowActions } from "../../organism/DataTableRowActions";
 
+const shouldIncludeSectionId = (data) => {
+    return data.some(row => row.section_id !== undefined);
+};
+
 export const columns = [
     {
         id: "select",
@@ -93,6 +97,7 @@ export const columns = [
             <DataTableColumnHeader column={column} title="Section ID" />
         ),
         cell: ({ row }) => {
+            console.log(row.original)
             return (
                 <>
                     {
