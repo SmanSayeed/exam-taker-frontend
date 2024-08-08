@@ -111,7 +111,8 @@ const CreateQuestion = () => {
                     {...register("mark", { required: "Marks is Required" })}
                     id="mark"
                     name="mark"
-                    placeholder="2"
+                    type="number"
+                    placeholder="5"
                 />
                 {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
             </div>
