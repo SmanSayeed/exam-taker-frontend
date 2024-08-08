@@ -9,8 +9,8 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 import { Button } from "@/components/ui/button";
 
-import DataTableEditBtn from "../molecules/datatable/DataTableEditBtn";
 import TableRowDeleteBtn from "../molecules/datatable/TableRowDeleteBtn";
+import TableRowEditBtn from "../molecules/datatable/TableRowEditBtn";
 
 export function DataTableRowActions({ row, type }) {
 
@@ -28,7 +28,7 @@ export function DataTableRowActions({ row, type }) {
             <DropdownMenuContent align="end" className="w-[160px]">
                 {/* Edit button */}
                 <DropdownMenuItem className="cursor-pointer">
-                    <DataTableEditBtn />
+                    <TableRowEditBtn />
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />

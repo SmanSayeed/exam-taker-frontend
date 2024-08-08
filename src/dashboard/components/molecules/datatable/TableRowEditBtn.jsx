@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Edit } from "lucide-react";
 import { useState } from "react";
 
-const DataTableEditBtn = () => {
+const TableRowEditBtn = () => {
     const [open, setOpen] = useState(false);
 
     const handleOpen = (event) => {
@@ -70,4 +70,4 @@ const DataTableEditBtn = () => {
     )
 }
 
-export default DataTableEditBtn
+export default TableRowEditBtn
