@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import CreateQuestion from "../molecules/multistepform/CreateQuestion";
 
-const QuestionCreateForm = () => {
+const QuestionCreateForm2 = () => {
     const {
         handleSubmit
     } = useForm();
@@ -50,4 +50,4 @@ const QuestionCreateForm = () => {
         </form>
     )
 }
-export default QuestionCreateForm;
+export default QuestionCreateForm2;
