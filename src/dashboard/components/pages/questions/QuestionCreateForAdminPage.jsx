@@ -1,7 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MultiStepContextProvider } from "@/providers/MultiStepContextProvider";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import { McqTypeForm } from "../../molecules/createquestion/McqTypeForm";
+import { AddOption } from "../../molecules/createquestion/addoption";
+import CreativeTypeForm from "../../molecules/createquestion/CreativeTypeForm";
 import QuestionCreateForm from "../../molecules/createquestion/QuestionCreateForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
@@ -30,25 +31,14 @@ const QuestionCreateForAdminPage = () => {
                                     </CardDescription>
                                 </CardHeader>
 
-                                <CardContent className="flex flex-col gap-6">
+                                <CardContent className="flex flex-col gap-10">
                                     <QuestionCreateForm />
-                                    <McqTypeForm />
+                                    {/* <McqTypeForm /> */}
+                                    <AddOption />
+                                    <CreativeTypeForm />
                                 </CardContent>
                             </Card>
                         </div>
-
-                        {/* <div className="aside w-full md:w-[35%]">
-                            <Card className="container " >
-                                <CardHeader>
-                                    <CardTitle className="text-xl">Questions Category</CardTitle>
-                                    <CardDescription>
-                                        Enter your questions information for go ahead
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                </CardContent>
-                            </Card>
-                        </div> */}
                     </div>
                 </Layout.Body>
             </Layout>

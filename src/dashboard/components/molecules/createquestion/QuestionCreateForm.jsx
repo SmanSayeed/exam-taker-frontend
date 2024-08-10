@@ -82,10 +82,6 @@ const QuestionCreateForm = () => {
                                 theme="snow"
                                 value={field.value}
                                 modules={module}
-                                style={{
-                                    height: "8rem",
-                                    margin: "0 0 4rem 0"
-                                }}
                             />
                         )}
                     />
