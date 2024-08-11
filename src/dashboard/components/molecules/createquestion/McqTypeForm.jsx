@@ -1,17 +1,23 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCreateMcqQuestionMutation } from "@/features/questions/mcqQuestionsApi";
+import { useEffect, useState } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+import { toast } from "sonner";
 
-export const McqTypeForm = () => {
+export const McqTypeForm = ({ questionId }) => {
     const {
         formState: { errors },
         control,
+        setError,
         handleSubmit
     } = useForm();
+
+    const [isCorrect, setIsCorrect] = useState(false);
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -36,9 +42,32 @@ export const McqTypeForm = () => {
         toolbar: toolbarOptions
     }
 
+    const [createMcqQuestion, { data, isSuccess, isLoading, error }] = useCreateMcqQuestionMutation();
+
     const handleCreate = (formData) => {
-        console.log(formData)
+        const payload = {
+            mcq_question_text: formData.mcq_question_text,
+            description: formData.explanation,
+            question_id: questionId,
+            is_correct: isCorrect
+        }
+        createMcqQuestion(payload)
     }
+
+    useEffect(() => {
+        if (error?.data) {
+            toast.error(error?.data?.message);
+
+            setError("root.random", {
+                type: "random",
+                message: `Something went wrong: ${error?.data?.message}`
+            });
+        }
+
+        if (isSuccess && data?.data) {
+            toast.success(data?.message);
+        }
+    }, [error, setError, isSuccess, data]);
 
     return (
         <form onSubmit={handleSubmit(handleCreate)}>
@@ -63,34 +92,18 @@ export const McqTypeForm = () => {
                 </div>
 
                 {/* is correct */}
-                <div className="flex gap-4 items-center space-y-2">
-                    <div>
-                        <Label>Is Correct: </Label>
-                    </div>
-                    <div>
-                        <Controller
-                            name="is_correct"
-                            control={control}
-                            rules={{ required: "Is Corresct is required" }}
-                            render={({ field }) => (
-                                <RadioGroup
-                                    className="flex gap-2"
-                                    value={field.value}
-                                    onValueChange={(value) => field.onChange(value)}
-                                >
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="true" id="true" />
-                                        <Label htmlFor="true">true</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="false" id="false" />
-                                        <Label htmlFor="false">false</Label>
-                                    </div>
-                                </RadioGroup>
-                            )}
-                        />
-                        {errors.is_correct && <span className="text-red-600">{errors.is_correct.message}</span>}
-                    </div>
+                <div className="flex items-center space-x-2">
+                    <Checkbox
+                        id="is_Correct"
+                        checked={isCorrect}
+                        onCheckedChange={(checked) => setIsCorrect(checked)}
+                    />
+                    <label
+                        htmlFor="is_Correct"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Is Correct
+                    </label>
                 </div>
 
                 {/* Explanation */}
@@ -112,9 +125,18 @@ export const McqTypeForm = () => {
                     {errors.explanation && <span className="text-red-600">{errors.explanation.message}</span>}
                 </div>
 
-                <Button type="submit" className="w-full">
-                    Create Question
-                </Button>
+                <div className="flex gap-4">
+                    <div className="text-right">
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? "Saving" : "Save"}
+                        </Button>
+                    </div>
+                    <div className="text-right">
+                        <Button type="button">
+                            New Option
+                        </Button>
+                    </div>
+                </div>
             </div>
         </form>
     )

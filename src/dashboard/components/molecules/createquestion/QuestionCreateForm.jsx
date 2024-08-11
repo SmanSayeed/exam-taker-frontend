@@ -18,8 +18,8 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import { AddOption } from "./addoption";
 import CreativeTypeForm from "./CreativeTypeForm";
+import { McqOptionForm } from "./McqOptionForm";
 
 const QuestionCreateForm = () => {
     const [statusCheck, setStatusCheck] = useState(true);
@@ -27,7 +27,7 @@ const QuestionCreateForm = () => {
     const [isFeatured, setIsFeatured] = useState(false);
 
     const question = useSelector(state => state.question);
-    const { title, description, type, mark } = question;
+    const { question_id, title, description, type, mark } = question;
 
     const {
         register,
@@ -246,7 +246,7 @@ const QuestionCreateForm = () => {
             </form>
 
             {/* Conditionally render new form based on question type */}
-            {type === "mcq" && <AddOption />}
+            {type === "mcq" && <McqOptionForm questionId={question_id} />}
             {type === "creative" && <CreativeTypeForm />}
         </>
     )
