@@ -1,8 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MultiStepContextProvider } from "@/providers/MultiStepContextProvider";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import { AddOption } from "../../molecules/createquestion/addoption";
-import CreativeTypeForm from "../../molecules/createquestion/CreativeTypeForm";
 import QuestionCreateForm from "../../molecules/createquestion/QuestionCreateForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
@@ -33,9 +31,6 @@ const QuestionCreateForAdminPage = () => {
 
                                 <CardContent className="flex flex-col gap-10">
                                     <QuestionCreateForm />
-                                    {/* <McqTypeForm /> */}
-                                    <AddOption />
-                                    <CreativeTypeForm />
                                 </CardContent>
                             </Card>
                         </div>

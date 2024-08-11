@@ -115,15 +115,18 @@ export const AddOption = () => {
                     </div>
                 ))}
 
-                <div className="text-right">
-                    <Button type="button" onClick={handleAddOption}>
-                        New Option
-                    </Button>
+                <div className="flex gap-4">
+                    <div className="text-right">
+                        <Button type="button">
+                            Save
+                        </Button>
+                    </div>
+                    <div className="text-right">
+                        <Button type="button" onClick={handleAddOption}>
+                            New Option
+                        </Button>
+                    </div>
                 </div>
-
-                <Button type="submit" className="w-full">
-                    Create Question
-                </Button>
             </div>
         </form>
     );

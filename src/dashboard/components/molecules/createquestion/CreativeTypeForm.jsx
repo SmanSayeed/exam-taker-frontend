@@ -63,28 +63,34 @@ const CreativeTypeForm = () => {
                 </div>
 
                 {/* creative question type */}
-                <div className="flex gap-4 items-center space-y-2">
-                    <div>
-                        <Label>Creative Question Type: </Label>
-                    </div>
+                <div className="flex gap-4 items-center">
+                    <Label>Creative Question Type: </Label>
                     <div>
                         <Controller
-                            name="is_correct"
+                            name="creative_que_type"
                             control={control}
-                            rules={{ required: "Is Corresct is required" }}
+                            rules={{ required: "Creative question type is required" }}
                             render={({ field }) => (
                                 <RadioGroup
-                                    className="flex gap-2"
+                                    className="flex gap-4"
                                     value={field.value}
                                     onValueChange={(value) => field.onChange(value)}
                                 >
                                     <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="true" id="true" />
-                                        <Label htmlFor="true">true</Label>
+                                        <RadioGroupItem value="a" id="a" />
+                                        <Label htmlFor="a">A</Label>
                                     </div>
                                     <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="false" id="false" />
-                                        <Label htmlFor="false">false</Label>
+                                        <RadioGroupItem value="b" id="b" />
+                                        <Label htmlFor="b">B</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="c" id="c" />
+                                        <Label htmlFor="c">C</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="d" id="d" />
+                                        <Label htmlFor="d">D</Label>
                                     </div>
                                 </RadioGroup>
                             )}
@@ -112,9 +118,18 @@ const CreativeTypeForm = () => {
                     {errors.explanation && <span className="text-red-600">{errors.explanation.message}</span>}
                 </div>
 
-                <Button type="submit" className="w-full">
-                    Create Question
-                </Button>
+                <div className="flex gap-4">
+                    <div className="text-right">
+                        <Button type="button">
+                            Save
+                        </Button>
+                    </div>
+                    <div className="text-right">
+                        <Button type="button">
+                            New Option
+                        </Button>
+                    </div>
+                </div>
             </div>
         </form>
     )
