@@ -93,17 +93,17 @@ export const sidelinks = [
                 icon: <Group size={18} />
             },
             {
+                title: "Create Question",
+                label: "",
+                href: "/admin/question/create",
+                icon: <FileQuestion size={18} />
+            },
+            {
                 title: "Questions List",
                 label: "",
                 href: "/admin/questions",
                 icon: <FileQuestion size={18} />
             },
-            {
-                title: "Create Question",
-                label: "",
-                href: "/admin/question/create",
-                icon: <FileQuestion size={18} />
-            }
         ]
     },
     {
