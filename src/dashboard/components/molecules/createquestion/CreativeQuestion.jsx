@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCreateCreativeQuestionMutation } from "@/features/questions/creativeQuestionsApi";
+import { useEffect } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+import { toast } from "sonner";
 
-const CreativeTypeForm = () => {
+const CreativeQuestion = ({ questionId, questionIndex }) => {
     const {
         formState: { errors },
         control,
+        setError,
         handleSubmit
     } = useForm();
 
@@ -36,14 +40,36 @@ const CreativeTypeForm = () => {
         toolbar: toolbarOptions
     }
 
+    const [createCreativeQuestion, { data, isSuccess, isLoading, error }] = useCreateCreativeQuestionMutation();
+
     const handleCreate = (formData) => {
-        console.log(formData)
-    }
+        const payload = {
+            creative_question_text: formData.creative_question_text,
+            description: formData.explanation,
+            question_id: questionId,
+            creative_question_type: formData.creative_que_type
+        };
+        createCreativeQuestion(payload);
+    };
+
+    useEffect(() => {
+        if (error?.data) {
+            toast.error(`Question ${questionIndex + 1}: ${error?.data?.message}`);
+            setError("root.random", {
+                type: "random",
+                message: `Something went wrong: ${error?.data?.message}`
+            });
+        }
+
+        if (isSuccess && data?.data) {
+            toast.success(`Question ${questionIndex + 1}: ${data?.message}`);
+        }
+    }, [error, setError, isSuccess, data, questionIndex]);
 
     return (
         <form onSubmit={handleSubmit(handleCreate)}>
             <div className="space-y-6 mt-4">
-                {/* mcq_question_text */}
+                {/* creative_question_text */}
                 <div className="space-y-2">
                     <Label htmlFor="title">Creative Question Text</Label>
                     <Controller
@@ -118,21 +144,26 @@ const CreativeTypeForm = () => {
                     {errors.explanation && <span className="text-red-600">{errors.explanation.message}</span>}
                 </div>
 
-                <div className="flex gap-4">
-                    <div className="text-right">
-                        <Button type="button">
-                            Save
-                        </Button>
-                    </div>
-                    <div className="text-right">
-                        <Button type="button">
-                            New Option
-                        </Button>
-                    </div>
+                <div>
+                    {
+                        isSuccess && data?.data ? (
+                            <Button type="button">{`Edit Question ${questionIndex + 1}`}</Button>
+                        ) : (
+                            <Button type="submit" disabled={isLoading}>
+                                {isLoading ? "Saving" : `Save Question ${questionIndex + 1}`}
+                            </Button>
+                        )
+                    }
+                    <Button
+                        type="button"
+                        className="ml-4"
+                    >
+                        Delete
+                    </Button>
                 </div>
             </div>
         </form>
     )
 }
 
-export default CreativeTypeForm
+export default CreativeQuestion

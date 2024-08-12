@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useCreateMcqQuestionMutation } from "@/features/questions/mcqQuestionsApi";
+import { useCreateMcqOptionMutation, useDeleteMcqOptionMutation } from "@/features/questions/mcqQuestionsApi";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
@@ -34,7 +34,9 @@ const McqOption = ({ questionId, optionIndex }) => {
     const module = { toolbar: toolbarOptions };
 
     const [isCorrect, setIsCorrect] = useState(false);
-    const [createMcqQuestion, { data, isSuccess, isLoading, error }] = useCreateMcqQuestionMutation();
+
+    const [createMcqOption, { data, isSuccess, isLoading, error }] = useCreateMcqOptionMutation();
+    const [deleteMcqOption, { data: deleteData }] = useDeleteMcqOptionMutation();
 
     const handleCreate = (formData) => {
         const payload = {
@@ -43,8 +45,15 @@ const McqOption = ({ questionId, optionIndex }) => {
             question_id: questionId,
             is_correct: isCorrect
         };
-        createMcqQuestion(payload);
+        createMcqOption(payload);
     };
+
+    const handleDelete = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        console.log(data?.data?.id)
+        deleteMcqOption(data?.data?.id)
+    }
 
     useEffect(() => {
         if (error?.data) {
@@ -117,14 +126,21 @@ const McqOption = ({ questionId, optionIndex }) => {
 
             <div>
                 {
-                    isSuccess ? (
-                        <Button type="button">{`Update Option ${optionIndex + 1}`}</Button>
+                    isSuccess && data?.data ? (
+                        <Button type="button">{`Edit Option ${optionIndex + 1}`}</Button>
                     ) : (
                         <Button type="submit" disabled={isLoading}>
                             {isLoading ? "Saving" : `Save Option ${optionIndex + 1}`}
                         </Button>
                     )
                 }
+                <Button
+                    type="button"
+                    className="ml-4"
+                    onClick={handleDelete}
+                >
+                    Delete
+                </Button>
             </div>
         </form >
     );
