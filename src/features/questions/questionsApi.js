@@ -38,16 +38,39 @@ export const questionsApi = apiSlice.injectEndpoints({
         }),
         deleteQuestion: builder.mutation({
             query: (id) => ({
-                URL: `que/delete/${id}`,
+                url: `que/delete/${id}`,
                 method: "DELETE",
             }),
         }),
         editQuestion: builder.mutation({
             query: ({ id, data }) => ({
-                URL: `que/update/${id}`,
+                url: `que/update/${id}`,
                 method: "PUT",
                 body: data
             }),
+
+            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+
+                try {
+                    const result = await queryFulfilled;
+
+                    dispatch(
+                        saveQuestion({
+                            question_id: result.data.data.id,
+                            title: result.data.data.title,
+                            description: result.data.data.description,
+                            type: result.data.data.type,
+                            mark: result.data.data.mark,
+                            images: result.data.data.images,
+                            is_paid: result.data.data.is_paid,
+                            is_featured: result.data.data.is_featured,
+                            status: result.data.data.status
+                        })
+                    );
+                } catch (err) {
+                    console.log(err);
+                }
+            },
         }),
     }),
 });

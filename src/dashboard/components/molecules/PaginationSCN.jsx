@@ -1,18 +1,14 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+  PaginationItem
 } from "@/components/ui/pagination";
-import { useGetQuestionsQuery } from "@/features/questions/questionApi";
-import { Button } from "@/components/ui/button";
+import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
+import { useState } from "react";
 
 export default function PaginationSCN() {
   const [currentPage, setCurrentPage] = useState(1);
-
 
   // Fetch data using the current page
   const { data, isLoading, isError } = useGetQuestionsQuery(currentPage);
@@ -20,7 +16,7 @@ export default function PaginationSCN() {
   const paginationData = data?.data?.data
   const paginationURl = data?.data
 
-  const totalPage = Math.ceil(data?.data?.total/10)
+  const totalPage = Math.ceil(data?.data?.total / 10)
 
 
   // Handle page click
@@ -56,10 +52,10 @@ export default function PaginationSCN() {
             /> */}
             <Button onClick={handlePreviousClick}>Previous </Button>
           </PaginationItem>
-          
+
           {Array.from({ length: totalPage }, (_, index) => (
             <PaginationItem key={index}>
-              <button className="bg-gray-500 px-3 py-[.06rem] rounded-sm text-white hover:bg-gray-800 duration-500 "  >{index+1}</button>
+              <button className="bg-gray-500 px-3 py-[.06rem] rounded-sm text-white hover:bg-gray-800 duration-500 "  >{index + 1}</button>
             </PaginationItem>
           ))}
 

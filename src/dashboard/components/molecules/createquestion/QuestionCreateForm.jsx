@@ -10,7 +10,7 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
+import { useCreateQuestionMutation, useEditQuestionMutation } from "@/features/questions/questionsApi";
 import { useEffect, useRef, useState } from "react";
 
 import { Controller, useForm } from "react-hook-form";
@@ -18,7 +18,6 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import QuestionEditBtn from "../../atoms/createquestion/QuestionEditBtn";
 import { CreativeQuestionForm } from "./CreativeQuestionForm";
 import { McqOptionForm } from "./McqOptionForm";
 
@@ -71,6 +70,7 @@ const QuestionCreateForm = () => {
     }
 
     const [createQuestion, { data, isSuccess, isLoading, error }] = useCreateQuestionMutation();
+    const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleCreate = (formData) => {
         const payload = {
@@ -85,6 +85,26 @@ const QuestionCreateForm = () => {
         }
         createQuestion(payload);
     }
+
+    const handleUpdate = async (formData) => {
+        const payload = {
+            title: formData.title,
+            description: formData.description,
+            type: formData.type,
+            mark: formData.mark,
+            images: null,
+            is_paid: isPaid,
+            is_featured: isFeatured,
+            status: statusCheck
+        };
+
+        try {
+            const response = await editQuestion({ id: question_id, data: payload }).unwrap();
+            toast.success(response?.message);
+        } catch (err) {
+            toast.error(err?.data?.message || "An error occurred");
+        }
+    };
 
     useEffect(() => {
         if (error?.data) {
@@ -225,20 +245,26 @@ const QuestionCreateForm = () => {
                         <Label htmlFor="status" className="ml-2">Status</Label>
                     </div>
 
-                    {/* Conditionally Render Button */}
+                    {/* update button */}
                     {
-                        title ? (
-                            <QuestionEditBtn formRef={formRef} questionId={question_id} />
-                        ) : (
+                        title && (
                             <Button
-                                disabled={isLoading}
-                                type="submit"
-                                className="w-full"
+                                type="button"
+                                onClick={handleSubmit(handleUpdate)}
+                                disabled={isUpdating}
                             >
-                                {isLoading ? "Proceeding" : "Proceed"}
+                                {isUpdating ? "Updating..." : "Update"}
                             </Button>
                         )
                     }
+                    {/* proceed button */}
+                    <Button
+                        disabled={isLoading}
+                        type="submit"
+                        className="w-full"
+                    >
+                        {isLoading ? "Proceeding" : "Proceed"}
+                    </Button>
                 </div>
             </form>
 
