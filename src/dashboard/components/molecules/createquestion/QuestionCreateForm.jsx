@@ -11,17 +11,20 @@ import {
 } from "@/components/ui/select";
 
 import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import QuestionEditBtn from "../../atoms/createquestion/QuestionEditBtn";
 import { CreativeQuestionForm } from "./CreativeQuestionForm";
 import { McqOptionForm } from "./McqOptionForm";
 
 const QuestionCreateForm = () => {
+    const formRef = useRef(null);
+
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
@@ -100,7 +103,7 @@ const QuestionCreateForm = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(handleCreate)}>
+            <form ref={formRef} onSubmit={handleSubmit(handleCreate)} id="question-form">
                 <div className="space-y-4 mt-4">
                     {/* title */}
                     <div className="space-y-1">
@@ -225,13 +228,7 @@ const QuestionCreateForm = () => {
                     {/* Conditionally Render Button */}
                     {
                         title ? (
-                            <Button
-                                // disabled={isLoading}
-                                type="button"
-                                className="w-full"
-                            >
-                                Update
-                            </Button>
+                            <QuestionEditBtn formRef={formRef} questionId={question_id} />
                         ) : (
                             <Button
                                 disabled={isLoading}
