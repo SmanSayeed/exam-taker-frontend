@@ -17,6 +17,8 @@ import SectionForQuestionPage from '@/dashboard/components/pages/questions/quest
 import YearForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/YearForQuestionPage";
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
+import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
+import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
 
 const router = createBrowserRouter([
     {
@@ -84,6 +86,14 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/question/create",
                         element: <QuestionCreateForAdminPage />
+                    },
+                    {
+                        path: "/admin/questions",
+                        element: <QuestionListForAdminPage />
+                    },
+                    {
+                        path: "/admin/question/edit",
+                        element: <QuestionEditForAdminPage />
                     },
                 ]
             },
