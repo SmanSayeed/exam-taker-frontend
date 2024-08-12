@@ -83,7 +83,6 @@ const RegisterForm = () => {
                 message: `Something went wrong: ${error?.data?.message}`
             });
         }
-        console.log(data)
 
         if (isSuccess && data?.data) {
             toast.success(data?.message);
