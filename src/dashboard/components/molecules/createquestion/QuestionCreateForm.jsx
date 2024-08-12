@@ -18,7 +18,7 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import CreativeQuestionForm from "./CreativeQuestionForm";
+import { CreativeQuestionForm } from "./CreativeQuestionForm";
 import { McqOptionForm } from "./McqOptionForm";
 
 const QuestionCreateForm = () => {
