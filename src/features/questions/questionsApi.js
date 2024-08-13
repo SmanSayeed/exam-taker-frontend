@@ -3,6 +3,9 @@ import { saveQuestion } from "./questionSlice";
 
 export const questionsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
+        getQuestions: builder.query({
+            query: (page) => `que/all?page=${page}`,
+        }),
         createQuestion: builder.mutation({
             query: (data) => ({
                 url: "/que/create",
@@ -33,7 +36,20 @@ export const questionsApi = apiSlice.injectEndpoints({
                 }
             },
         }),
+        editQuestion: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `que / update / ${id}`,
+                method: "PUT",
+                body: data
+            }),
+        }),
+        deleteQuestion: builder.mutation({
+            query: (id) => ({
+                url: `que/delete/${id}`,
+                method: "DELETE",
+            }),
+        }),
     }),
 });
 
-export const { useCreateQuestionMutation } = questionsApi;
+export const {useGetQuestionsQuery ,useCreateQuestionMutation, useEditQuestionMutation, useDeleteQuestionMutation } = questionsApi;
