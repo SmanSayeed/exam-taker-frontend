@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
-import { SquareX } from "lucide-react";
-import { ViewModal } from "./ViewModal";
-import { Link } from "react-router-dom";
-import DOMPurify from "dompurify";
 import { useDeleteQuestionMutation } from "@/features/questions/questionsApi";
+import DOMPurify from "dompurify";
+import { SquareX } from "lucide-react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { ViewModal } from "./ViewModal";
 
 export default function QuestionCard({ data }) {
     const { id, title, description, is_paid, is_featured, type, mark } = data || {};
@@ -22,7 +22,7 @@ export default function QuestionCard({ data }) {
             }
         } else {
             console.log("tmr id nai miya")
-            toast.error( "tmr id nai miya");
+            toast.error("tmr id nai miya");
         }
     };
 
@@ -83,7 +83,7 @@ export default function QuestionCard({ data }) {
                 </div>
             </div>
 
-            <div className="flex gap-2"> 
+            <div className="flex gap-2">
                 <span className="font-medium text-sm text-gray-500 ">Descriptions:</span>
                 <div
                     className="description-content"
@@ -93,14 +93,14 @@ export default function QuestionCard({ data }) {
 
             {/* Card controllers */}
             <SquareX
-                onClick={()=>handleDelete(id)}
+                onClick={() => handleDelete(id)}
                 size={18}
                 className="cursor-pointer absolute top-4 right-4 opacity-45 group-hover:scale-105 group-hover:opacity-85 duration-300"
             />
 
             <div className="absolute bottom-4 right-4 flex items-center gap-3">
                 <Button>
-                    <ViewModal data={data}/>
+                    <ViewModal data={data} />
                 </Button>
                 <Button>
                     <Link state={(data)} to={`/admin/question/edit/${id}`}>

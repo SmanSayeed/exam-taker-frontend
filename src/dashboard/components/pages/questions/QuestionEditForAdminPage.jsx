@@ -1,17 +1,16 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MultiStepContextProvider } from "@/providers/MultiStepContextProvider";
+import { useLocation } from "react-router-dom";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import QuestionCreateForm from "../../molecules/createquestion/QuestionCreateForm";
+import QuestionEditForm from "../../organism/QuestionEditForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
-import { useLocation } from "react-router-dom";
-import QuestionEditForm from "../../organism/QuestionEditForm";
 
 const QuestionEditForAdminPage = () => {
 
     const location = useLocation()
     console.log(location?.state)
-    
+
 
     return (
         <MultiStepContextProvider>

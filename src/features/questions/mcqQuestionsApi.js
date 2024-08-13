@@ -15,7 +15,14 @@ export const mcqQuestionsApi = apiSlice.injectEndpoints({
                 method: "DELETE"
             }),
         }),
+        editMcqOption: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `/que/update/mcq/${id}`,
+                method: "PUT",
+                body: data
+            }),
+        }),
     }),
 });
 
-export const { useCreateMcqOptionMutation, useDeleteMcqOptionMutation } = mcqQuestionsApi;
+export const { useCreateMcqOptionMutation, useDeleteMcqOptionMutation, useEditMcqOptionMutation } = mcqQuestionsApi;
