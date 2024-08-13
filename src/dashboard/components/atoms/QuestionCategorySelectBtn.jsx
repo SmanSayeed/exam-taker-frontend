@@ -20,7 +20,7 @@ export default function QuestionCategorySelectBtn({ value }) {
             <div className="absolute top-0">
                 {
                     open &&
-                    <QuestionCategorySelectItems name={value} />
+                    <QuestionCategorySelectItems />
                 }
             </div>
         </div>
