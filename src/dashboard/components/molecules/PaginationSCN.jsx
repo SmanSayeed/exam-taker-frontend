@@ -5,6 +5,7 @@ import {
   PaginationItem
 } from "@/components/ui/pagination";
 import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
+import { useState } from "react";
 import QuestionCard from "./QuestionCard";
 
 export default function PaginationSCN() {
