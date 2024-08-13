@@ -6,7 +6,6 @@ import PageTitle from "../../atoms/PageTitle";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
 import PaginationSCN from "../../molecules/PaginationSCN";
 import FilteringQuestions from "../../organism/FilteringQuestions";
-import QuestionsList from "../../organism/QuestionsList";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
@@ -15,10 +14,10 @@ const QuestionListForAdminPage = () => {
 
     const { data: paginationData, isError, isLoading, isSuccess } = useGetQuestionsQuery(currentPage)
 
+
     return (
         <Layout>
             <Layout.Header sticky>
-                {/* <Search /> */}
                 <PageTitle title={"Questions List"} />
                 <div className='ml-auto flex items-center space-x-4'>
                     <ThemeSwitch />
@@ -34,17 +33,14 @@ const QuestionListForAdminPage = () => {
                 {/* filter ends */}
 
                 <div>
-                    {isLoading ? <Loading /> : isSuccess && paginationData &&
-                        <div>
-                            <QuestionsList paginationData={paginationData} />
-                            <PaginationSCN />
-                        </div>}
+                    {isLoading ? <Loading /> : isSuccess && paginationData?.data?.data ? <div>
+                        {/* {paginationData?.data?.total > 10 && */}
+                        <PaginationSCN />
+                        {/* // } */}
+                    </div> : <h1 className="text-5xl text-black">
+                        no data found
+                    </h1>}
                 </div>
-
-
-                {/* <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-                    <DataTable data={ictQuestions} columns={questionsColumns} />
-                </div> */}
             </Layout.Body>
         </Layout>
     )

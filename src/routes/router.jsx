@@ -92,7 +92,7 @@ const router = createBrowserRouter([
                         element: <QuestionListForAdminPage />
                     },
                     {
-                        path: "/admin/question/edit",
+                        path: "/admin/question/edit/:id",
                         element: <QuestionEditForAdminPage />
                     },
                 ]
