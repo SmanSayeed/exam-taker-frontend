@@ -10,6 +10,8 @@ import StudentListForAdminPage from "@/dashboard/components/pages/StudentListFor
 import UserCreateForAdminPage from "@/dashboard/components/pages/UserCreateForAdminPage";
 import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
+import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
+import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
 import ExamSubTypeForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/ExamSubTypeForQuestionPage";
 import ExamTypeForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/ExamTypeForQuestionPage";
 import GroupForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/GroupForQuestionPage";
@@ -17,8 +19,6 @@ import SectionForQuestionPage from '@/dashboard/components/pages/questions/quest
 import YearForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/YearForQuestionPage";
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
-import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
-import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
 
 const router = createBrowserRouter([
     {
