@@ -10,6 +10,8 @@ import StudentListForAdminPage from "@/dashboard/components/pages/StudentListFor
 import UserCreateForAdminPage from "@/dashboard/components/pages/UserCreateForAdminPage";
 import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
+import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
+import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
 import ExamSubTypeForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/ExamSubTypeForQuestionPage";
 import ExamTypeForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/ExamTypeForQuestionPage";
 import GroupForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/GroupForQuestionPage";
@@ -84,6 +86,14 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/question/create",
                         element: <QuestionCreateForAdminPage />
+                    },
+                    {
+                        path: "/admin/questions",
+                        element: <QuestionListForAdminPage />
+                    },
+                    {
+                        path: "/admin/question/edit/:id",
+                        element: <QuestionEditForAdminPage />
                     },
                 ]
             },

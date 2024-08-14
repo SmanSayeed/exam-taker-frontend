@@ -1,10 +1,16 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocation } from "react-router-dom";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import QuestionCreateForm from "../../molecules/createquestion/QuestionCreateForm";
+import QuestionEditForm from "../../organism/QuestionEditForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
-const QuestionCreateForAdminPage = () => {
+const QuestionEditForAdminPage = () => {
+
+    const location = useLocation()
+    console.log(location?.state)
+
+
     return (
         <Layout>
             <Layout.Header>
@@ -20,7 +26,7 @@ const QuestionCreateForAdminPage = () => {
                         <Card className="container ">
                             <CardHeader>
                                 <CardTitle className="text-xl">
-                                    Question Creation
+                                    Question Edit
                                 </CardTitle>
                                 <CardDescription>
                                     Enter proper information to create an question
@@ -28,7 +34,7 @@ const QuestionCreateForAdminPage = () => {
                             </CardHeader>
 
                             <CardContent className="flex flex-col gap-10">
-                                <QuestionCreateForm />
+                                <QuestionEditForm />
                             </CardContent>
                         </Card>
                     </div>
@@ -37,4 +43,4 @@ const QuestionCreateForAdminPage = () => {
         </Layout>
     )
 }
-export default QuestionCreateForAdminPage;
+export default QuestionEditForAdminPage;
