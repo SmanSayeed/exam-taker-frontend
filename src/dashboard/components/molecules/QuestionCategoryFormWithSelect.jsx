@@ -17,7 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 
-const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery }) => {
+const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery, fromExamTypes = false, fromExamSubTypes = false }) => {
     const [statusCheck, setStatusCheck] = useState(false);
     const [image, setImage] = useState(null);
     const [imageError, setImageError] = useState("");
@@ -31,7 +31,9 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
     } = useForm();
 
     const [createQuestionsCategory, { data, isSuccess, isLoading, error }] = useCreateQuestionsCategoryMutation();
-    const { data: categories } = useGetQuestionsCategoryQuery();
+    const { data: sectionData } = useGetQuestionsCategoryQuery("sections");
+    const { data: yearData } = useGetQuestionsCategoryQuery("years");
+    const { data: examtypesData } = useGetQuestionsCategoryQuery("exam-types");
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -90,33 +92,100 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
         <Card>
             <form onSubmit={handleSubmit(handleCreate)} className="container gap-2 p-8 ">
                 <div className="space-y-4 mt-4 ">
-                    {/* todo: Combobox component for select item */}
-                    <div className="grid gap-2">
-                        <Label>section</Label>
-                        <Controller
-                            name="section"
-                            control={control}
-                            rules={{ required: "Section is required" }}
-                            render={({ field }) => (
-                                <Select onValueChange={field.onChange} value={field.value}>
-                                    <SelectTrigger className="w-[300px]">
-                                        <SelectValue placeholder="Section" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {
-                                            categories?.data && categories?.data.map(item => (
-                                                <SelectItem key={item.id} value={item?.id}>
-                                                    {item?.title}
-                                                </SelectItem>
-                                            ))
-                                        }
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        />
-                        {errors.role && <span className="text-red-600">{errors.role.message}</span>}
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
+
+                    {/* section and year select */}
+                    {
+                        fromExamTypes && (
+                            <div className="flex flex-col md:flex-row gap-4">
+                                {/* select section */}
+                                <div className="grid gap-2">
+                                    <Label>section</Label>
+                                    <Controller
+                                        name="section"
+                                        control={control}
+                                        rules={{ required: "Section is required" }}
+                                        render={({ field }) => (
+                                            <Select onValueChange={field.onChange} value={field.value}>
+                                                <SelectTrigger className="w-[300px]">
+                                                    <SelectValue placeholder="Section" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {
+                                                        sectionData?.data?.data && sectionData?.data?.data.map(item => (
+                                                            <SelectItem key={item.id} value={item?.id}>
+                                                                {item?.title}
+                                                            </SelectItem>
+                                                        ))
+                                                    }
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                    />
+                                    {errors.section && <span className="text-red-600">{errors.section.message}</span>}
+                                </div>
+
+                                {/* select year */}
+                                <div className="grid gap-2">
+                                    <Label>Year</Label>
+                                    <Controller
+                                        name="year"
+                                        control={control}
+                                        rules={{ required: "Year is required" }}
+                                        render={({ field }) => (
+                                            <Select onValueChange={field.onChange} value={field.value}>
+                                                <SelectTrigger className="w-[300px]">
+                                                    <SelectValue placeholder="Year" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {
+                                                        yearData?.data?.data && yearData?.data?.data.map(item => (
+                                                            <SelectItem key={item.id} value={item?.id}>
+                                                                {item?.title}
+                                                            </SelectItem>
+                                                        ))
+                                                    }
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                    />
+                                    {errors.year && <span className="text-red-600">{errors.year.message}</span>}
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {/* select exam-types */}
+                    {
+                        fromExamSubTypes && (
+                            <div className="grid gap-2">
+                                <Label>Exam Types</Label>
+                                <Controller
+                                    name="exam_types"
+                                    control={control}
+                                    rules={{ required: "Exam Types is required" }}
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger className="w-[300px]">
+                                                <SelectValue placeholder="Exam Types" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {
+                                                    examtypesData?.data?.data && examtypesData?.data?.data.map(item => (
+                                                        <SelectItem key={item.id} value={item?.id}>
+                                                            {item?.title}
+                                                        </SelectItem>
+                                                    ))
+                                                }
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                                {errors.exam_types && <span className="text-red-600">{errors.exam_types.message}</span>}
+                            </div>
+                        )
+                    }
+
+                    <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-1">
                             <Label htmlFor="title">Title</Label>
                             <Input
@@ -142,6 +211,7 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
                             {imageError && <span className="text-red-600">{imageError}</span>}
                         </div>
                     </div>
+
                     <div className="space-y-1">
                         <Label htmlFor="details">Details</Label>
                         <Textarea
@@ -152,6 +222,7 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
                         />
                         {errors.details && <span className="text-red-600">{errors.details.message}</span>}
                     </div>
+
                     <div>
                         <Checkbox
                             id="status"
@@ -166,7 +237,7 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
                     </Button>
                 </div>
             </form>
-        </Card>
+        </Card >
     )
 }
 export default QuestionCategoryFormWithSelect;

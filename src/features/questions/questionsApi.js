@@ -6,9 +6,6 @@ export const questionsApi = apiSlice.injectEndpoints({
         getQuestions: builder.query({
             query: (page) => `que/all?page=${page}`,
         }),
-        getQuestions: builder.query({
-            query: (page) => `que/all?page=${page}`,
-        }),
         createQuestion: builder.mutation({
             query: (data) => ({
                 url: "/que/create",

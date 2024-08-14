@@ -1,16 +1,16 @@
+import QuestionCategoryForm from "@/dashboard/components/molecules/QuestionCategoryForm";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import { TypeProvider } from "@/providers/TypeProvider";
 import Loading from "../../../atoms/Loading";
 import PageTitle from "../../../atoms/PageTitle";
 import ThemeSwitch from "../../../atoms/ThemeSwitch";
 import { columns } from "../../../molecules/datatable/Columns";
-import QuestionCategoryFormWithSelect from "../../../molecules/QuestionCategoryFormWithSelect";
 import UserNav from "../../../organism/UserNav";
 import { DataTable } from "../../../templates/DataTable";
 import { Layout } from "../../../templates/Layout";
 
 const YearForQuestionPage = () => {
-    const { data, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("years");
+    const { data: yearData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("years");
 
     return (
         <TypeProvider initialType="years">
@@ -24,7 +24,7 @@ const YearForQuestionPage = () => {
                 </Layout.Header>
 
                 <Layout.Body>
-                    <QuestionCategoryFormWithSelect
+                    <QuestionCategoryForm
                         type={"years"}
                         refetchOnQuestionsCategoryQuery={refetch}
                     />
@@ -40,7 +40,7 @@ const YearForQuestionPage = () => {
                     <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
                         {
                             isLoading ? <Loading /> : (
-                                isSuccess && data?.data && <DataTable data={data?.data} columns={columns} />
+                                isSuccess && yearData?.data?.data && <DataTable data={yearData?.data?.data} columns={columns} />
                             )
                         }
                     </div>

@@ -10,7 +10,7 @@ import { DataTable } from "../../../templates/DataTable";
 import { Layout } from "../../../templates/Layout";
 
 const ExamTypeForQuestionPage = () => {
-    const { data, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("exam-types");
+    const { data: examtypeData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("exam-types");
 
     return (
         <TypeProvider initialType="exam-types">
@@ -27,6 +27,7 @@ const ExamTypeForQuestionPage = () => {
                     <QuestionCategoryFormWithSelect
                         type={"exam-types"}
                         refetchOnQuestionsCategoryQuery={refetch}
+                        fromExamTypes={true}
                     />
 
                     <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
@@ -38,7 +39,7 @@ const ExamTypeForQuestionPage = () => {
                         </div>
                     </div>
                     <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-                        {isLoading ? <Loading /> : isSuccess && data?.data && <DataTable data={data?.data} columns={columns} />}
+                        {isLoading ? <Loading /> : isSuccess && examtypeData?.data?.data && <DataTable data={examtypeData?.data?.data} columns={columns} />}
                     </div>
                 </Layout.Body>
             </Layout>
