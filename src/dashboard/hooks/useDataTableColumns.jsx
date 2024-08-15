@@ -2,12 +2,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/dashboard/components/molecules/datatable/DataTableColumnHeader";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import { useEffect, useState } from "react";
-import { DataTableRowActions } from "../../organism/DataTableRowActions";
+import { DataTableRowActions } from "../components/organism/DataTableRowActions";
 
 const useDataTableColumns = (type) => {
     const [includeSectionId, setIncludeSectionId] = useState(false);
     const [includeYearId, setIncludeYearId] = useState(false);
-    const [examTypeId, setExamTypeId] = useState(false);
+    const [includeExamTypeId, setIncludeExamTypeId] = useState(false);
+    const [includeLevelId, setIncludeLevelId] = useState(false);
+    const [includeGroupId, setIncludeGroupId] = useState(false);
+    const [includePart, setIncludePart] = useState(false);
+    const [includeSubjectId, setIncludeSubjectId] = useState(false);
+    const [includeLessonId, setIncludeLessonId] = useState(false);
+    const [includeTopicId, setIncludeTopicId] = useState(false);
 
     const { data: categoryData, isLoading, isError } = useGetQuestionsCategoryQuery(type);
 
@@ -15,7 +21,13 @@ const useDataTableColumns = (type) => {
         if (categoryData?.data) {
             setIncludeSectionId(categoryData?.data?.data.some(item => item.section_id !== undefined));
             setIncludeYearId(categoryData?.data?.data.some(item => item.year !== undefined));
-            setExamTypeId(categoryData?.data?.data.some(item => item.exam_type_id !== undefined));
+            setIncludeExamTypeId(categoryData?.data?.data.some(item => item.exam_type_id !== undefined));
+            setIncludeLevelId(categoryData?.data?.data.some(item => item.level_id !== undefined));
+            setIncludeGroupId(categoryData?.data?.data.some(item => item.group_id !== undefined));
+            setIncludePart(categoryData?.data?.data.some(item => item.part !== undefined));
+            setIncludeSubjectId(categoryData?.data?.data.some(item => item.subject_id !== undefined));
+            setIncludeLessonId(categoryData?.data?.data.some(item => item.lesson_id !== undefined));
+            setIncludeTopicId(categoryData?.data?.data.some(item => item.topic_id !== undefined));
         }
     }, [categoryData]);
 
@@ -143,7 +155,7 @@ const useDataTableColumns = (type) => {
                 );
             }
         }] : []),
-        ...(examTypeId ? [{
+        ...(includeExamTypeId ? [{
             accessorKey: "exam_type_id",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Exam Type" />
@@ -155,6 +167,120 @@ const useDataTableColumns = (type) => {
                             <div className="flex space-x-2">
                                 <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
                                     {row.original.exam_type.title}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                );
+            }
+        }] : []),
+        ...(includeLevelId ? [{
+            accessorKey: "level_id",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Level" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <>
+                        {row.original.level_id && (
+                            <div className="flex space-x-2">
+                                <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                                    {row.original.level.title}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                );
+            }
+        }] : []),
+        ...(includeGroupId ? [{
+            accessorKey: "group_id",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Group" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <>
+                        {row.original.group_id && (
+                            <div className="flex space-x-2">
+                                <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                                    {row.original.group.title}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                );
+            }
+        }] : []),
+        ...(includePart ? [{
+            accessorKey: "part",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Part" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <>
+                        {row.original.part && (
+                            <div className="flex space-x-2">
+                                <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                                    {row.original.part.title}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                );
+            }
+        }] : []),
+        ...(includeSubjectId ? [{
+            accessorKey: "subject_id",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Subject" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <>
+                        {row.original.subject_id && (
+                            <div className="flex space-x-2">
+                                <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                                    {row.original.subject.title}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                );
+            }
+        }] : []),
+        ...(includeLessonId ? [{
+            accessorKey: "lesson_id",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Lesson" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <>
+                        {row.original.lesson_id && (
+                            <div className="flex space-x-2">
+                                <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                                    {row.original.lesson.title}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                );
+            }
+        }] : []),
+        ...(includeTopicId ? [{
+            accessorKey: "topic_id",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Topic" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <>
+                        {row.original.topic_id && (
+                            <div className="flex space-x-2">
+                                <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                                    {row.original.topic.title}
                                 </span>
                             </div>
                         )}

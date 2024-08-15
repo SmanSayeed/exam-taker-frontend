@@ -1,7 +1,7 @@
 import Loading from "@/dashboard/components/atoms/Loading";
-import useDataTableColumns from "@/dashboard/components/molecules/datatable/useDataTableColumns";
 import QuestionCategoryForm from "@/dashboard/components/molecules/QuestionCategoryForm";
 import { DataTable } from "@/dashboard/components/templates/DataTable";
+import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import PageTitle from "../../../atoms/PageTitle";
 import ThemeSwitch from "../../../atoms/ThemeSwitch";
