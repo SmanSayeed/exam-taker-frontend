@@ -6,13 +6,18 @@ import { DataTableRowActions } from "../../organism/DataTableRowActions";
 
 const useDataTableColumns = (type) => {
     const [includeSectionId, setIncludeSectionId] = useState(false);
-    const { data, isLoading, isError } = useGetQuestionsCategoryQuery(type);
+    const [includeYearId, setIncludeYearId] = useState(false);
+    const [examTypeId, setExamTypeId] = useState(false);
+
+    const { data: categoryData, isLoading, isError } = useGetQuestionsCategoryQuery(type);
 
     useEffect(() => {
-        if (data) {
-            setIncludeSectionId(data.some(item => item.section_id !== undefined));
+        if (categoryData?.data) {
+            setIncludeSectionId(categoryData?.data?.data.some(item => item.section_id !== undefined));
+            setIncludeYearId(categoryData?.data?.data.some(item => item.year !== undefined));
+            setExamTypeId(categoryData?.data?.data.some(item => item.exam_type_id !== undefined));
         }
-    }, [data]);
+    }, [categoryData]);
 
     if (isLoading || isError) return null;
 
@@ -103,7 +108,7 @@ const useDataTableColumns = (type) => {
         ...(includeSectionId ? [{
             accessorKey: "section_id",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Section ID" />
+                <DataTableColumnHeader column={column} title="Section" />
             ),
             cell: ({ row }) => {
                 return (
@@ -111,7 +116,45 @@ const useDataTableColumns = (type) => {
                         {row.original.section_id && (
                             <div className="flex space-x-2">
                                 <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
-                                    {row.getValue("section_id")}
+                                    {row.original.section.title}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                );
+            }
+        }] : []),
+        ...(includeYearId ? [{
+            accessorKey: "year",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Year" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <>
+                        {row.original.year && (
+                            <div className="flex space-x-2">
+                                <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                                    {row.getValue("year")}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                );
+            }
+        }] : []),
+        ...(examTypeId ? [{
+            accessorKey: "exam_type_id",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Exam Type" />
+            ),
+            cell: ({ row }) => {
+                return (
+                    <>
+                        {row.original.exam_type_id && (
+                            <div className="flex space-x-2">
+                                <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
+                                    {row.original.exam_type.title}
                                 </span>
                             </div>
                         )}
@@ -121,10 +164,7 @@ const useDataTableColumns = (type) => {
         }] : []),
         {
             id: "actions",
-            cell: ({ row }) => {
-                const { type } = useTypeProvider();
-                return <DataTableRowActions row={row} type={type} />;
-            }
+            cell: ({ row }) => <DataTableRowActions row={row} type={type} />
         }
     ];
 }
