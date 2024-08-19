@@ -93,6 +93,36 @@ export const sidelinks = [
                 icon: <Group size={18} />
             },
             {
+                title: "Level",
+                label: "",
+                href: "/admin/questions/level",
+                icon: <Group size={18} />
+            },
+            {
+                title: "Subject",
+                label: "",
+                href: "/admin/questions/subject",
+                icon: <Group size={18} />
+            },
+            {
+                title: "Lesson",
+                label: "",
+                href: "/admin/questions/lesson",
+                icon: <Group size={18} />
+            },
+            {
+                title: "Topics",
+                label: "",
+                href: "/admin/questions/topics",
+                icon: <Group size={18} />
+            },
+            {
+                title: "Sub Topics",
+                label: "",
+                href: "/admin/questions/sub-topics",
+                icon: <Group size={18} />
+            },
+            {
                 title: "Create Question",
                 label: "",
                 href: "/admin/question/create",

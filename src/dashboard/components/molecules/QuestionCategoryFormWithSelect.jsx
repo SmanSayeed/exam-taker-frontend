@@ -3,35 +3,46 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateQuestionsCategoryMutation, useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import CustomSelect from "../atoms/CustomSelect";
 
 
-const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery }) => {
+const QuestionCategoryFormWithSelect = ({
+    type,
+    refetchOnQuestionsCategoryQuery,
+    fromExamTypes = false,
+    fromExamSubTypes = false,
+    fromSubjects = false,
+    fromLessons = false,
+    fromTopics = false,
+    fromSubtopics = false,
+}) => {
     const [statusCheck, setStatusCheck] = useState(false);
     const [image, setImage] = useState(null);
     const [imageError, setImageError] = useState("");
 
     const {
         register,
-        handleSubmit, reset,
+        handleSubmit,
+        reset,
         formState: { errors },
         setError,
         control
     } = useForm();
 
     const [createQuestionsCategory, { data, isSuccess, isLoading, error }] = useCreateQuestionsCategoryMutation();
-    const { data: categories } = useGetQuestionsCategoryQuery();
+    const { data: sectionsData } = useGetQuestionsCategoryQuery("sections");
+    const { data: yearsData } = useGetQuestionsCategoryQuery("years");
+    const { data: examtypesData } = useGetQuestionsCategoryQuery("exam-types");
+    const { data: levelsData } = useGetQuestionsCategoryQuery("levels");
+    const { data: groupsData } = useGetQuestionsCategoryQuery("groups");
+    const { data: subjectsData } = useGetQuestionsCategoryQuery("subjects");
+    const { data: lessonsData } = useGetQuestionsCategoryQuery("lessons");
+    const { data: topicsData } = useGetQuestionsCategoryQuery("topics");
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -57,7 +68,15 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
 
     const handleCreate = (formData) => {
         const payload = {
-            section_id: formData.section,
+            section_id: formData.sections,
+            level_id: formData.level,
+            group_id: formData.group,
+            exam_type_id: formData.exam_types,
+            subject_id: formData.subjects,
+            lesson_id: formData.lessons,
+            topic_id: formData.topics,
+            part: formData.part,
+            year: formData.years,
             title: formData.title,
             status: statusCheck,
             details: formData.details,
@@ -90,33 +109,139 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
         <Card>
             <form onSubmit={handleSubmit(handleCreate)} className="container gap-2 p-8 ">
                 <div className="space-y-4 mt-4 ">
-                    {/* todo: Combobox component for select item */}
-                    <div className="grid gap-2">
-                        <Label>section</Label>
-                        <Controller
-                            name="section"
-                            control={control}
-                            rules={{ required: "Section is required" }}
-                            render={({ field }) => (
-                                <Select onValueChange={field.onChange} value={field.value}>
-                                    <SelectTrigger className="w-[300px]">
-                                        <SelectValue placeholder="Section" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {
-                                            categories?.data && categories?.data.map(item => (
-                                                <SelectItem key={item.id} value={item?.id}>
-                                                    {item?.title}
-                                                </SelectItem>
-                                            ))
-                                        }
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        />
-                        {errors.role && <span className="text-red-600">{errors.role.message}</span>}
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
+
+                    {/* section and year select */}
+                    {
+                        fromExamTypes && (
+                            <div className="flex flex-col md:flex-row gap-4">
+                                {/* select section */}
+                                <div>
+                                    <CustomSelect
+                                        label={"sections"}
+                                        categoryData={sectionsData?.data?.data}
+                                        control={control}
+                                        errors={errors}
+                                    />
+                                    {errors.sections && <span className="text-red-600">{errors.sections.message}</span>}
+                                </div>
+
+                                {/* select year */}
+                                <div>
+                                    <CustomSelect
+                                        label={"years"}
+                                        categoryData={yearsData?.data?.data}
+                                        control={control}
+                                        errors={errors}
+                                    />
+                                    {errors.years && <span className="text-red-600">{errors.years.message}</span>}
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {/* select exam-types */}
+                    {
+                        fromExamSubTypes && (
+                            <>
+                                <CustomSelect
+                                    label={"exam_types"}
+                                    categoryData={examtypesData?.data?.data}
+                                    control={control}
+                                    errors={errors}
+                                />
+                                {errors.exam_types && <span className="text-red-600">{errors.exam_types.message}</span>}
+                            </>
+                        )
+                    }
+
+                    {/* select subject */}
+                    {
+                        fromLessons && (
+                            <>
+                                <CustomSelect
+                                    label={"subjects"}
+                                    categoryData={subjectsData?.data?.data}
+                                    control={control}
+                                    errors={errors}
+                                />
+                                {errors.subjects && <span className="text-red-600">{errors.subjects.message}</span>}
+                            </>
+                        )
+                    }
+
+                    {/* select lesson */}
+                    {
+                        fromTopics && (
+                            <>
+                                <CustomSelect
+                                    label={"lessons"}
+                                    categoryData={lessonsData?.data?.data}
+                                    control={control}
+                                    errors={errors}
+                                />
+                                {errors.lessons && <span className="text-red-600">{errors.lessons.message}</span>}
+                            </>
+                        )
+                    }
+
+                    {/* select topics */}
+                    {
+                        fromSubtopics && (
+                            <>
+                                <CustomSelect
+                                    label={"topics"}
+                                    categoryData={topicsData?.data?.data}
+                                    control={control}
+                                    errors={errors}
+                                />
+                                {errors.topics && <span className="text-red-600">{errors.topics.message}</span>}
+                            </>
+                        )
+                    }
+
+                    {/* select level, group and and part */}
+                    {
+                        fromSubjects && (
+                            <div className="flex flex-col md:flex-row gap-4">
+                                {/* select level */}
+                                <div>
+                                    <CustomSelect
+                                        label={"level"}
+                                        categoryData={levelsData?.data?.data}
+                                        control={control}
+                                        errors={errors}
+                                    />
+                                    {errors.level && <span className="text-red-600">{errors.level.message}</span>}
+                                </div>
+                                {/* select group */}
+                                <div>
+                                    <CustomSelect
+                                        label={"group"}
+                                        categoryData={groupsData?.data?.data}
+                                        control={control}
+                                        errors={errors}
+                                    />
+                                    {errors.group && <span className="text-red-600">{errors.group.message}</span>}
+                                </div>
+                                {/* part select */}
+                                <div>
+                                    <CustomSelect
+                                        label={"part"}
+                                        categoryData={[
+                                            { id: 1, title: "1st part" },
+                                            { id: 2, title: "2nd part" }
+                                        ]}
+                                        control={control}
+                                        errors={errors}
+                                    />
+                                    {errors.part && <span className="text-red-600">{errors.part.message}</span>}
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {/* title and picture */}
+                    <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-1">
                             <Label htmlFor="title">Title</Label>
                             <Input
@@ -142,6 +267,8 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
                             {imageError && <span className="text-red-600">{imageError}</span>}
                         </div>
                     </div>
+
+                    {/* details */}
                     <div className="space-y-1">
                         <Label htmlFor="details">Details</Label>
                         <Textarea
@@ -152,6 +279,8 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
                         />
                         {errors.details && <span className="text-red-600">{errors.details.message}</span>}
                     </div>
+
+                    {/* status */}
                     <div>
                         <Checkbox
                             id="status"
@@ -166,7 +295,7 @@ const QuestionCategoryFormWithSelect = ({ type, refetchOnQuestionsCategoryQuery 
                     </Button>
                 </div>
             </form>
-        </Card>
+        </Card >
     )
 }
 export default QuestionCategoryFormWithSelect;

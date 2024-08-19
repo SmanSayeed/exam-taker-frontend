@@ -15,7 +15,12 @@ import QuestionListForAdminPage from "@/dashboard/components/pages/questions/Que
 import ExamSubTypeForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/ExamSubTypeForQuestionPage";
 import ExamTypeForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/ExamTypeForQuestionPage";
 import GroupForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/GroupForQuestionPage";
+import LessonForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/LessonForQuestionPage";
+import LevelForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/LevelForQuestionPage";
 import SectionForQuestionPage from '@/dashboard/components/pages/questions/questioncategories/SectionForQuestionPage';
+import SubTopicsForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/SubTopicsForQuestionPage";
+import SubjectForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/SubjectForQuestionPage";
+import TopicsForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/TopicsForQuestionPage";
 import YearForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/YearForQuestionPage";
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
@@ -82,6 +87,26 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/questions/exam-sub-type",
                         element: <ExamSubTypeForQuestionPage />
+                    },
+                    {
+                        path: "/admin/questions/level",
+                        element: <LevelForQuestionPage />
+                    },
+                    {
+                        path: "/admin/questions/subject",
+                        element: <SubjectForQuestionPage />
+                    },
+                    {
+                        path: "/admin/questions/lesson",
+                        element: <LessonForQuestionPage />
+                    },
+                    {
+                        path: "/admin/questions/topics",
+                        element: <TopicsForQuestionPage />
+                    },
+                    {
+                        path: "/admin/questions/sub-topics",
+                        element: <SubTopicsForQuestionPage />
                     },
                     {
                         path: "/admin/question/create",
