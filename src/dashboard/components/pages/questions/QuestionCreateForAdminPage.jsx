@@ -1,5 +1,4 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MultiStepContextProvider } from "@/providers/MultiStepContextProvider";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
 import QuestionCreateForm from "../../molecules/createquestion/QuestionCreateForm";
 import UserNav from "../../organism/UserNav";
@@ -7,7 +6,6 @@ import { Layout } from "../../templates/Layout";
 
 const QuestionCreateForAdminPage = () => {
     return (
-        <MultiStepContextProvider>
             <Layout>
                 <Layout.Header>
                     <div className='ml-auto flex items-center space-x-4'>
@@ -37,7 +35,6 @@ const QuestionCreateForAdminPage = () => {
                     </div>
                 </Layout.Body>
             </Layout>
-        </MultiStepContextProvider>
     )
 }
 export default QuestionCreateForAdminPage;

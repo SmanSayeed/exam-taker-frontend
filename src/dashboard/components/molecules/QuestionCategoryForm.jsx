@@ -65,75 +65,75 @@ const QuestionCategoryForm = ({ type, refetchOnQuestionsCategoryQuery }) => {
             toast.error(error?.data?.message);
             setError("root.random", {
                 type: "random",
-                message: `Something went wrong: ${error?.data?.message}`
+                message: `Something went wrong: ${ error?.data?.message }`
             });
-        }
+}
 
-        if (isSuccess) {
-            toast.success(data?.message);
-            reset();
-            refetchOnQuestionsCategoryQuery();
-        }
+if (isSuccess) {
+    toast.success(data?.message);
+    reset();
+    refetchOnQuestionsCategoryQuery();
+}
     }, [data, isSuccess, error, setError, reset, refetchOnQuestionsCategoryQuery]);
 
-    return (
-        <Card>
-            <form onSubmit={handleSubmit(handleCreate)} className="container gap-2 p-8 ">
-                <div className="space-y-4 mt-4 ">
-                    {/* category title */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                            <Label htmlFor="title">Title</Label>
-                            <Input
-                                {...register("title", { required: "title is Required" })}
-                                id="title"
-                                name="title"
-                                placeholder="Enter title"
-                            />
-                            {errors.title && <span className="text-red-600">{errors.title.message}</span>}
-                        </div>
-                        <div className="space-y-1">
-                            <Label htmlFor="picture">Picture</Label>
-                            <Input
-                                {...register("picture")}
-                                id="picture"
-                                type="file"
-                                name="picture"
-                                accept="image/jpeg, image/jpg, image/png"
-                                onChange={handleImageChange}
-                                className="dark:bg-gray-600"
-                            />
-                            {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
-                            {imageError && <span className="text-red-600">{imageError}</span>}
-                        </div>
-                    </div>
-                    {/* category details */}
+return (
+    <Card>
+        <form onSubmit={handleSubmit(handleCreate)} className="container gap-2 p-8 ">
+            <div className="space-y-4 mt-4 ">
+                {/* category title */}
+                <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <Label htmlFor="details">Details</Label>
-                        <Textarea
-                            {...register("details")}
-                            id="details"
-                            name="details"
-                            placeholder="Write your details here.."
+                        <Label htmlFor="title">Title</Label>
+                        <Input
+                            {...register("title", { required: "title is Required" })}
+                            id="title"
+                            name="title"
+                            placeholder="Enter title"
                         />
-                        {errors.details && <span className="text-red-600">{errors.details.message}</span>}
+                        {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                     </div>
-                    {/* status */}
-                    <div>
-                        <Checkbox
-                            id="status"
-                            checked={statusCheck}
-                            onCheckedChange={(checked) => setStatusCheck(checked)}
+                    <div className="space-y-1">
+                        <Label htmlFor="picture">Picture</Label>
+                        <Input
+                            {...register("picture")}
+                            id="picture"
+                            type="file"
+                            name="picture"
+                            accept="image/jpeg, image/jpg, image/png"
+                            onChange={handleImageChange}
+                            className="dark:bg-gray-600"
                         />
-                        <Label htmlFor="status" className="ml-2">Status</Label>
+                        {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
+                        {imageError && <span className="text-red-600">{imageError}</span>}
                     </div>
-
-                    <Button disabled={isLoading}>
-                        {isLoading ? "Loading" : "Create"}
-                    </Button>
                 </div>
-            </form>
-        </Card>
-    )
+                {/* category details */}
+                <div className="space-y-1">
+                    <Label htmlFor="details">Details</Label>
+                    <Textarea
+                        {...register("details")}
+                        id="details"
+                        name="details"
+                        placeholder="Write your details here.."
+                    />
+                    {errors.details && <span className="text-red-600">{errors.details.message}</span>}
+                </div>
+                {/* status */}
+                <div>
+                    <Checkbox
+                        id="status"
+                        checked={statusCheck}
+                        onCheckedChange={(checked) => setStatusCheck(checked)}
+                    />
+                    <Label htmlFor="status" className="ml-2">Status</Label>
+                </div>
+
+                <Button disabled={isLoading}>
+                    {isLoading ? "Loading" : "Create"}
+                </Button>
+            </div>
+        </form>
+    </Card>
+)
 }
 export default QuestionCategoryForm;

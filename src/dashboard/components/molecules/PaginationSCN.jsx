@@ -1,14 +1,11 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+  PaginationItem
 } from "@/components/ui/pagination";
 import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import QuestionCard from "./QuestionCard";
 
 export default function PaginationSCN() {
@@ -31,7 +28,7 @@ export default function PaginationSCN() {
   // Handle previous and next buttons
   const handlePreviousClick = () => {
     if (prevPageUrl) {
-      setCurrentPage((prev) => Math.max(prev - 1, 1)); 
+      setCurrentPage((prev) => Math.max(prev - 1, 1));
     }
   };
 
@@ -66,8 +63,8 @@ export default function PaginationSCN() {
             <PaginationItem key={index}>
               <button
                 className={`${index + 1 === currentPage
-                    ? "bg-gray-800"
-                    : "bg-gray-500 hover:bg-gray-800"
+                  ? "bg-gray-800"
+                  : "bg-gray-500 hover:bg-gray-800"
                   } px-3 py-[.06rem] rounded-sm text-white duration-500`}
                 onClick={() => handlePageClick(index + 1)}
               >

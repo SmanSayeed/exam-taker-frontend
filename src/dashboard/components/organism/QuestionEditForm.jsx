@@ -20,14 +20,17 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { CreativeQuestionForm } from "../molecules/createquestion/CreativeQuestionForm";
 import { McqOptionForm } from "../molecules/createquestion/McqOptionForm";
+import { useLocation } from "react-router-dom";
 
 const QuestionEditForm = () => {
-    const [statusCheck, setStatusCheck] = useState(true);
-    const [isPaid, setIsPaid] = useState(false);
-    const [isFeatured, setIsFeatured] = useState(false);
+    const location = useLocation()
 
-    const question = useSelector(state => state.question);
-    const { question_id, title, description, type, mark } = question;
+    // const question = useSelector(state => state.question);
+    const { id, title, description, type, mark, is_paid, is_featured } = location.state || {};
+
+    const [statusCheck, setStatusCheck] = useState(true);
+    const [isPaid, setIsPaid] = useState(is_paid);
+    const [isFeatured, setIsFeatured] = useState(is_featured);
 
     const {
         register,
@@ -37,10 +40,12 @@ const QuestionEditForm = () => {
         handleSubmit
     } = useForm({
         defaultValues: {
-            title: title || "",
-            description: description || "",
-            type: type || "",
-            mark: mark || ""
+            title: title ,
+            description: description ,
+            type: type ,
+            mark: mark,
+            is_paid,
+            is_featured
         }
     });
 
@@ -113,6 +118,7 @@ const QuestionEditForm = () => {
                                 <ReactQuill
                                     theme="snow"
                                     value={field.value}
+                                    defaultValue={title}
                                     onChange={field.onChange}
                                     modules={module}
                                 />
@@ -159,6 +165,7 @@ const QuestionEditForm = () => {
                         <div>
                             <Checkbox
                                 id="is_paid"
+                                name="is_paid"
                                 checked={isPaid}
                                 onCheckedChange={(checked) => setIsPaid(checked)}
                             />
@@ -169,6 +176,7 @@ const QuestionEditForm = () => {
                         <div>
                             <Checkbox
                                 id="is_featured"
+                                name="is_featured"
                                 checked={isFeatured}
                                 onCheckedChange={(checked) => setIsFeatured(checked)}
                             />
@@ -181,7 +189,7 @@ const QuestionEditForm = () => {
                         <Label>Question Type</Label>
                         <Controller
                             name="type"
-                            control={control}
+                            control={control} defaultValue={type}
                             rules={{ required: "Type is required" }}
                             render={({ field }) => (
                                 <Select onValueChange={field.onChange} value={field.value}>
@@ -246,9 +254,25 @@ const QuestionEditForm = () => {
             </form>
 
             {/* Conditionally render new form based on question type */}
-            {type === "mcq" && <McqOptionForm questionId={question_id} />}
-            {type === "creative" && <CreativeQuestionForm questionId={question_id} />}
+            {type === "mcq" && <McqOptionForm questionId={id} />}
+            {type === "creative" && <CreativeQuestionForm questionId={id} />}
         </>
     )
 }
 export default QuestionEditForm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
