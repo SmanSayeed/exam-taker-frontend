@@ -16,7 +16,6 @@ const SelectField = ({
     placeholder,
     onChange,
     rules = {},
-    value,
     disabled = false,
 }) => {
     return (
@@ -31,19 +30,19 @@ const SelectField = ({
                         {/* {console.log(`${name} Field Value:`, field.value)} */}
                         <Select
                             onValueChange={(val) => {
-                                field.onChange(val);
-                                if (onChange) onChange(val);
+                                field.onChange(val)
+                                if (onChange) onChange(val)
                             }}
-                            value={value || field.value}
+                            value={field.value || ""}
                             disabled={disabled}
                         >
                             <SelectTrigger className="w-[300px]">
-                                <SelectValue placeholder={placeholder} />
+                                <SelectValue placeholder={placeholder} aria-label="" />
                             </SelectTrigger>
                             <SelectContent>
-                                {options.map((item) => (
-                                    <SelectItem key={item.id} value={item.id}>
-                                        {item.title}
+                                {options && options.map((item) => (
+                                    <SelectItem key={item?.id.toString()} value={item?.id.toString()}>
+                                        {item?.title}
                                     </SelectItem>
                                 ))}
                             </SelectContent>

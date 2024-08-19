@@ -19,7 +19,7 @@ const CustomSelect = ({ label, categoryData, control }) => {
                         <SelectContent>
                             {
                                 categoryData && categoryData.map(item => (
-                                    <SelectItem key={item.id} value={item?.id}>
+                                    <SelectItem key={item.id.toString()} value={item?.id.toString()}>
                                         {item?.title}
                                     </SelectItem>
                                 ))

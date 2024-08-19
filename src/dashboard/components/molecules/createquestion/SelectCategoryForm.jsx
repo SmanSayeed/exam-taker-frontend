@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { useAttachCategoryMutation } from "@/features/questions/questionsApi";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import MultiSelectCategory from "./MultiSelectCategory";
+import SelectCategory from "./SelectCategory";
 
 const SelectCategoryForm = () => {
     const question = useSelector(state => state.question);
@@ -13,6 +14,8 @@ const SelectCategoryForm = () => {
         control,
         handleSubmit
     } = useForm();
+
+    const [isCategoryAttached, setIsCategoryAttached] = useState(false);
 
     const [attachCategory, { isLoading }] = useAttachCategoryMutation();
 
@@ -34,26 +37,50 @@ const SelectCategoryForm = () => {
         try {
             const response = await attachCategory(payload).unwrap();
             toast.success(response?.message);
+            setIsCategoryAttached(true);
         } catch (err) {
             toast.error(err?.data?.message || "An error occurred");
         }
+    }
+
+    const handleUpdate = (formData) => {
+        console.log(formData)
+
+        // try {
+        //     const response = await editCreativeQuestion({ id: data?.data?.id, data: payload }).unwrap();
+        //     toast.success(response?.message);
+        // } catch (err) {
+        //     toast.error(err?.data?.message || "An error occurred");
+        // }
     }
 
     return (
         <form onSubmit={handleSubmit(handleSelect)} id="select-category">
             <div className="space-y-4 mt-4">
 
-                <MultiSelectCategory
+                <SelectCategory
                     control={control}
                 />
 
-                <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isLoading}
-                >
-                    {isLoading ? "Loading..." : "Finish"}
-                </Button>
+                {
+                    isCategoryAttached ? (
+                        <Button
+                            type="button"
+                            className="w-full"
+                            onClick={handleSubmit(handleUpdate)}
+                        >
+                            Update
+                        </Button>
+                    ) : (
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? "Loading..." : "Finish"}
+                        </Button>
+                    )
+                }
             </div>
         </form>
     )

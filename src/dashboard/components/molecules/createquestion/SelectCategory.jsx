@@ -2,7 +2,7 @@ import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCate
 import { useState } from "react";
 import SelectField from "./SelectField";
 
-const MultiSelectCategory = ({ control }) => {
+const SelectCategory = ({ control }) => {
     const [sectionData, setSectionData] = useState(null);
     const [examTypeData, setExamTypeData] = useState(null);
     const [groupData, setGroupData] = useState(null);
@@ -213,4 +213,4 @@ const MultiSelectCategory = ({ control }) => {
     );
 };
 
-export default MultiSelectCategory;
+export default SelectCategory;
