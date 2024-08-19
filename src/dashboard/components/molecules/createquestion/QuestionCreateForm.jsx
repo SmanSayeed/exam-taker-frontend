@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 
 import { useCreateQuestionMutation, useEditQuestionMutation } from "@/features/questions/questionsApi";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
@@ -22,8 +22,6 @@ import { CreativeQuestionForm } from "./CreativeQuestionForm";
 import { McqOptionForm } from "./McqOptionForm";
 
 const QuestionCreateForm = () => {
-    const formRef = useRef(null);
-
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
@@ -123,7 +121,7 @@ const QuestionCreateForm = () => {
 
     return (
         <>
-            <form ref={formRef} onSubmit={handleSubmit(handleCreate)} id="question-form">
+            <form onSubmit={handleSubmit(handleCreate)} id="question-form">
                 <div className="space-y-4 mt-4">
                     {/* title */}
                     <div className="space-y-1">

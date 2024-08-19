@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
 import QuestionCreateForm from "../../molecules/createquestion/QuestionCreateForm";
+import SelectCategoryForm from "../../molecules/createquestion/SelectCategoryForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
@@ -29,6 +30,7 @@ const QuestionCreateForAdminPage = () => {
 
                             <CardContent className="flex flex-col gap-10">
                                 <QuestionCreateForm />
+                                <SelectCategoryForm />
                             </CardContent>
                         </Card>
                     </div>
