@@ -72,6 +72,13 @@ export const questionsApi = apiSlice.injectEndpoints({
                 }
             },
         }),
+        attachCategory: builder.mutation({
+            query: (data) => ({
+                url: "/que/attach",
+                method: "POST",
+                body: data,
+            }),
+        }),
     }),
 });
 
@@ -79,5 +86,6 @@ export const {
     useCreateQuestionMutation,
     useGetQuestionsQuery,
     useDeleteQuestionMutation,
-    useEditQuestionMutation
+    useEditQuestionMutation,
+    useAttachCategoryMutation
 } = questionsApi;
