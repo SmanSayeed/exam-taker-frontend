@@ -5,7 +5,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import useAdminAuth from "@/hooks/useAdminAuth";
+import useAdminAuth from "@/dashboard/hooks/useAdminAuth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";

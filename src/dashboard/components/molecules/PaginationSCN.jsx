@@ -1,42 +1,39 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+  PaginationItem
 } from "@/components/ui/pagination";
-import { useGetQuestionsQuery } from "@/features/questions/questionApi";
-import { Button } from "@/components/ui/button";
+import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
+import { useState } from "react";
+import QuestionCard from "./QuestionCard";
 
 export default function PaginationSCN() {
   const [currentPage, setCurrentPage] = useState(1);
 
-
   // Fetch data using the current page
   const { data, isLoading, isError } = useGetQuestionsQuery(currentPage);
 
-  const paginationData = data?.data?.data
-  const paginationURl = data?.data
+  // Destructure necessary data from the response
+  const paginationData = data?.data?.data;
+  const totalPage = Math.ceil(data?.data?.total / 10);
+  const prevPageUrl = data?.data?.prev_page_url;
+  const nextPageUrl = data?.data?.next_page_url;
 
-  const totalPage = Math.ceil(data?.data?.total/10)
-
-
-  // Handle page click
-  // const handlePageClick = () => {
-  //   setCurrentPage(prevPage => prevPage + 1);
-  // };
+  // Handle page click for specific page numbers
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
 
   // Handle previous and next buttons
   const handlePreviousClick = () => {
-    if (paginationData?.prev_page_url) {
-      setCurrentPage((prev) => prev - 1);
+    if (prevPageUrl) {
+      setCurrentPage((prev) => Math.max(prev - 1, 1));
     }
   };
 
   const handleNextClick = () => {
-    if (paginationURl?.next_page_url) {
+    if (nextPageUrl) {
       setCurrentPage((prev) => prev + 1);
     }
   };
@@ -46,30 +43,40 @@ export default function PaginationSCN() {
 
   return (
     <div>
+      {/* Render your list of questions */}
+      <div>
+        {paginationData?.map((question) => (
+          <QuestionCard key={question.id} data={question} />
+        ))}
+      </div>
+
+      {/* Render pagination controls */}
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            {/* <PaginationPrevious
-              href="#11"
-              onClick={handlePreviousClick}
-              disabled={!paginationData?.prev_page_url}
-            /> */}
-            <Button onClick={handlePreviousClick}>Previous </Button>
+            <Button onClick={handlePreviousClick} disabled={!prevPageUrl}>
+              Previous
+            </Button>
           </PaginationItem>
-          
+
           {Array.from({ length: totalPage }, (_, index) => (
             <PaginationItem key={index}>
-              <button className="bg-gray-500 px-3 py-[.06rem] rounded-sm text-white hover:bg-gray-800 duration-500 "  >{index+1}</button>
+              <button
+                className={`${index + 1 === currentPage
+                  ? "bg-gray-800"
+                  : "bg-gray-500 hover:bg-gray-800"
+                  } px-3 py-[.06rem] rounded-sm text-white duration-500`}
+                onClick={() => handlePageClick(index + 1)}
+              >
+                {index + 1}
+              </button>
             </PaginationItem>
           ))}
 
           <PaginationItem>
-            {/* <PaginationNext
-              // href="#"
-              onClick={handleNextClick}
-              disabled={!paginationData?.next_page_url}
-            /> */}
-            <Button onClick={handleNextClick}>Next</Button>
+            <Button onClick={handleNextClick} disabled={!nextPageUrl}>
+              Next
+            </Button>
           </PaginationItem>
         </PaginationContent>
       </Pagination>

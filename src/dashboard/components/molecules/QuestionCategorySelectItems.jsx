@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Controller, useForm } from "react-hook-form";
 
 
-export default function QuestionCategorySelectItems({name}) {
+export default function QuestionCategorySelectItems({value}) {
 
     const {
         register,
@@ -25,12 +25,12 @@ export default function QuestionCategorySelectItems({name}) {
               <form>
                   <Controller
                       name="section"
-                      control={name}
-                      rules={{ required: `${name}  is required` }}
+                    //   control={value}
+                      rules={{ required: `${value}  is required` }}
                       render={({ field }) => (
                           <Select onValueChange={field.onChange} value={field.value}>
                               <SelectTrigger className="w-[300px]">
-                                  <SelectValue placeholder={name} />
+                                  <SelectValue placeholder={value} />
                               </SelectTrigger>
                               <SelectContent>
                                   {/* {

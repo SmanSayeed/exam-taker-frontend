@@ -10,7 +10,7 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-import { useCreateQuestionMutation, useEditQuestionMutation } from "@/features/questions/questionsApi";
+import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
 import { useEffect, useState } from "react";
 
 import { Controller, useForm } from "react-hook-form";
@@ -18,10 +18,10 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import { CreativeQuestionForm } from "./CreativeQuestionForm";
-import { McqOptionForm } from "./McqOptionForm";
+import { CreativeQuestionForm } from "../molecules/createquestion/CreativeQuestionForm";
+import { McqOptionForm } from "../molecules/createquestion/McqOptionForm";
 
-const QuestionCreateForm = () => {
+const QuestionEditForm = () => {
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
@@ -68,7 +68,6 @@ const QuestionCreateForm = () => {
     }
 
     const [createQuestion, { data, isSuccess, isLoading, error }] = useCreateQuestionMutation();
-    const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleCreate = (formData) => {
         const payload = {
@@ -83,26 +82,6 @@ const QuestionCreateForm = () => {
         }
         createQuestion(payload);
     }
-
-    const handleUpdate = async (formData) => {
-        const payload = {
-            title: formData.title,
-            description: formData.description,
-            type: formData.type,
-            mark: formData.mark,
-            images: null,
-            is_paid: isPaid,
-            is_featured: isFeatured,
-            status: statusCheck
-        };
-
-        try {
-            const response = await editQuestion({ id: question_id, data: payload }).unwrap();
-            toast.success(response?.message);
-        } catch (err) {
-            toast.error(err?.data?.message || "An error occurred");
-        }
-    };
 
     useEffect(() => {
         if (error?.data) {
@@ -121,7 +100,7 @@ const QuestionCreateForm = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(handleCreate)} id="question-form">
+            <form onSubmit={handleSubmit(handleCreate)}>
                 <div className="space-y-4 mt-4">
                     {/* title */}
                     <div className="space-y-1">
@@ -243,26 +222,26 @@ const QuestionCreateForm = () => {
                         <Label htmlFor="status" className="ml-2">Status</Label>
                     </div>
 
-                    {/* update button */}
+                    {/* Conditionally Render Button */}
                     {
-                        title && (
+                        title ? (
                             <Button
+                                // disabled={isLoading}
                                 type="button"
-                                onClick={handleSubmit(handleUpdate)}
-                                disabled={isUpdating}
+                                className="w-full"
                             >
-                                {isUpdating ? "Updating..." : "Update"}
+                                Update
+                            </Button>
+                        ) : (
+                            <Button
+                                disabled={isLoading}
+                                type="submit"
+                                className="w-full"
+                            >
+                                {isLoading ? "Proceeding" : "Proceed"}
                             </Button>
                         )
                     }
-                    {/* proceed button */}
-                    <Button
-                        disabled={isLoading}
-                        type="submit"
-                        className="w-full"
-                    >
-                        {isLoading ? "Proceeding" : "Proceed"}
-                    </Button>
                 </div>
             </form>
 
@@ -272,4 +251,4 @@ const QuestionCreateForm = () => {
         </>
     )
 }
-export default QuestionCreateForm
+export default QuestionEditForm

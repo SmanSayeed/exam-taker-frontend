@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useCreateCreativeQuestionMutation } from "@/features/questions/creativeQuestionsApi";
+import { useCreateCreativeQuestionMutation, useDeleteCreativeQuestionMutation, useEditCreativeQuestionMutation } from "@/features/questions/creativeQuestionsApi";
 import { useEffect } from "react";
 
 import { Controller, useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ const CreativeQuestion = ({ questionId, questionIndex }) => {
         formState: { errors },
         control,
         setError,
+        reset,
         handleSubmit
     } = useForm();
 
@@ -41,6 +42,8 @@ const CreativeQuestion = ({ questionId, questionIndex }) => {
     }
 
     const [createCreativeQuestion, { data, isSuccess, isLoading, error }] = useCreateCreativeQuestionMutation();
+    const [deleteCreativeQuestion, { isLoading: isdDeleting }] = useDeleteCreativeQuestionMutation();
+    const [editCreativeQuestion, { isLoading: isEditing }] = useEditCreativeQuestionMutation();
 
     const handleCreate = (formData) => {
         const payload = {
@@ -51,6 +54,35 @@ const CreativeQuestion = ({ questionId, questionIndex }) => {
         };
         createCreativeQuestion(payload);
     };
+
+    const handleDelete = async (event) => {
+        event.preventDefault()
+
+        try {
+            const response = await deleteCreativeQuestion(data?.data?.id).unwrap();
+            toast.success(response?.message);
+
+            reset();
+        } catch (err) {
+            toast.error(err?.data?.message || "An error occurred");
+        }
+    }
+
+    const handleEdit = async (formData) => {
+        const payload = {
+            creative_question_text: formData.creative_question_text,
+            description: formData.explanation,
+            question_id: questionId,
+            creative_question_type: formData.creative_que_type
+        };
+
+        try {
+            const response = await editCreativeQuestion({ id: data?.data?.id, data: payload }).unwrap();
+            toast.success(response?.message);
+        } catch (err) {
+            toast.error(err?.data?.message || "An error occurred");
+        }
+    }
 
     useEffect(() => {
         if (error?.data) {
@@ -147,7 +179,13 @@ const CreativeQuestion = ({ questionId, questionIndex }) => {
                 <div>
                     {
                         isSuccess && data?.data ? (
-                            <Button type="button">{`Edit Question ${questionIndex + 1}`}</Button>
+                            <Button
+                                type="button"
+                                onClick={handleSubmit(handleEdit)}
+                                disabled={isEditing}
+                            >
+                                {`Edit Question ${questionIndex + 1}`}
+                            </Button>
                         ) : (
                             <Button type="submit" disabled={isLoading}>
                                 {isLoading ? "Saving" : `Save Question ${questionIndex + 1}`}
@@ -157,8 +195,10 @@ const CreativeQuestion = ({ questionId, questionIndex }) => {
                     <Button
                         type="button"
                         className="ml-4"
+                        onClick={handleDelete}
+                        disabled={isdDeleting}
                     >
-                        Delete
+                        {isdDeleting ? "Deleting..." : "Delete"}
                     </Button>
                 </div>
             </div>
