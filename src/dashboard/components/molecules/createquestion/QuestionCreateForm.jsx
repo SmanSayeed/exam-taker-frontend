@@ -17,9 +17,9 @@ import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
-import { toast } from "sonner";
 import { CreativeQuestionForm } from "./CreativeQuestionForm";
-import { McqOptionForm } from "./McqOptionForm";
+import { McqOptions } from "./McqOptions";
+import SelectCategory from "./SelectCategory";
 
 const QuestionCreateForm = () => {
     const [statusCheck, setStatusCheck] = useState(true);
@@ -27,22 +27,39 @@ const QuestionCreateForm = () => {
     const [isFeatured, setIsFeatured] = useState(false);
 
     const question = useSelector(state => state.question);
-    const { question_id, title, description, type, mark } = question;
+    const { question_id, title, description, mark } = question;
+
+    const [selectedType, setSelectedType] = useState("");
 
     const {
         register,
         formState: { errors },
         control,
         setError,
+        setValue,
         handleSubmit
     } = useForm({
         defaultValues: {
             title: title || "",
             description: description || "",
-            type: type || "",
+            type: selectedType || "",
             mark: mark || ""
         }
     });
+
+    const handleTypeChange = (val) => {
+        setSelectedType(val);
+        localStorage.setItem('questionType', val);
+        setValue("type", val);
+    };
+
+    useEffect(() => {
+        const storedType = localStorage.getItem('questionType');
+        if (storedType) {
+            setSelectedType(storedType);
+            setValue("type", storedType);
+        }
+    }, [setValue]);
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -70,21 +87,35 @@ const QuestionCreateForm = () => {
     const [createQuestion, { data, isSuccess, isLoading, error }] = useCreateQuestionMutation();
     const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
+    const [options, setOptions] = useState([0, 1, 2, 3]);
+    const [correctOptions, setCorrectOptions] = useState([]);
+
     const handleCreate = (formData) => {
-        const payload = {
-            title: formData.title,
-            description: formData.description,
-            type: formData.type,
-            mark: formData.mark,
-            images: null,
-            is_paid: isPaid,
-            is_featured: isFeatured,
-            status: statusCheck
-        }
-        createQuestion(payload);
-    }
+        const mcqOptions = options.map((optionIndex) => {
+            const optionText = formData[`mcq_question_text${optionIndex}`];
+            const explanation = formData[`explanation${optionIndex}`] || null;
 
-    const handleUpdate = async (formData) => {
+            return {
+                mcq_question_text: optionText,
+                is_correct: correctOptions[optionIndex] || false,
+                description: explanation,
+                mcq_images: null
+            };
+        });
+
+        const categoriesPayload = {
+            section_id: formData.section,
+            exam_type_id: formData.exam_type,
+            exam_sub_type_id: formData.exam_sub_type,
+            group_id: formData.group,
+            level_id: formData.level,
+            subject_id: formData.subject,
+            lesson_id: formData.lesson,
+            topic_id: formData.topic,
+            sub_topic_id: formData.sub_topic,
+            year_id: formData.year
+        }
+
         const payload = {
             title: formData.title,
             description: formData.description,
@@ -93,39 +124,51 @@ const QuestionCreateForm = () => {
             images: null,
             is_paid: isPaid,
             is_featured: isFeatured,
-            status: statusCheck
+            status: statusCheck,
+            mcq_options: mcqOptions,
+            categories: categoriesPayload
         };
+        console.log(payload)
 
-        try {
-            const response = await editQuestion({ id: question_id, data: payload }).unwrap();
-            toast.success(response?.message);
-        } catch (err) {
-            toast.error(err?.data?.message || "An error occurred");
-        }
+        // createQuestion(payload);
     };
-
-    useEffect(() => {
-        if (error?.data) {
-            toast.error(error?.data?.message);
-
-            setError("root.random", {
-                type: "random",
-                message: `Something went wrong: ${error?.data?.message}`
-            });
-        }
-
-        if (isSuccess && data?.data) {
-            toast.success(data?.message);
-        }
-    }, [error, setError, isSuccess, data]);
 
     return (
         <>
             <form onSubmit={handleSubmit(handleCreate)} id="question-form">
                 <div className="space-y-4 mt-4">
+                    {/* Question Type */}
+                    <div className="space-y-1">
+                        <Label className="text-md font-bold">Question Type</Label>
+                        <Controller
+                            name="type"
+                            control={control}
+                            rules={{ required: "Type is required" }}
+                            render={({ field }) => (
+                                <Select
+                                    onValueChange={(val) => {
+                                        handleTypeChange(val)
+                                        field.onChange(val)
+                                    }}
+                                    value={selectedType}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="normal">Normal</SelectItem>
+                                        <SelectItem value="mcq">MCQ</SelectItem>
+                                        <SelectItem value="creative">Creative</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        {errors.type && <span className="text-red-600">{errors.type.message}</span>}
+                    </div>
+
                     {/* title */}
                     <div className="space-y-1">
-                        <Label htmlFor="title">Title</Label>
+                        <Label htmlFor="title" className="text-md font-bold">Title</Label>
                         <Controller
                             name="title"
                             control={control}
@@ -144,7 +187,7 @@ const QuestionCreateForm = () => {
 
                     {/* description */}
                     <div className="space-y-1">
-                        <Label htmlFor="details">Description</Label>
+                        <Label htmlFor="details" className="text-md font-bold">Description</Label>
                         <Controller
                             name="description"
                             control={control}
@@ -163,7 +206,7 @@ const QuestionCreateForm = () => {
 
                     {/* images(optional) later */}
                     <div className="space-y-1">
-                        <Label htmlFor="picture">Picture</Label>
+                        <Label htmlFor="picture" className="text-md font-bold">Picture</Label>
                         <Input
                             {...register("picture")}
                             id="picture"
@@ -197,32 +240,9 @@ const QuestionCreateForm = () => {
                         </div>
                     </div>
 
-                    {/* Question Type */}
-                    <div className="space-y-1">
-                        <Label>Question Type</Label>
-                        <Controller
-                            name="type"
-                            control={control}
-                            rules={{ required: "Type is required" }}
-                            render={({ field }) => (
-                                <Select onValueChange={field.onChange} value={field.value}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Type" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="mcq">MCQ</SelectItem>
-                                        <SelectItem value="normal">Normal</SelectItem>
-                                        <SelectItem value="creative">Creative</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        />
-                        {errors.type && <span className="text-red-600">{errors.type.message}</span>}
-                    </div>
-
                     {/* marks */}
                     <div className="grid gap-2">
-                        <Label htmlFor="mark">Marks</Label>
+                        <Label htmlFor="mark" className="text-md font-bold">Marks</Label>
                         <Input
                             {...register("mark", { required: "Marks is Required" })}
                             id="mark"
@@ -243,6 +263,22 @@ const QuestionCreateForm = () => {
                         <Label htmlFor="status" className="ml-2">Status</Label>
                     </div>
 
+                    {/* mcq question */}
+                    {selectedType === "mcq" && (
+                        <McqOptions
+                            control={control}
+                            options={options}
+                            setOptions={setOptions}
+                            correctOptions={correctOptions}
+                            setCorrectOptions={setCorrectOptions}
+                        />
+                    )}
+                    {/* creative question */}
+                    {selectedType === "creative" && <CreativeQuestionForm questionId={question_id} />}
+
+                    {/* select category */}
+                    <SelectCategory control={control} />
+
                     {/* update button */}
                     {
                         title && (
@@ -261,14 +297,10 @@ const QuestionCreateForm = () => {
                         type="submit"
                         className="w-full"
                     >
-                        {isLoading ? "Proceeding" : "Proceed"}
+                        {isLoading ? "Proceeding" : "Create Question"}
                     </Button>
                 </div>
             </form>
-
-            {/* Conditionally render new form based on question type */}
-            {type === "mcq" && <McqOptionForm questionId={question_id} />}
-            {type === "creative" && <CreativeQuestionForm questionId={question_id} />}
         </>
     )
 }

@@ -20,7 +20,7 @@ const SelectField = ({
 }) => {
     return (
         <div className="grid gap-2">
-            <Label>{label}</Label>
+            <Label className="text-md font-bold">{label}</Label>
             <Controller
                 name={name}
                 control={control}

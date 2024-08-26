@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import CreativeQuestion from "./CreativeQuestion";
 
@@ -20,11 +19,11 @@ export const CreativeQuestionForm = ({ questionId }) => {
                     />
                 ))
             }
-            <div className="text-right mt-[-38px]">
+            {/* <div className="text-right mt-[-38px]">
                 <Button type="button" onClick={addNewOption}>
                     New Question
                 </Button>
-            </div>
+            </div> */}
         </div>
     );
 };

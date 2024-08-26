@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCreateCreativeQuestionMutation, useDeleteCreativeQuestionMutation, useEditCreativeQuestionMutation } from "@/features/questions/creativeQuestionsApi";
@@ -176,7 +175,7 @@ const CreativeQuestion = ({ questionId, questionIndex }) => {
                     {errors.explanation && <span className="text-red-600">{errors.explanation.message}</span>}
                 </div>
 
-                <div>
+                {/* <div>
                     {
                         isSuccess && data?.data ? (
                             <Button
@@ -200,7 +199,7 @@ const CreativeQuestion = ({ questionId, questionIndex }) => {
                     >
                         {isdDeleting ? "Deleting..." : "Delete"}
                     </Button>
-                </div>
+                </div> */}
             </div>
         </form>
     )
