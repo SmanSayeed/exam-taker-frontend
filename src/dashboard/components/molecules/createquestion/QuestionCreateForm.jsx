@@ -17,7 +17,8 @@ import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
-import { CreativeQuestionForm } from "./CreativeQuestionForm";
+import { toast } from "sonner";
+import { CreativeQuestions } from "./CreativeQuestions";
 import { McqOptions } from "./McqOptions";
 import SelectCategory from "./SelectCategory";
 
@@ -27,7 +28,7 @@ const QuestionCreateForm = () => {
     const [isFeatured, setIsFeatured] = useState(false);
 
     const question = useSelector(state => state.question);
-    const { question_id, title, description, mark } = question;
+    const { question_id, title, description, mark, mcq_options } = question;
 
     const [selectedType, setSelectedType] = useState("");
 
@@ -37,13 +38,15 @@ const QuestionCreateForm = () => {
         control,
         setError,
         setValue,
-        handleSubmit
+        handleSubmit,
+        defaultValues
     } = useForm({
         defaultValues: {
             title: title || "",
             description: description || "",
             type: selectedType || "",
-            mark: mark || ""
+            mark: mark || "",
+            mcq_options: mcq_options || []
         }
     });
 
@@ -84,13 +87,14 @@ const QuestionCreateForm = () => {
         toolbar: toolbarOptions
     }
 
-    const [createQuestion, { data, isSuccess, isLoading, error }] = useCreateQuestionMutation();
+    const [createQuestion, { isLoading }] = useCreateQuestionMutation();
     const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const [options, setOptions] = useState([0, 1, 2, 3]);
     const [correctOptions, setCorrectOptions] = useState([]);
+    const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
 
-    const handleCreate = (formData) => {
+    const handleCreate = async (formData) => {
         const mcqOptions = options.map((optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
@@ -100,6 +104,18 @@ const QuestionCreateForm = () => {
                 is_correct: correctOptions[optionIndex] || false,
                 description: explanation,
                 mcq_images: null
+            };
+        });
+
+        const creativeQuestions = creativeQueTypes.map((queTypeIndex) => {
+            const queText = formData[`creative_question_text${queTypeIndex}`];
+            const explanation = formData[`explanation${queTypeIndex}`] || null;
+            const queType = formData[`creative_que_type${queTypeIndex}`];
+
+            return {
+                creative_question_text: queText,
+                creative_question_type: queType,
+                description: explanation
             };
         });
 
@@ -126,12 +142,32 @@ const QuestionCreateForm = () => {
             is_featured: isFeatured,
             status: statusCheck,
             mcq_options: mcqOptions,
+            creative_options: creativeQuestions,
             categories: categoriesPayload
         };
-        console.log(payload)
 
-        // createQuestion(payload);
+        try {
+            const response = await createQuestion(payload).unwrap();
+            toast.success(response?.message);
+        } catch (err) {
+            toast.error(err?.data?.message || "An error occurred");
+        }
     };
+
+    // useEffect(() => {
+    //     if (mcq_options && mcq_options.length > 0) {
+    //         setOptions(mcq_options.map((_, index) => index));
+
+    //         mcq_options.forEach((option, index) => {
+    //             setValue(`mcq_question_text${index}`, option.mcq_question_text);
+    //             setValue(`explanation${index}`, option.description);
+    //             setCorrectOptions(prev => ({
+    //                 ...prev,
+    //                 [index]: option.is_correct,
+    //             }));
+    //         });
+    //     }
+    // }, [mcq_options, setValue]);
 
     return (
         <>
@@ -271,16 +307,23 @@ const QuestionCreateForm = () => {
                             setOptions={setOptions}
                             correctOptions={correctOptions}
                             setCorrectOptions={setCorrectOptions}
+                        // defaultValues={defaultValues}
                         />
                     )}
                     {/* creative question */}
-                    {selectedType === "creative" && <CreativeQuestionForm questionId={question_id} />}
+                    {selectedType === "creative" && (
+                        <CreativeQuestions
+                            control={control}
+                            creativeQueTypes={creativeQueTypes}
+                            setCreativeQueTypes={setCreativeQueTypes}
+                        />
+                    )}
 
                     {/* select category */}
                     <SelectCategory control={control} />
 
                     {/* update button */}
-                    {
+                    {/* {
                         title && (
                             <Button
                                 type="button"
@@ -290,8 +333,8 @@ const QuestionCreateForm = () => {
                                 {isUpdating ? "Updating..." : "Update"}
                             </Button>
                         )
-                    }
-                    {/* proceed button */}
+                    } */}
+                    {/* create button */}
                     <Button
                         disabled={isLoading}
                         type="submit"

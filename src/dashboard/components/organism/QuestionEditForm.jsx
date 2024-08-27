@@ -18,7 +18,7 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
-import { CreativeQuestionForm } from "../molecules/createquestion/CreativeQuestionForm";
+import { CreativeQuestions } from "../molecules/createquestion/CreativeQuestions";
 import { McqOptions } from "../molecules/createquestion/McqOptions";
 
 const QuestionEditForm = () => {
@@ -247,7 +247,7 @@ const QuestionEditForm = () => {
 
             {/* Conditionally render new form based on question type */}
             {type === "mcq" && <McqOptions questionId={question_id} />}
-            {type === "creative" && <CreativeQuestionForm questionId={question_id} />}
+            {type === "creative" && <CreativeQuestions questionId={question_id} />}
         </>
     )
 }

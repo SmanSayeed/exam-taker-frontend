@@ -1,7 +1,21 @@
 import { Button } from "@/components/ui/button";
 import McqOption from "./McqOption";
 
-export const McqOptions = ({ control, options, setOptions, correctOptions, setCorrectOptions }) => {
+export const McqOptions = ({
+    control,
+    options,
+    setOptions,
+    correctOptions,
+    setCorrectOptions,
+    defaultValues
+}) => {
+
+    // useEffect(() => {
+    //     if (defaultValues && defaultValues.mcq_options) {
+    //         const initialCorrectOptions = defaultValues.mcq_options.map(option => option.is_correct);
+    //         setCorrectOptions(initialCorrectOptions);
+    //     }
+    // }, [defaultValues, setCorrectOptions]);
 
     const addNewOption = () => {
         if (options.length < 8) {
@@ -13,6 +27,9 @@ export const McqOptions = ({ control, options, setOptions, correctOptions, setCo
         if (options.length > 2) {
             setOptions(prevOptions =>
                 prevOptions.filter(optionIndex => optionIndex !== optionIndexToDelete)
+            );
+            setCorrectOptions(prevCorrectOptions =>
+                prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete)
             );
         }
     };
@@ -33,6 +50,7 @@ export const McqOptions = ({ control, options, setOptions, correctOptions, setCo
                             control={control}
                             isCorrect={!!correctOptions[optionIndex]}
                             setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
+                        // defaultValues={defaultValues}
                         />
 
                         {/* Conditionally render the delete button */}

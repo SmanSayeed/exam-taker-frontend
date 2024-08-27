@@ -5,7 +5,13 @@ import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 
-const McqOption = ({ optionIndex, control, isCorrect, setIsCorrect }) => {
+const McqOption = ({
+    optionIndex,
+    control,
+    isCorrect,
+    setIsCorrect,
+    defaultValues
+}) => {
     const {
         formState: { errors }
     } = useForm();
@@ -32,7 +38,7 @@ const McqOption = ({ optionIndex, control, isCorrect, setIsCorrect }) => {
             {/* mcq_option_text */}
             <div className="space-y-2">
                 <Label
-                    htmlFor={`mcq_question_text_${optionIndex}`}
+                    htmlFor={`mcq_question_text${optionIndex}`}
                     className="text-md font-bold"
                 >
                     {`Option ${optionIndex + 1}`}
@@ -40,6 +46,7 @@ const McqOption = ({ optionIndex, control, isCorrect, setIsCorrect }) => {
                 <Controller
                     name={`mcq_question_text${optionIndex}`}
                     control={control}
+                    // defaultValue={defaultValues[`mcq_question_text${optionIndex}`] || ""}
                     rules={{ required: "MCQ Question Text is required" }}
                     render={({ field }) => (
                         <ReactQuill
@@ -76,10 +83,11 @@ const McqOption = ({ optionIndex, control, isCorrect, setIsCorrect }) => {
             {
                 isCorrect && (
                     <div className="space-y-2">
-                        <Label htmlFor={`explanation_${optionIndex}`}>Explanation</Label>
+                        <Label htmlFor={`explanation${optionIndex}`}>Explanation</Label>
                         <Controller
                             name={`explanation${optionIndex}`}
                             control={control}
+                            // defaultValue={defaultValues[`explanation${optionIndex}`] || ""}
                             rules={{ required: "Explanation is required" }}
                             render={({ field }) => (
                                 <ReactQuill
