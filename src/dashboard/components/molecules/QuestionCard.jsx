@@ -23,6 +23,7 @@ export default function QuestionCard({ data }) {
         } else {
             console.log("tmr id nai miya")
             toast.error("tmr id nai miya");
+            toast.error("tmr id nai miya");
         }
     };
 
@@ -84,30 +85,34 @@ export default function QuestionCard({ data }) {
             </div>
 
             <div className="flex gap-2">
-                <span className="font-medium text-sm text-gray-500 ">Descriptions:</span>
-                <div
-                    className="description-content"
-                    dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-                ></div>
-            </div>
+                <div className="flex gap-2">
+                    <span className="font-medium text-sm text-gray-500 ">Descriptions:</span>
+                    <div
+                        className="description-content"
+                        dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+                    ></div>
+                </div>
 
-            {/* Card controllers */}
-            <SquareX
-                onClick={() => handleDelete(id)}
-                size={18}
-                className="cursor-pointer absolute top-4 right-4 opacity-45 group-hover:scale-105 group-hover:opacity-85 duration-300"
-            />
+                {/* Card controllers */}
+                <SquareX
+                    onClick={() => handleDelete(id)}
+                    onClick={() => handleDelete(id)}
+                    size={18}
+                    className="cursor-pointer absolute top-4 right-4 opacity-45 group-hover:scale-105 group-hover:opacity-85 duration-300"
+                />
 
-            <div className="absolute bottom-4 right-4 flex items-center gap-3">
-                <Button>
-                    <ViewModal data={data} />
-                </Button>
-                <Button>
-                    <Link state={(data)} to={`/admin/question/edit/${id}`}>
-                        Edit
-                    </Link>
-                </Button>
+                <div className="absolute bottom-4 right-4 flex items-center gap-3">
+                    <Button>
+                        <ViewModal data={data} />
+                        <ViewModal data={data} />
+                    </Button>
+                    <Button>
+                        <Link state={(data)} to={`/admin/question/edit/${id}`}>
+                            Edit
+                        </Link>
+                    </Button>
+                </div>
             </div>
         </Card>
-    );
+    )
 }
