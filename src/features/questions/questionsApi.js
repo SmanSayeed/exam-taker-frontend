@@ -28,7 +28,8 @@ export const questionsApi = apiSlice.injectEndpoints({
                             images: result.data.data.images,
                             is_paid: result.data.data.is_paid,
                             is_featured: result.data.data.is_featured,
-                            status: result.data.data.status
+                            status: result.data.data.status,
+                            mcq_options: result.data.data.mcq_questions,
                         })
                     );
                 } catch (err) {
@@ -79,6 +80,20 @@ export const questionsApi = apiSlice.injectEndpoints({
                 body: data,
             }),
         }),
+        editAttachCategory: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `que/attach/update/${id}`,
+                method: "PUT",
+                body: data
+            }),
+        }),
+        questionSearch: builder.query({
+            query: (data) => ({
+                url: "/que/search",
+                method: "GET",
+                params: data
+            })
+        }),
     }),
 });
 
@@ -87,5 +102,7 @@ export const {
     useGetQuestionsQuery,
     useDeleteQuestionMutation,
     useEditQuestionMutation,
-    useAttachCategoryMutation
+    useAttachCategoryMutation,
+    useEditAttachCategoryMutation,
+    useQuestionSearchQuery
 } = questionsApi;
