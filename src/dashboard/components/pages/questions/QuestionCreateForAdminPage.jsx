@@ -14,18 +14,18 @@ const QuestionCreateForAdminPage = () => {
                     </div>
                 </Layout.Header>
 
-                <Layout.Body>
-                    <div className="body w-full">
-                        <div>
-                            <Card className="container ">
-                                <CardHeader>
-                                    <CardTitle className="text-xl">
-                                        Question Creation
-                                    </CardTitle>
-                                    <CardDescription>
-                                        Enter proper information to create an question
-                                    </CardDescription>
-                                </CardHeader>
+            <Layout.Body>
+                <div className="body w-full">
+                    <div>
+                        <Card className="container ">
+                            <CardHeader>
+                                <CardTitle className="text-xl">
+                                    Question Creation
+                                </CardTitle>
+                                <CardDescription>
+                                    Enter proper information to create an question
+                                </CardDescription>
+                            </CardHeader>
 
                                 <CardContent className="flex flex-col gap-10">
                                     <QuestionCreateForm />

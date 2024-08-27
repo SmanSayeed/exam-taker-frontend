@@ -1,12 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useCreateMcqOptionMutation, useDeleteMcqOptionMutation } from "@/features/questions/mcqQuestionsApi";
+import { toast } from "sonner";
+
+import {
+    useCreateMcqOptionMutation,
+    useDeleteMcqOptionMutation,
+    useEditMcqOptionMutation
+} from "@/features/questions/mcqQuestionsApi";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { toast } from "sonner";
 
 const McqOption = ({ questionId, optionIndex }) => {
     const {
@@ -14,6 +19,7 @@ const McqOption = ({ questionId, optionIndex }) => {
         control,
         setError,
         handleSubmit,
+        reset
     } = useForm();
 
     const toolbarOptions = [
@@ -35,8 +41,9 @@ const McqOption = ({ questionId, optionIndex }) => {
 
     const [isCorrect, setIsCorrect] = useState(false);
 
-    const [createMcqOption, { data, isSuccess, isLoading, error }] = useCreateMcqOptionMutation();
-    const [deleteMcqOption, { data: deleteData }] = useDeleteMcqOptionMutation();
+    const [createMcqOption, { data: optionData, isSuccess, isLoading, error }] = useCreateMcqOptionMutation();
+    const [deleteMcqOption, { isLoading: isdDeleting }] = useDeleteMcqOptionMutation();
+    const [editMcqOption, { isLoading: isEditing }] = useEditMcqOptionMutation();
 
     const handleCreate = (formData) => {
         const payload = {
@@ -48,11 +55,35 @@ const McqOption = ({ questionId, optionIndex }) => {
         createMcqOption(payload);
     };
 
-    const handleDelete = (event) => {
+    const handleEdit = async (formData) => {
+        const payload = {
+            mcq_question_text: formData.mcq_question_text,
+            description: formData.explanation,
+            question_id: questionId,
+            is_correct: isCorrect
+        };
+
+        try {
+            const response = await editMcqOption({ id: optionData?.data?.id, data: payload }).unwrap();
+            toast.success(response?.message);
+        } catch (err) {
+            toast.error(err?.data?.message || "An error occurred");
+        }
+    }
+
+    const handleDelete = async (event) => {
         event.preventDefault()
-        event.stopPropagation()
-        console.log(data?.data?.id)
-        deleteMcqOption(data?.data?.id)
+
+        try {
+            const response = await deleteMcqOption(optionData?.data?.id).unwrap();
+            toast.success(response?.message);
+
+            // Clear the form and reset the isCorrect state
+            reset();
+            setIsCorrect(false);
+        } catch (err) {
+            toast.error(err?.data?.message || "An error occurred");
+        }
     }
 
     useEffect(() => {
@@ -64,10 +95,10 @@ const McqOption = ({ questionId, optionIndex }) => {
             });
         }
 
-        if (isSuccess && data?.data) {
-            toast.success(`Option ${optionIndex + 1}: ${data?.message}`);
+        if (isSuccess && optionData?.data) {
+            toast.success(`Option ${optionIndex + 1}: ${optionData?.message}`);
         }
-    }, [error, setError, isSuccess, data, optionIndex]);
+    }, [error, setError, isSuccess, optionData, optionIndex]);
 
     return (
         <form onSubmit={handleSubmit(handleCreate)} className="space-y-6 mt-4">
@@ -126,8 +157,14 @@ const McqOption = ({ questionId, optionIndex }) => {
 
             <div>
                 {
-                    isSuccess && data?.data ? (
-                        <Button type="button">{`Edit Option ${optionIndex + 1}`}</Button>
+                    isSuccess && optionData?.data ? (
+                        <Button
+                            type="button"
+                            onClick={handleSubmit(handleEdit)}
+                            disabled={isEditing}
+                        >
+                            {`Edit Option ${optionIndex + 1}`}
+                        </Button>
                     ) : (
                         <Button type="submit" disabled={isLoading}>
                             {isLoading ? "Saving" : `Save Option ${optionIndex + 1}`}
@@ -138,8 +175,9 @@ const McqOption = ({ questionId, optionIndex }) => {
                     type="button"
                     className="ml-4"
                     onClick={handleDelete}
+                    disabled={isdDeleting}
                 >
-                    Delete
+                    {isdDeleting ? "Deleting..." : "Delete"}
                 </Button>
             </div>
         </form >

@@ -224,6 +224,7 @@ const useDataTableColumns = (type) => {
                             <div className="flex space-x-2">
                                 <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
                                     {row.original.part.title}
+                                    {row.original.part}
                                 </span>
                             </div>
                         )}

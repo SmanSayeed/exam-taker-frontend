@@ -10,7 +10,7 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
+import { useCreateQuestionMutation, useEditQuestionMutation } from "@/features/questions/questionsApi";
 import { useEffect, useState } from "react";
 
 import { Controller, useForm } from "react-hook-form";
@@ -68,6 +68,7 @@ const QuestionCreateForm = () => {
     }
 
     const [createQuestion, { data, isSuccess, isLoading, error }] = useCreateQuestionMutation();
+    const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleCreate = (formData) => {
         const payload = {
@@ -82,6 +83,26 @@ const QuestionCreateForm = () => {
         }
         createQuestion(payload);
     }
+
+    const handleUpdate = async (formData) => {
+        const payload = {
+            title: formData.title,
+            description: formData.description,
+            type: formData.type,
+            mark: formData.mark,
+            images: null,
+            is_paid: isPaid,
+            is_featured: isFeatured,
+            status: statusCheck
+        };
+
+        try {
+            const response = await editQuestion({ id: question_id, data: payload }).unwrap();
+            toast.success(response?.message);
+        } catch (err) {
+            toast.error(err?.data?.message || "An error occurred");
+        }
+    };
 
     useEffect(() => {
         if (error?.data) {
@@ -100,7 +121,7 @@ const QuestionCreateForm = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(handleCreate)}>
+            <form onSubmit={handleSubmit(handleCreate)} id="question-form">
                 <div className="space-y-4 mt-4">
                     {/* title */}
                     <div className="space-y-1">
@@ -222,26 +243,26 @@ const QuestionCreateForm = () => {
                         <Label htmlFor="status" className="ml-2">Status</Label>
                     </div>
 
-                    {/* Conditionally Render Button */}
+                    {/* update button */}
                     {
-                        title ? (
+                        title && (
                             <Button
-                                // disabled={isLoading}
                                 type="button"
-                                className="w-full"
+                                onClick={handleSubmit(handleUpdate)}
+                                disabled={isUpdating}
                             >
-                                Update
-                            </Button>
-                        ) : (
-                            <Button
-                                disabled={isLoading}
-                                type="submit"
-                                className="w-full"
-                            >
-                                {isLoading ? "Proceeding" : "Proceed"}
+                                {isUpdating ? "Updating..." : "Update"}
                             </Button>
                         )
                     }
+                    {/* proceed button */}
+                    <Button
+                        disabled={isLoading}
+                        type="submit"
+                        className="w-full"
+                    >
+                        {isLoading ? "Proceeding" : "Proceed"}
+                    </Button>
                 </div>
             </form>
 
