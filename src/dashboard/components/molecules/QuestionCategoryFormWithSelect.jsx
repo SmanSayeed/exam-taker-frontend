@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -227,8 +228,8 @@ const QuestionCategoryFormWithSelect = ({
                                     <CustomSelect
                                         label={"part"}
                                         categoryData={[
-                                            { id: 1, title: "1st part" },
-                                            { id: 2, title: "2nd part" }
+                                            { id: "1st", title: "1st part" },
+                                            { id: "2nd", title: "2nd part" }
                                         ]}
                                         control={control}
                                         errors={errors}
@@ -251,119 +252,32 @@ const QuestionCategoryFormWithSelect = ({
                             />
                             {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                         </div>
-                        )
-                }
-
-                        {/* select exam-types */}
-                        {
-                            fromExamSubTypes && (
-                                <>
-                                    <CustomSelect
-                                        label={"exam_types"}
-                                        categoryData={examtypesData?.data?.data}
-                                        control={control}
-                                        errors={errors}
-                                    />
-                                    {errors.exam_types && <span className="text-red-600">{errors.exam_types.message}</span>}
-                                </>
-                            )
-                        }
-
-                        {/* select subject */}
-                        {
-                            fromLessons && (
-                                <>
-                                    <CustomSelect
-                                        label={"subjects"}
-                                        categoryData={subjectsData?.data?.data}
-                                        control={control}
-                                        errors={errors}
-                                    />
-                                    {errors.subjects && <span className="text-red-600">{errors.subjects.message}</span>}
-                                </>
-                            )
-                        }
-
-                        {/* select lesson */}
-                        {
-                            fromTopics && (
-                                <>
-                                    <CustomSelect
-                                        label={"lessons"}
-                                        categoryData={lessonsData?.data?.data}
-                                        control={control}
-                                        errors={errors}
-                                    />
-                                    {errors.lessons && <span className="text-red-600">{errors.lessons.message}</span>}
-                                </>
-                            )
-                        }
-
-                        {/* select topics */}
-                        {
-                            fromSubtopics && (
-                                <>
-                                    <CustomSelect
-                                        label={"topics"}
-                                        categoryData={topicsData?.data?.data}
-                                        control={control}
-                                        errors={errors}
-                                    />
-                                    {errors.topics && <span className="text-red-600">{errors.topics.message}</span>}
-                                </>
-                            )
-                        }
-
-                        {/* select level, group and and part */}
-                        {
-                            fromSubjects && (
-                                <div className="flex flex-col md:flex-row gap-4">
-                                    {/* select level */}
-                                    <div>
-                                        <CustomSelect
-                                            label={"level"}
-                                            categoryData={levelsData?.data?.data}
-                                            control={control}
-                                            errors={errors}
-                                        />
-                                        {errors.level && <span className="text-red-600">{errors.level.message}</span>}
-                                    </div>
-                                    {/* select group */}
-                                    <div>
-                                        <CustomSelect
-                                            label={"group"}
-                                            categoryData={groupsData?.data?.data}
-                                            control={control}
-                                            errors={errors}
-                                        />
-                                        {errors.group && <span className="text-red-600">{errors.group.message}</span>}
-                                    </div>
-                                    {/* part select */}
-                                    <div>
-                                        <CustomSelect
-                                            label={"part"}
-                                            categoryData={[
-                                                { id: 1, title: "1st part" },
-                                                { id: 2, title: "2nd part" }
-                                            ]}
-                                            control={control}
-                                            errors={errors}
-                                        />
-                                        {errors.part && <span className="text-red-600">{errors.part.message}</span>}
-                                    </div>
-                                </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="picture">Picture</Label>
+                            <Input
+                                {...register("picture")}
+                                id="picture"
+                                type="file"
+                                name="picture"
+                                accept="image/jpeg, image/jpg, image/png"
+                                onChange={handleImageChange}
+                                className="dark:bg-gray-600"
+                            />
+                            {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
+                            {imageError && <span className="text-red-600">{imageError}</span>}
+                        </div>
                     </div>
 
                     {/* details */}
                     <div className="space-y-1">
-                        <Label htmlFor="title">Title</Label>
-                        <Input
-                            {...register("title", { required: "title is Required" })}
-                            id="title"
-                            name="title"
-                            placeholder="Enter title"
+                        <Label htmlFor="details">Details</Label>
+                        <Textarea
+                            {...register("details")}
+                            id="details"
+                            name="details"
+                            placeholder="Write your details here.."
                         />
-                        {errors.title && <span className="text-red-600">{errors.title.message}</span>}
+                        {errors.details && <span className="text-red-600">{errors.details.message}</span>}
                     </div>
 
                     {/* status */}
@@ -373,21 +287,12 @@ const QuestionCategoryFormWithSelect = ({
                             checked={statusCheck}
                             onCheckedChange={(checked) => setStatusCheck(checked)}
                         />
-                        {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
-                        {imageError && <span className="text-red-600">{imageError}</span>}
+                        <Label htmlFor="status" className="ml-2">Status</Label>
                     </div>
-                </div>
 
-                {/* details */}
-                <div className="space-y-1">
-                    <Label htmlFor="details">Details</Label>
-                    <Textarea
-                        {...register("details")}
-                        id="details"
-                        name="details"
-                        placeholder="Write your details here.."
-                    />
-                    {errors.details && <span className="text-red-600">{errors.details.message}</span>}
+                    <Button disabled={isLoading}>
+                        {isLoading ? "Loading" : "Create"}
+                    </Button>
                 </div>
             </form>
         </Card >
