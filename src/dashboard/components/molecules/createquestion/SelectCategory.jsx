@@ -78,7 +78,7 @@ const SelectCategory = ({ control }) => {
     }
 
     return (
-        <>
+        <div className="space-y-4 mt-4">
             {/* Section → exam_types → exam_sub_types */}
             <div className="flex flex-col md:flex-row gap-4 mb-6">
                 <SelectField
@@ -92,32 +92,28 @@ const SelectCategory = ({ control }) => {
                 />
 
                 {sectionData && sectionData.exam_types && (
-                    <>
-                        <SelectField
-                            label="Exam Type"
-                            name="exam_type"
-                            control={control}
-                            options={sectionData.exam_types}
-                            placeholder="Select Exam Type"
-                            onChange={handleExamTypeChange}
-                            rules={{ required: "Exam Type is required" }}
-                            disabled={!sectionData}
-                        />
-                    </>
+                    <SelectField
+                        label="Exam Type"
+                        name="exam_type"
+                        control={control}
+                        options={sectionData.exam_types}
+                        placeholder="Select Exam Type"
+                        onChange={handleExamTypeChange}
+                        rules={{ required: "Exam Type is required" }}
+                        disabled={!sectionData}
+                    />
                 )}
 
                 {examTypeData && examTypeData.exam_sub_types && (
-                    <>
-                        <SelectField
-                            label="Exam Sub Type"
-                            name="exam_sub_type"
-                            control={control}
-                            options={examTypeData.exam_sub_types}
-                            placeholder="Select Exam Sub Type"
-                            rules={{ required: "Exam Sub Type is required" }}
-                            disabled={!examTypeData}
-                        />
-                    </>
+                    <SelectField
+                        label="Exam Sub Type"
+                        name="exam_sub_type"
+                        control={control}
+                        options={examTypeData.exam_sub_types}
+                        placeholder="Select Exam Sub Type"
+                        rules={{ required: "Exam Sub Type is required" }}
+                        disabled={!examTypeData}
+                    />
                 )}
             </div>
 
@@ -209,7 +205,7 @@ const SelectCategory = ({ control }) => {
                     rules={{ required: "Year is required" }}
                 />
             </div>
-        </>
+        </div>
     );
 };
 

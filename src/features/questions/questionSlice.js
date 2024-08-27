@@ -9,7 +9,8 @@ const initialState = {
     images: null,
     is_paid: null,
     is_featured: null,
-    status: null
+    status: null,
+    mcq_options: []
 };
 
 const questionSlice = createSlice({
@@ -26,6 +27,7 @@ const questionSlice = createSlice({
             state.is_paid = action.payload.is_paid;
             state.is_featured = action.payload.is_featured;
             state.status = action.payload.status;
+            state.mcq_options = action.payload.mcq_options;
         },
         clearQuestion: (state) => {
             state.question_id = null;
@@ -37,6 +39,7 @@ const questionSlice = createSlice({
             state.is_paid = null;
             state.is_featured = null;
             state.status = null;
+            state.mcq_options = [];
         },
     },
 });
