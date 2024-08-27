@@ -228,8 +228,8 @@ const QuestionCategoryFormWithSelect = ({
                                     <CustomSelect
                                         label={"part"}
                                         categoryData={[
-                                            { id: 1, title: "1st part" },
-                                            { id: 2, title: "2nd part" }
+                                            { id: "1st", title: "1st part" },
+                                            { id: "2nd", title: "2nd part" }
                                         ]}
                                         control={control}
                                         errors={errors}

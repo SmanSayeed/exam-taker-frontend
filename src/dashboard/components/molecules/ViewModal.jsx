@@ -1,73 +1,75 @@
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Link } from "react-router-dom"
 import DOMPurify from "dompurify";
 
+// Helper function to parse HTML string and convert to JSX with Tailwind classes
+const parseHtmlContent = (htmlContent) => {
+    return (
+        <div
+            dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(htmlContent),
+            }}
+        />
+    );
+};
 
 export function ViewModal({ data }) {
-    const { id, title, description, is_paid, is_featured, type, mark } = data || {};
+    const { id, title, description, is_paid, is_featured, type, mark, mcq_questions, creative_questions
+    } = data || {};
 
-
-    // Function to add Tailwind classes to specific elements
-    const addTailwindClasses = (htmlContent) => {
-        const div = document.createElement("div");
-        div.innerHTML = htmlContent;
-
-        // Example: Add classes to specific elements
-        const paragraphs = div.querySelectorAll("p");
-        paragraphs.forEach((p) => {
-            p.classList.add("text-3xl", "mb-5", "text-sm");
-        });
-
-        const headings = div.querySelectorAll("h1, h2, h3");
-        headings.forEach((heading) => {
-            heading.classList.add("capitalize", "text-2xl", "mb-1", "font-semibold");
-        });
-
-        const lists = div.querySelectorAll("ul, ol");
-        lists.forEach((list) => {
-            list.classList.add("list-disc", "list-inside", "ml-4");
-        });
-
-        return div.innerHTML;
-    };
-    // Sanitize and style the title HTML
-    const sanitizedTitle = DOMPurify.sanitize(addTailwindClasses(title));
-    // Sanitize and style the description HTML
-    const sanitizedDescription = DOMPurify.sanitize(addTailwindClasses(description));
-
+    const mcqOptionDescription = mcq_questions?.map(title => title?.description)
 
     return (
         <Dialog>
             <DialogTrigger asChild>
                 <Link variant="outline">View</Link>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[60%] ">
+            <DialogContent className="sm:max-w-[60%] border border-gray-400 text-gray-400 ">
                 <DialogHeader>
-                    <DialogTitle>
-                        <p
-                            className="description-content"
-                            dangerouslySetInnerHTML={{ __html: sanitizedTitle }}
-                        ></p>
-                    </DialogTitle>
 
+                    <p className="text-3xl" >
+                        {parseHtmlContent(title)}
+                    </p>
 
-                    <div className="mb-20 text-xs text-gray-500 flex items-center gap-3">
-                        <p>Que ID: {id}</p>
-                        <p className="border-l pl-2">{is_paid === 0 ? "not paid" : "paid"}</p>
-                        <p className="border-l pl-2">{is_featured === 0 ? "not featured" : "featured"}</p>
-                        <p className="border-l pl-2">{type} question</p>
-                        <p className="border-l pl-2">{mark} Marks </p>
+                    <div>
+                        {type === "mcq" ? <div>
+                            {<div className="">
+                                <ul className="text-sm space-y-1 mb-2 "
+                                >
+                                    {mcq_questions?.map((option, index) => <li key={index} className="list-decimal ml-5  " > {parseHtmlContent(option?.mcq_question_text)} </li>)}
+                                </ul>
+                            </div>}
+                        </div>
+                            : type === "creative" ? <div>
+                                {<div className="">
+                                    <ul className="text-sm"
+                                    >
+                                        {creative_questions?.map((question, index) => <li key={index} className="list-decimal ml-5 " > {parseHtmlContent(question?.creative_question_text)} </li>)}
+                                    </ul>
+                                </div>}
+                            </div> : ""}
                     </div>
 
-                    <div className="text-sm text-gray-500 my-20 ">
+                    <div className="flex items-start gap-2">
+                        <span className="font-medium">Description:</span>
+                        <span  >
+                            {parseHtmlContent(title)}
+                        </span>
+                    </div>
+
+                    <div className="text-xs flex items-center gap-3 pt-4 ">
+                        <p>Que ID: {id}</p>
+                        <p className="border-l border-gray-400 pl-2">{is_paid === 0 ? "Not paid" : "paid"}</p>
+                        <p className="border-l border-gray-400  pl-2">{is_featured === 0 ? "Not featured" : "featured"}</p>
+                        <p className="border-l border-gray-400  pl-2 capitalize"> <span className={`${type === "mcq" ? "uppercase" : "capitalize"}`} > {type}  </span>question</p>
+                        <p className="border-l border-gray-400  pl-2">{mark} Marks </p>
+                    </div>
+                    <div className="text-sm ">
                         <div id="section" className="mt-1">
                             <p><span className="font-medium">Section:</span>  &rarr; exam-type &rarr; exam sub-type</p>
                         </div>
@@ -75,14 +77,6 @@ export function ViewModal({ data }) {
                             <p> <span className="font-medium"> Group: </span> &rarr; level &rarr; subject &rarr; exam topic &rarr; exam sub-topic</p>
                         </div>
                     </div>
-
-                    <DialogDescription className="flex gap-2">
-                        <span className="font-medium">Description:</span>
-                        <div
-                            className="description-content "
-                            dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-                        ></div>
-                    </DialogDescription>
                 </DialogHeader>
             </DialogContent>
         </Dialog>
