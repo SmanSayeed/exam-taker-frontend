@@ -6,20 +6,20 @@ import { Layout } from "../../templates/Layout";
 
 const QuestionCreateForAdminPage = () => {
     return (
-            <Layout>
-                <Layout.Header>
-                    <div className='ml-auto flex items-center space-x-4'>
-                        <ThemeSwitch />
-                        <UserNav />
-                    </div>
-                </Layout.Header>
+        <Layout>
+            <Layout.Header>
+                <div className='ml-auto flex items-center space-x-4'>
+                    <ThemeSwitch />
+                    <UserNav />
+                </div>
+            </Layout.Header>
 
             <Layout.Body>
                 <div className="body w-full">
                     <div>
                         <Card className="container ">
                             <CardHeader>
-                                <CardTitle className="text-xl">
+                                <CardTitle className="text-xl font-semibold">
                                     Question Creation
                                 </CardTitle>
                                 <CardDescription>
@@ -27,14 +27,14 @@ const QuestionCreateForAdminPage = () => {
                                 </CardDescription>
                             </CardHeader>
 
-                                <CardContent className="flex flex-col gap-10">
-                                    <QuestionCreateForm />
-                                </CardContent>
-                            </Card>
-                        </div>
+                            <CardContent className="flex flex-col gap-10">
+                                <QuestionCreateForm />
+                            </CardContent>
+                        </Card>
                     </div>
-                </Layout.Body>
-            </Layout>
+                </div>
+            </Layout.Body>
+        </Layout>
     )
 }
 export default QuestionCreateForAdminPage;

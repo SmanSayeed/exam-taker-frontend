@@ -1,20 +1,24 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLocation } from "react-router-dom";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
+import QuestionEditForm from "../../organism/QuestionEditForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
-import QuestionEditForm from "../../organism/QuestionEditForm";
 
 const QuestionEditForAdminPage = () => {
 
+    const location = useLocation()
+    console.log(location?.state)
+
 
     return (
-            <Layout>
-                <Layout.Header>
-                    <div className='ml-auto flex items-center space-x-4'>
-                        <ThemeSwitch />
-                        <UserNav />
-                    </div>
-                </Layout.Header>
+        <Layout>
+            <Layout.Header>
+                <div className='ml-auto flex items-center space-x-4'>
+                    <ThemeSwitch />
+                    <UserNav />
+                </div>
+            </Layout.Header>
 
                 <Layout.Body>
                     <div className="body w-full">
@@ -29,14 +33,14 @@ const QuestionEditForAdminPage = () => {
                                     </CardDescription>
                                 </CardHeader>
 
-                                <CardContent className="flex flex-col gap-10">
-                                    <QuestionEditForm />
-                                </CardContent>
-                            </Card>
-                        </div>
+                            <CardContent className="flex flex-col gap-10">
+                                <QuestionEditForm />
+                            </CardContent>
+                        </Card>
                     </div>
-                </Layout.Body>
-            </Layout>
+                </div>
+            </Layout.Body>
+        </Layout>
     )
 }
 export default QuestionEditForAdminPage;

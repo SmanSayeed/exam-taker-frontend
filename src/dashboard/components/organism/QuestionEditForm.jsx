@@ -16,11 +16,10 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import { CreativeQuestionForm } from "../molecules/createquestion/CreativeQuestionForm";
-import { McqOptionForm } from "../molecules/createquestion/McqOptionForm";
 import { useLocation } from "react-router-dom";
+import { toast } from "sonner";
+import { CreativeQuestions } from "../molecules/createquestion/CreativeQuestions";
+import { McqOptions } from "../molecules/createquestion/McqOptions";
 
 const QuestionEditForm = () => {
     const location = useLocation()
@@ -40,9 +39,9 @@ const QuestionEditForm = () => {
         handleSubmit
     } = useForm({
         defaultValues: {
-            title: title ,
-            description: description ,
-            type: type ,
+            title: title,
+            description: description,
+            type: type,
             mark: mark,
             is_paid,
             is_featured
@@ -254,8 +253,8 @@ const QuestionEditForm = () => {
             </form>
 
             {/* Conditionally render new form based on question type */}
-            {type === "mcq" && <McqOptionForm questionId={id} />}
-            {type === "creative" && <CreativeQuestionForm questionId={id} />}
+            {type === "mcq" && <McqOptions questionId={question_id} />}
+            {type === "creative" && <CreativeQuestions questionId={question_id} />}
         </>
     )
 }
