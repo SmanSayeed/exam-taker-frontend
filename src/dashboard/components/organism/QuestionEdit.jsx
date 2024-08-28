@@ -10,26 +10,27 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-import { useCreateQuestionMutation, useEditQuestionMutation } from "@/features/questions/questionsApi";
-import { useEffect, useState } from "react";
+import { useEditQuestionMutation } from "@/features/questions/questionsApi";
+import { useState } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
-import { CreativeQuestions } from "./CreativeQuestions";
-import { McqOptions } from "./McqOptions";
-import SelectCategory from "./SelectCategory";
+import { CreativeQuestions } from "../molecules/createquestion/CreativeQuestions";
+import { McqOptions } from "../molecules/createquestion/McqOptions";
+import SelectCategory from "../molecules/createquestion/SelectCategory";
 
-const QuestionCreateForm = () => {
+const QuestionEdit = () => {
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
-    const [selectedType, setSelectedType] = useState("");
 
-    const question = useSelector(state => state.question);
-    const { question_id, title, description, mark, mcq_options } = question;
+    const location = useLocation();
+    console.log(location)
+
+    const { id: question_id, title, description, type, mark, is_paid, is_featured, mcq_questions, creative_questions } = location.state || {};
 
     const {
         register,
@@ -41,25 +42,11 @@ const QuestionCreateForm = () => {
         defaultValues: {
             title: title || "",
             description: description || "",
-            type: selectedType || "",
+            type: type || "",
             mark: mark || "",
-            mcq_options: mcq_options || []
+            mcq_options: mcq_questions || []
         }
     });
-
-    const handleTypeChange = (val) => {
-        setSelectedType(val);
-        localStorage.setItem('questionType', val);
-        setValue("type", val);
-    };
-
-    useEffect(() => {
-        const storedType = localStorage.getItem('questionType');
-        if (storedType) {
-            setSelectedType(storedType);
-            setValue("type", storedType);
-        }
-    }, [setValue]);
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -84,72 +71,11 @@ const QuestionCreateForm = () => {
         toolbar: toolbarOptions
     }
 
-    const [createQuestion, { data: questionsData, isLoading }] = useCreateQuestionMutation();
     const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const [options, setOptions] = useState([0, 1, 2, 3]);
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
-
-    const handleCreate = async (formData) => {
-        const mcqOptions = options.map((optionIndex) => {
-            const optionText = formData[`mcq_question_text${optionIndex}`];
-            const explanation = formData[`explanation${optionIndex}`] || null;
-
-            return {
-                mcq_question_text: optionText,
-                is_correct: correctOptions[optionIndex] || false,
-                description: explanation,
-                mcq_images: null
-            };
-        });
-
-        const creativeQuestions = creativeQueTypes.map((queTypeIndex) => {
-            const queText = formData[`creative_question_text${queTypeIndex}`];
-            const explanation = formData[`explanation${queTypeIndex}`] || null;
-            const queType = formData[`creative_que_type${queTypeIndex}`];
-
-            return {
-                creative_question_text: queText,
-                creative_question_type: queType,
-                description: explanation
-            };
-        });
-
-        const categoriesPayload = {
-            section_id: formData.section,
-            exam_type_id: formData.exam_type,
-            exam_sub_type_id: formData.exam_sub_type,
-            group_id: formData.group,
-            level_id: formData.level,
-            subject_id: formData.subject,
-            lesson_id: formData.lesson,
-            topic_id: formData.topic,
-            sub_topic_id: formData.sub_topic,
-            year_id: formData.year
-        }
-
-        const payload = {
-            title: formData.title,
-            description: formData.description,
-            type: formData.type,
-            mark: formData.mark,
-            images: null,
-            is_paid: isPaid,
-            is_featured: isFeatured,
-            status: statusCheck,
-            mcq_options: mcqOptions,
-            creative_options: creativeQuestions,
-            categories: categoriesPayload
-        };
-
-        try {
-            const response = await createQuestion(payload).unwrap();
-            toast.success(response?.message);
-        } catch (err) {
-            toast.error(err?.data?.message || "An error occurred");
-        }
-    };
 
     const handleUpdate = async (formData) => {
         const mcqOptions = options.map((optionIndex) => {
@@ -213,7 +139,7 @@ const QuestionCreateForm = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(handleCreate)} id="question-form">
+            <form onSubmit={handleSubmit(handleUpdate)} id="question-form">
                 <div className="space-y-4 mt-4">
                     {/* Question Type */}
                     <div className="space-y-1">
@@ -224,19 +150,13 @@ const QuestionCreateForm = () => {
                             rules={{ required: "Type is required" }}
                             render={({ field }) => (
                                 <Select
-                                    onValueChange={(val) => {
-                                        handleTypeChange(val)
-                                        field.onChange(val)
-                                    }}
-                                    value={selectedType}
+                                    value={field.value}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Type" />
+                                        <SelectValue placeholder={field.value} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="normal">Normal</SelectItem>
-                                        <SelectItem value="mcq">MCQ</SelectItem>
-                                        <SelectItem value="creative">Creative</SelectItem>
+                                        <SelectItem value={type}>{type}</SelectItem>
                                     </SelectContent>
                                 </Select>
                             )}
@@ -342,7 +262,7 @@ const QuestionCreateForm = () => {
                     </div>
 
                     {/* mcq question */}
-                    {selectedType === "mcq" && (
+                    {type === "mcq" && (
                         <McqOptions
                             control={control}
                             options={options}
@@ -352,7 +272,7 @@ const QuestionCreateForm = () => {
                         />
                     )}
                     {/* creative question */}
-                    {selectedType === "creative" && (
+                    {type === "creative" && (
                         <CreativeQuestions
                             control={control}
                             creativeQueTypes={creativeQueTypes}
@@ -363,30 +283,15 @@ const QuestionCreateForm = () => {
                     {/* select category */}
                     <SelectCategory control={control} />
 
-                    {/* update button */}
-                    {
-                        questionsData?.data && selectedType === questionsData?.data?.type && (
-                            <Button
-                                type="button"
-                                onClick={handleSubmit(handleUpdate)}
-                                disabled={isUpdating}
-                            >
-                                {isUpdating ? "Updating..." : "Update"}
-                            </Button>
-                        )
-                    }
-
-                    {/* create button */}
                     <Button
-                        disabled={isLoading}
-                        type="submit"
+                        disabled={isUpdating}
                         className="w-full"
                     >
-                        {isLoading ? "Proceeding" : "Create Question"}
+                        {isUpdating ? "Updating..." : "Update"}
                     </Button>
                 </div>
             </form>
         </>
     )
 }
-export default QuestionCreateForm
+export default QuestionEdit
