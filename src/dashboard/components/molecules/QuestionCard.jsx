@@ -19,7 +19,8 @@ const parseHtmlContent = (htmlContent) => {
 };
 
 export default function QuestionCard({ data: questionData }) {
-    const { id, title, description, is_paid, is_featured, type, mark } = questionData;
+    const { id, title, description, is_paid, is_featured, type, mark } =
+        questionData || {};
 
     const [deleteQuestion, { error }] = useDeleteQuestionMutation();
 
@@ -53,12 +54,7 @@ export default function QuestionCard({ data: questionData }) {
                 <p className="border-l border-gray-500  pl-2 capitalize ">
                     {is_featured === 0 ? "not featured" : "featured"}
                 </p>
-                <p className="border-l border-gray-500  pl-2">
-                    <span className={`${type === "mcq" ? "uppercase" : "capitalize"}`} >
-                        {type}
-                    </span>
-                    Question
-                </p>
+                <p className="border-l border-gray-500  pl-2"> <span className={`${type === "mcq" ? "uppercase" : "capitalize"}`} > {type}  </span>Question</p>
                 <p className="border-l border-gray-500  pl-2">{mark} Marks </p>
             </div>
 
@@ -99,7 +95,7 @@ export default function QuestionCard({ data: questionData }) {
                         Edit
                     </Link>
                 </Button>
-            </div >
-        </Card >
+            </div>
+        </Card>
     );
 }
