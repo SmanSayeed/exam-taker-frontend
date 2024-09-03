@@ -26,11 +26,9 @@ const QuestionListForAdminPage = () => {
             </Layout.Header>
 
             <Layout.Body>
-                {/* filter starts */}
-                <Card id="filtering-and-search-question" className="mb-5 h-80 sm:h-52 md:h-40 relative rounded-md p-2 ">
+                <Card id="filtering-and-search-question" className="mb-5 h-full rounded-md p-3">
                     <FilteringQuestions />
                 </Card>
-                {/* filter ends */}
 
                 <div>
                     {isLoading ? <Loading /> : isSuccess && paginationData?.data?.data ? <div>

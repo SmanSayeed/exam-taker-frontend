@@ -3,14 +3,14 @@ import FilterQuestionsByCategory from "../molecules/FilterQuestionsByCategory";
 
 export default function FilteringQuestions() {
   return (
-      <div className="relative h-full">
-          <div>
-              <FilterQuestionsByCategory/>
-          </div>
-          
-          <div className="refresh-and-search w-full absolute bottom-0 left-1/2 transform -translate-x-1/2">
-              <FilterQuestionsBySearch />
-      </div> 
+    <div className="relativ h-full min-h-20 ">
+      <div>
+        <FilterQuestionsByCategory />
+      </div>
+
+      <div className="refresh-and-search w-full ">
+        <FilterQuestionsBySearch />
+      </div>
     </div>
   )
 }
