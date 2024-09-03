@@ -16,8 +16,10 @@ const SelectField = ({
     placeholder,
     onChange,
     rules = {},
+    defaultValue,
     disabled = false,
 }) => {
+    // console.log("select options", options)
     return (
         <div className="grid gap-2">
             <Label className="text-md font-bold">{label}</Label>
@@ -27,17 +29,16 @@ const SelectField = ({
                 rules={rules}
                 render={({ field, formState: { errors } }) => (
                     <>
-                        {/* {console.log(`${name} Field Value:`, field.value)} */}
                         <Select
                             onValueChange={(val) => {
                                 field.onChange(val)
                                 if (onChange) onChange(val)
                             }}
-                            value={field.value || ""}
+                            value={defaultValue || ""}
                             disabled={disabled}
                         >
                             <SelectTrigger className="w-[300px]">
-                                <SelectValue placeholder={placeholder} aria-label="" />
+                                <SelectValue placeholder={placeholder} aria-label={`${label} select`} />
                             </SelectTrigger>
                             <SelectContent>
                                 {options && options.map((item) => (

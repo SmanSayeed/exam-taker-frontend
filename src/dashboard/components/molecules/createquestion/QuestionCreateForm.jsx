@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/select";
 
 import { useCreateQuestionMutation, useEditQuestionMutation } from "@/features/questions/questionsApi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
@@ -26,10 +27,12 @@ const QuestionCreateForm = () => {
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
-    const [selectedType, setSelectedType] = useState("");
+
+    const [selectedType, setSelectedType] = useLocalStorage({ key: 'questionType', defaultValue: "" });
+    const [mark, setMark] = useLocalStorage({ key: 'questionMark', defaultValue: '' });
 
     const question = useSelector(state => state.question);
-    const { question_id, title, description, mark, mcq_options } = question;
+    const { question_id, title, description, mcq_options } = question;
 
     const {
         register,
@@ -49,17 +52,14 @@ const QuestionCreateForm = () => {
 
     const handleTypeChange = (val) => {
         setSelectedType(val);
-        localStorage.setItem('questionType', val);
         setValue("type", val);
     };
 
-    useEffect(() => {
-        const storedType = localStorage.getItem('questionType');
-        if (storedType) {
-            setSelectedType(storedType);
-            setValue("type", storedType);
-        }
-    }, [setValue]);
+    const handleMarkChange = (e) => {
+        const value = e.target.value;
+        setMark(value);
+        setValue("mark", value);
+    };
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -326,7 +326,7 @@ const QuestionCreateForm = () => {
                             id="mark"
                             name="mark"
                             type="number"
-                            placeholder="5"
+                            onChange={handleMarkChange}
                         />
                         {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
                     </div>
