@@ -6,16 +6,8 @@ export const McqOptions = ({
     options,
     setOptions,
     correctOptions,
-    setCorrectOptions,
-    defaultValues
+    setCorrectOptions
 }) => {
-
-    // useEffect(() => {
-    //     if (defaultValues && defaultValues.mcq_options) {
-    //         const initialCorrectOptions = defaultValues.mcq_options.map(option => option.is_correct);
-    //         setCorrectOptions(initialCorrectOptions);
-    //     }
-    // }, [defaultValues, setCorrectOptions]);
 
     const addNewOption = () => {
         if (options.length < 8) {
@@ -50,10 +42,8 @@ export const McqOptions = ({
                             control={control}
                             isCorrect={!!correctOptions[optionIndex]}
                             setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
-                        // defaultValues={defaultValues}
                         />
 
-                        {/* Conditionally render the delete button */}
                         {options.length > 2 && optionIndex > 1 && (
                             <Button
                                 type="button"
@@ -67,7 +57,6 @@ export const McqOptions = ({
                 ))
             }
 
-            {/* Display the "New Option" button next to the delete button */}
             <div className="flex justify-end mt-4">
                 {options.length < 8 && (
                     <Button type="button" onClick={addNewOption} className="ml-4">

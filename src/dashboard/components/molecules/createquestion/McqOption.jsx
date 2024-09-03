@@ -9,8 +9,7 @@ const McqOption = ({
     optionIndex,
     control,
     isCorrect,
-    setIsCorrect,
-    defaultValues
+    setIsCorrect
 }) => {
     const {
         formState: { errors }
@@ -46,7 +45,6 @@ const McqOption = ({
                 <Controller
                     name={`mcq_question_text${optionIndex}`}
                     control={control}
-                    // defaultValue={defaultValues[`mcq_question_text${optionIndex}`] || ""}
                     rules={{ required: "MCQ Question Text is required" }}
                     render={({ field }) => (
                         <ReactQuill
@@ -87,7 +85,6 @@ const McqOption = ({
                         <Controller
                             name={`explanation${optionIndex}`}
                             control={control}
-                            // defaultValue={defaultValues[`explanation${optionIndex}`] || ""}
                             rules={{ required: "Explanation is required" }}
                             render={({ field }) => (
                                 <ReactQuill

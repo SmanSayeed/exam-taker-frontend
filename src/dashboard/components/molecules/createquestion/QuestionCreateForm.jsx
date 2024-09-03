@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/select";
 
 import { useCreateQuestionMutation, useEditQuestionMutation } from "@/features/questions/questionsApi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
@@ -27,19 +28,18 @@ const QuestionCreateForm = () => {
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
 
-    const question = useSelector(state => state.question);
-    const { question_id, title, description, mark, mcq_options } = question;
+    const [selectedType, setSelectedType] = useLocalStorage({ key: 'questionType', defaultValue: "" });
+    const [mark, setMark] = useLocalStorage({ key: 'questionMark', defaultValue: '' });
 
-    const [selectedType, setSelectedType] = useState("");
+    const question = useSelector(state => state.question);
+    const { question_id, title, description, mcq_options } = question;
 
     const {
         register,
         formState: { errors },
         control,
-        setError,
         setValue,
-        handleSubmit,
-        defaultValues
+        handleSubmit
     } = useForm({
         defaultValues: {
             title: title || "",
@@ -52,17 +52,14 @@ const QuestionCreateForm = () => {
 
     const handleTypeChange = (val) => {
         setSelectedType(val);
-        localStorage.setItem('questionType', val);
         setValue("type", val);
     };
 
-    useEffect(() => {
-        const storedType = localStorage.getItem('questionType');
-        if (storedType) {
-            setSelectedType(storedType);
-            setValue("type", storedType);
-        }
-    }, [setValue]);
+    const handleMarkChange = (e) => {
+        const value = e.target.value;
+        setMark(value);
+        setValue("mark", value);
+    };
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -87,7 +84,7 @@ const QuestionCreateForm = () => {
         toolbar: toolbarOptions
     }
 
-    const [createQuestion, { isLoading }] = useCreateQuestionMutation();
+    const [createQuestion, { data: questionsData, isLoading }] = useCreateQuestionMutation();
     const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const [options, setOptions] = useState([0, 1, 2, 3]);
@@ -154,20 +151,65 @@ const QuestionCreateForm = () => {
         }
     };
 
-    // useEffect(() => {
-    //     if (mcq_options && mcq_options.length > 0) {
-    //         setOptions(mcq_options.map((_, index) => index));
+    const handleUpdate = async (formData) => {
+        const mcqOptions = options.map((optionIndex) => {
+            const optionText = formData[`mcq_question_text${optionIndex}`];
+            const explanation = formData[`explanation${optionIndex}`] || null;
 
-    //         mcq_options.forEach((option, index) => {
-    //             setValue(`mcq_question_text${index}`, option.mcq_question_text);
-    //             setValue(`explanation${index}`, option.description);
-    //             setCorrectOptions(prev => ({
-    //                 ...prev,
-    //                 [index]: option.is_correct,
-    //             }));
-    //         });
-    //     }
-    // }, [mcq_options, setValue]);
+            return {
+                mcq_question_text: optionText,
+                is_correct: correctOptions[optionIndex] || false,
+                description: explanation,
+                mcq_images: null
+            };
+        });
+
+        const creativeQuestions = creativeQueTypes.map((queTypeIndex) => {
+            const queText = formData[`creative_question_text${queTypeIndex}`];
+            const explanation = formData[`explanation${queTypeIndex}`] || null;
+            const queType = formData[`creative_que_type${queTypeIndex}`];
+
+            return {
+                creative_question_text: queText,
+                creative_question_type: queType,
+                description: explanation
+            };
+        });
+
+        const categoriesPayload = {
+            section_id: formData.section,
+            exam_type_id: formData.exam_type,
+            exam_sub_type_id: formData.exam_sub_type,
+            group_id: formData.group,
+            level_id: formData.level,
+            subject_id: formData.subject,
+            lesson_id: formData.lesson,
+            topic_id: formData.topic,
+            sub_topic_id: formData.sub_topic,
+            year_id: formData.year
+        }
+
+        const payload = {
+            title: formData.title,
+            description: formData.description,
+            type: formData.type,
+            mark: formData.mark,
+            images: null,
+            is_paid: isPaid,
+            is_featured: isFeatured,
+            status: statusCheck,
+            mcq_options: mcqOptions,
+            creative_options: creativeQuestions,
+            categories: categoriesPayload
+        };
+
+        try {
+            const response = await editQuestion({ id: question_id, data: payload }).unwrap();
+            toast.success(response?.message);
+        } catch (err) {
+            toast.error(err?.data?.message || "An error occurred");
+        }
+    };
 
     return (
         <>
@@ -284,7 +326,7 @@ const QuestionCreateForm = () => {
                             id="mark"
                             name="mark"
                             type="number"
-                            placeholder="5"
+                            onChange={handleMarkChange}
                         />
                         {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
                     </div>
@@ -307,7 +349,6 @@ const QuestionCreateForm = () => {
                             setOptions={setOptions}
                             correctOptions={correctOptions}
                             setCorrectOptions={setCorrectOptions}
-                        // defaultValues={defaultValues}
                         />
                     )}
                     {/* creative question */}
@@ -323,8 +364,8 @@ const QuestionCreateForm = () => {
                     <SelectCategory control={control} />
 
                     {/* update button */}
-                    {/* {
-                        title && (
+                    {
+                        questionsData?.data && selectedType === questionsData?.data?.type && (
                             <Button
                                 type="button"
                                 onClick={handleSubmit(handleUpdate)}
@@ -333,7 +374,8 @@ const QuestionCreateForm = () => {
                                 {isUpdating ? "Updating..." : "Update"}
                             </Button>
                         )
-                    } */}
+                    }
+
                     {/* create button */}
                     <Button
                         disabled={isLoading}
