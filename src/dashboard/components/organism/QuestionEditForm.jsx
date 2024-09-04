@@ -253,8 +253,8 @@ const QuestionEditForm = () => {
             </form>
 
             {/* Conditionally render new form based on question type */}
-            {type === "mcq" && <McqOptions questionId={question_id} />}
-            {type === "creative" && <CreativeQuestions questionId={question_id} />}
+            {type === "mcq" && <McqOptions />}
+            {type === "creative" && <CreativeQuestions />}
         </>
     )
 }

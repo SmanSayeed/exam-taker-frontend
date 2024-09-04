@@ -1,15 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLocation } from "react-router-dom";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import QuestionEditForm from "../../organism/QuestionEditForm";
+import QuestionEdit from "../../organism/QuestionEdit";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
 const QuestionEditForAdminPage = () => {
-
-    const location = useLocation()
-    console.log(location?.state)
-
 
     return (
         <Layout>
@@ -34,7 +29,8 @@ const QuestionEditForAdminPage = () => {
                                 </CardHeader>
 
                             <CardContent className="flex flex-col gap-10">
-                                <QuestionEditForm />
+                                {/* <QuestionEditForm /> */}
+                                <QuestionEdit />
                             </CardContent>
                         </Card>
                     </div>
