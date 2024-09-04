@@ -20,7 +20,7 @@ import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { CreativeQuestions } from "../molecules/createquestion/CreativeQuestions";
 import { McqOptions } from "../molecules/createquestion/McqOptions";
-import SelectCategory from "../molecules/createquestion/SelectCategory";
+import SelectCategoryForEdit from "../molecules/questionedit/SelectCategoryForEdit";
 
 const QuestionEdit = () => {
     const [statusCheck, setStatusCheck] = useState(true);
@@ -311,7 +311,10 @@ const QuestionEdit = () => {
                 )}
 
                 {/* select category */}
-                <SelectCategory control={control} defaultValues={defaultValues.categories} />
+                <SelectCategoryForEdit
+                    control={control}
+                    defaultValues={defaultValues.categories}
+                />
 
                 <Button
                     disabled={isUpdating}
