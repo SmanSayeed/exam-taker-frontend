@@ -6,6 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { XIcon } from "lucide-react";
 import { Controller } from "react-hook-form";
 
 const SelectField = ({
@@ -19,7 +20,7 @@ const SelectField = ({
     defaultValue,
     disabled = false,
 }) => {
-    // console.log("select options", options)
+
     return (
         <div className="grid gap-2">
             <Label className="text-md font-bold">{label}</Label>
@@ -29,25 +30,40 @@ const SelectField = ({
                 rules={rules}
                 render={({ field, formState: { errors } }) => (
                     <>
-                        <Select
-                            onValueChange={(val) => {
-                                field.onChange(val)
-                                if (onChange) onChange(val)
-                            }}
-                            value={defaultValue || ""}
-                            disabled={disabled}
-                        >
-                            <SelectTrigger className="w-[300px]">
-                                <SelectValue placeholder={placeholder} aria-label={`${label} select`} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {options && options.map((item) => (
-                                    <SelectItem key={item?.id.toString()} value={item?.id.toString()}>
-                                        {item?.title}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        <div className="flex items-center gap-2">
+                            <Select
+                                onValueChange={(val) => {
+                                    field.onChange(val)
+                                    if (onChange) onChange(val)
+                                }}
+                                value={defaultValue || ""}
+                                disabled={disabled}
+                            >
+                                <SelectTrigger className="w-[300px]">
+                                    <SelectValue placeholder={placeholder} aria-label={`${label} select`} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {options && options.map((item) => (
+                                        <SelectItem key={item?.id.toString()} value={item?.id.toString()}>
+                                            {item?.title}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            {defaultValue && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        field.onChange("");
+                                        if (onChange) onChange("");
+                                    }}
+                                    className="p-2 rounded-full bg-gray-200 hover:bg-red-200 text-gray-500 hover:text-red-500"
+                                    aria-label={`Clear ${label}`}
+                                >
+                                    <XIcon className="w-5 h-5" aria-hidden="true" />
+                                </button>
+                            )}
+                        </div>
                         {errors[name] && <span className="text-red-600">{errors[name]?.message}</span>}
                     </>
                 )}

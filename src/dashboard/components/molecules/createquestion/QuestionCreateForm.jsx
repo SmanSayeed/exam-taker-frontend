@@ -27,6 +27,9 @@ const QuestionCreateForm = () => {
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
+    const [options, setOptions] = useState([0, 1, 2, 3]);
+    const [correctOptions, setCorrectOptions] = useState([]);
+    const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
 
     const [selectedType, setSelectedType] = useLocalStorage({ key: 'questionType', defaultValue: "" });
     const [mark, setMark] = useLocalStorage({ key: 'questionMark', defaultValue: '' });
@@ -86,10 +89,6 @@ const QuestionCreateForm = () => {
 
     const [createQuestion, { data: questionsData, isLoading }] = useCreateQuestionMutation();
     const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
-
-    const [options, setOptions] = useState([0, 1, 2, 3]);
-    const [correctOptions, setCorrectOptions] = useState([]);
-    const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
 
     const handleCreate = async (formData) => {
         const mcqOptions = options.map((optionIndex) => {
@@ -228,7 +227,7 @@ const QuestionCreateForm = () => {
                                         handleTypeChange(val)
                                         field.onChange(val)
                                     }}
-                                    value={selectedType}
+                                    value={field.value}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Type" />
