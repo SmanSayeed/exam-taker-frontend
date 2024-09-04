@@ -69,7 +69,7 @@ const SelectCategory = ({ control }) => {
                     options: examTypeData.exam_sub_types,
                     onChange: handleSubTypeChange,
                     defaultValue: selectedExamSubType,
-                    rules: { required: "Exam Sub Type is required" },
+                    // rules: { required: "Exam Sub Type is required" },
                     disabled: !examTypeData
                 })}
             </div>
@@ -144,7 +144,7 @@ const SelectCategory = ({ control }) => {
                     options: years,
                     onChange: handleYearChange,
                     defaultValue: selectedYear,
-                    rules: { required: "Year is required" },
+                    // rules: { required: "Year is required" },
                 })}
             </div>
         </div>
