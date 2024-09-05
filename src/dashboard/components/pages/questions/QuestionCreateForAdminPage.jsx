@@ -29,6 +29,7 @@ const QuestionCreateForAdminPage = () => {
 
                             <CardContent className="flex flex-col gap-10">
                                 <QuestionCreateForm />
+                                {/* <QuestionCreateForm2 /> */}
                             </CardContent>
                         </Card>
                     </div>

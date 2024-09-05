@@ -36,7 +36,7 @@ const SelectField = ({
                                     field.onChange(val)
                                     if (onChange) onChange(val)
                                 }}
-                                value={defaultValue || ""}
+                                value={field.value || defaultValue}
                                 disabled={disabled}
                             >
                                 <SelectTrigger className="w-[300px]">

@@ -11,16 +11,18 @@ export const useCategoryData = (category, storageKey) => {
         if (selected && data?.data?.data) {
             const foundData = data.data.data.find(item => item.id == selected);
             setCategoryData(foundData || null);
+        } else {
+            setCategoryData(null);
         }
     }, [selected, data]);
 
-    const handleChange = (id) => {
-        if (data?.data?.data) {
-            const foundData = data.data.data.find(item => item.id == id);
-            setCategoryData(foundData || null);
-            setSelected(id); // Save to local storage
-        }
+    return { 
+        data: data?.data?.data || [], 
+        selected,
+        setSelected, 
+        isLoading, 
+        error, 
+        categoryData, 
+        setCategoryData 
     };
-
-    return { data: data?.data?.data || [], selected, handleChange, isLoading, error, categoryData };
 };
