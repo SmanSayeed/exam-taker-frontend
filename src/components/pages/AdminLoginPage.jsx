@@ -1,5 +1,4 @@
 import LoginForm from "@/dashboard/components/molecules/auth/LoginForm";
-import Header from "../organism/Header";
 
 import {
     Card,
@@ -8,12 +7,14 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import ThemeSwitch from "@/dashboard/components/atoms/ThemeSwitch";
 
 const AdminLoginPage = () => {
     return (
         <div>
-            <Header />
-
+            <div className="mt-4 ml-4">
+                <ThemeSwitch />
+            </div>
             <Card className="mx-auto max-w-sm w-full mt-24">
                 <CardHeader>
                     <CardTitle className="text-2xl">
