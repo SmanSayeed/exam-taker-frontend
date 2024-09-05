@@ -23,7 +23,7 @@ import { CreativeQuestions } from "./CreativeQuestions";
 import { McqOptions } from "./McqOptions";
 import SelectCategory2 from "./SelectCategory2";
 
-export default function QuestionCreateForm() {
+const QuestionCreateForm2 = () => {
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
@@ -63,6 +63,17 @@ export default function QuestionCreateForm() {
     const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'selectedTopic', defaultValue: "" });
     const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'selectedSubTopic', defaultValue: "" });
     const [selectedYear, setSelectedYear] = useLocalStorage({ key: 'selectedYear', defaultValue: "" });
+
+    // const { selected: selectedSection } = useCategoryData("sections", "selectedSection");
+    // const { selected: selectedExamType } = useCategoryData("examTypes", "selectedExamType");
+    // const { selected: selectedExamSubType } = useCategoryData("examSubTypes", "selectedExamSubType");
+    // const { selected: selectedGroup } = useCategoryData("groups", "selectedGroup");
+    // const { selected: selectedLevel } = useCategoryData("levels", "selectedLevel");
+    // const { selected: selectedSubject } = useCategoryData("subjects", "selectedSubject");
+    // const { selected: selectedLesson } = useCategoryData("lessons", "selectedLesson");
+    // const { selected: selectedTopic } = useCategoryData("topics", "selectedTopic");
+    // const { selected: selectedSubTopic } = useCategoryData("subTopics", "selectedSubTopic");
+    // const { selected: selectedYear } = useCategoryData("years", "selectedYear");
 
     const handleTypeChange = (val) => {
         setSelectedType(val);
@@ -340,3 +351,4 @@ export default function QuestionCreateForm() {
         </>
     )
 }
+export default QuestionCreateForm2
