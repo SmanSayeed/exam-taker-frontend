@@ -14,7 +14,7 @@ const PrivateRoutes = () => {
                         <DashboardLayout />
                     </>
                 ) : (
-                    <Navigate to="/login/admin" />
+                    <Navigate to="/" />
                 )
             }
         </>

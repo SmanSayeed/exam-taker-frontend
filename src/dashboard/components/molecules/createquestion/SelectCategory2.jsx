@@ -1,8 +1,7 @@
 import SelectField from "./SelectField";
 import { useCategoryData } from "./useCategoryData";
 
-export default function SelectCategory({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
-
+const SelectCategory2 = ({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) => {
     const { data: sections, selected: selectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
     const { data: examTypes, selected: selectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
     const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "selectedExamSubType");
@@ -213,4 +212,6 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
             </div>
         </div>
     );
-}
+};
+
+export default SelectCategory2;
