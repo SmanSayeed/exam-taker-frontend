@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { CreativeQuestions } from "./CreativeQuestions";
 import { McqOptions } from "./McqOptions";
-import SelectCategory2 from "./SelectCategory2";
+import SelectCategory from "./SelectCategory";
 
 export default function QuestionCreateForm() {
     const [statusCheck, setStatusCheck] = useState(true);
@@ -313,7 +313,7 @@ export default function QuestionCreateForm() {
                     )}
 
                     {/* select category */}
-                    <SelectCategory2
+                    <SelectCategory
                         setValue={setValue}
                         control={control}
                         setSelectedSection={setSelectedSection}

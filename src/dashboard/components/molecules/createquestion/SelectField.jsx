@@ -7,6 +7,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { XIcon } from "lucide-react";
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 
 const SelectField = ({
@@ -17,9 +18,18 @@ const SelectField = ({
     placeholder,
     onChange,
     rules = {},
+    onRemove,
     defaultValue,
     disabled = false,
 }) => {
+    const [isVisible, setIsVisible] = useState(true);
+
+    const handleRemoveField = () => {
+        setIsVisible(false);
+        if (onRemove) onRemove();
+    };
+
+    if (!isVisible) return null;
 
     return (
         <div className="grid gap-2">
@@ -28,6 +38,7 @@ const SelectField = ({
                 name={name}
                 control={control}
                 rules={rules}
+                defaultValue={defaultValue}
                 render={({ field, formState: { errors } }) => (
                     <>
                         <div className="flex items-center gap-2">
@@ -36,7 +47,7 @@ const SelectField = ({
                                     field.onChange(val)
                                     if (onChange) onChange(val)
                                 }}
-                                value={field.value || defaultValue}
+                                value={field.value || ""}
                                 disabled={disabled}
                             >
                                 <SelectTrigger className="w-[300px]">
@@ -50,13 +61,10 @@ const SelectField = ({
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {defaultValue && (
+                            {field.value && (
                                 <button
                                     type="button"
-                                    onClick={() => {
-                                        field.onChange("");
-                                        if (onChange) onChange("");
-                                    }}
+                                    onClick={handleRemoveField}
                                     className="p-2 rounded-full bg-gray-200 hover:bg-red-200 text-gray-500 hover:text-red-500"
                                     aria-label={`Clear ${label}`}
                                 >

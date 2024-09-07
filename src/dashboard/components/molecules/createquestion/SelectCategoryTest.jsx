@@ -1,17 +1,83 @@
+import { useState } from "react";
 import SelectField from "./SelectField";
 import { useCategoryData } from "./useCategoryData";
 
-const SelectCategory2 = ({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) => {
+export default function SelectCategory2({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
+
+    const [visibleFields, setVisibleFields] = useState({
+        section: true,
+        exam_type: true,
+        exam_sub_type: true,
+        group: true,
+        level: true,
+        subject: true,
+        lesson: true,
+        topic: true,
+        sub_topic: true,
+        year: true,
+    });
+
     const { data: sections, selected: selectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
     const { data: examTypes, selected: selectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
-    const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "selectedExamSubType");
+    const { selected: selectedExamSubType, } = useCategoryData("exam-sub-types", "selectedExamSubType");
     const { data: groups, selected: selectedGroup, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "selectedGroup");
     const { data: levels, selected: selectedLevel, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "selectedLevel");
     const { data: subjects, selected: selectedSubject, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "selectedSubject");
     const { data: lessons, selected: selectedLesson, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "selectedLesson");
     const { data: topics, selected: selectedTopic, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "selectedTopic");
-    const { selected: selectedSubTopic } = useCategoryData("sub-topics", "selectedSubTopic");
-    const { data: years, selected: selectedYear } = useCategoryData("years", "selectedYear");
+    const { selected: selectedSubTopic, } = useCategoryData("sub-topics", "selectedSubTopic");
+    const { data: years, selected: selectedYear, } = useCategoryData("years", "selectedYear");
+
+    const handleRemoveField = (fieldName) => {
+        setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
+
+        setValue(fieldName, "");
+        clearSelectedState(fieldName);
+    };
+
+    const clearSelectedState = (fieldName) => {
+        switch (fieldName) {
+            case "section":
+                setSelectedSection("");
+                setSectionData(null);
+                break;
+            case "exam_type":
+                setSelectedExamType("");
+                setExamTypeData(null);
+                break;
+            case "exam_sub_type":
+                setSelectedExamSubType("");
+                break;
+            case "group":
+                setSelectedGroup("");
+                setGroupData(null);
+                break;
+            case "level":
+                setSelectedLevel("");
+                setLevelData(null);
+                break;
+            case "subject":
+                setSelectedSubject("");
+                setSubjectData(null);
+                break;
+            case "lesson":
+                setSelectedLesson("");
+                setLessonData(null);
+                break;
+            case "topic":
+                setSelectedTopic("");
+                setTopicData(null);
+                break;
+            case "sub_topic":
+                setSelectedSubTopic("");
+                break;
+            case "year":
+                setSelectedYear("");
+                break;
+            default:
+                break;
+        }
+    };
 
     const handleSectionChange = (id) => {
         if (sections) {
@@ -100,17 +166,20 @@ const SelectCategory2 = ({ control, setValue, setSelectedSection, setSelectedExa
     }
 
     const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => (
-        <SelectField
-            label={label}
-            name={name}
-            control={control}
-            options={options}
-            placeholder={`Select ${label}`}
-            onChange={onChange}
-            defaultValue={defaultValue}
-            rules={rules}
-            disabled={disabled}
-        />
+        visibleFields[name] && (
+            <SelectField
+                label={label}
+                name={name}
+                control={control}
+                options={options}
+                placeholder={`Select ${label}`}
+                onChange={onChange}
+                defaultValue={defaultValue}
+                rules={rules}
+                disabled={disabled}
+                onRemove={() => handleRemoveField(name)}
+            />
+        )
     );
 
     return (
@@ -212,6 +281,4 @@ const SelectCategory2 = ({ control, setValue, setSelectedSection, setSelectedExa
             </div>
         </div>
     );
-};
-
-export default SelectCategory2;
+}

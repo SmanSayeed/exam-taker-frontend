@@ -19,7 +19,7 @@ export const useCategoryData = (category, storageKey) => {
     return { 
         data: data?.data?.data || [], 
         selected,
-        setSelected, 
+        setSelected,
         isLoading, 
         error, 
         categoryData, 
