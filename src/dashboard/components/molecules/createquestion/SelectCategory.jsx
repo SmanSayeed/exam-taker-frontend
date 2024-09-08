@@ -1,7 +1,21 @@
+import { useState } from "react";
 import SelectField from "./SelectField";
 import { useCategoryData } from "./useCategoryData";
 
 export default function SelectCategory({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
+
+    const [visibleFields, setVisibleFields] = useState({
+        section: true,
+        exam_type: true,
+        exam_sub_type: true,
+        group: true,
+        level: true,
+        subject: true,
+        lesson: true,
+        topic: true,
+        sub_topic: true,
+        year: true,
+    });
 
     const { data: sections, selected: selectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
     const { data: examTypes, selected: selectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
@@ -13,6 +27,57 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
     const { data: topics, selected: selectedTopic, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "selectedTopic");
     const { selected: selectedSubTopic } = useCategoryData("sub-topics", "selectedSubTopic");
     const { data: years, selected: selectedYear } = useCategoryData("years", "selectedYear");
+
+    const handleRemoveField = (fieldName) => {
+        setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
+
+        setValue(fieldName, "");
+        clearSelectedState(fieldName);
+    };
+
+    const clearSelectedState = (fieldName) => {
+        switch (fieldName) {
+            case "section":
+                setSelectedSection("");
+                setSectionData(null);
+                break;
+            case "exam_type":
+                setSelectedExamType("");
+                setExamTypeData(null);
+                break;
+            case "exam_sub_type":
+                setSelectedExamSubType("");
+                break;
+            case "group":
+                setSelectedGroup("");
+                setGroupData(null);
+                break;
+            case "level":
+                setSelectedLevel("");
+                setLevelData(null);
+                break;
+            case "subject":
+                setSelectedSubject("");
+                setSubjectData(null);
+                break;
+            case "lesson":
+                setSelectedLesson("");
+                setLessonData(null);
+                break;
+            case "topic":
+                setSelectedTopic("");
+                setTopicData(null);
+                break;
+            case "sub_topic":
+                setSelectedSubTopic("");
+                break;
+            case "year":
+                setSelectedYear("");
+                break;
+            default:
+                break;
+        }
+    };
 
     const handleSectionChange = (id) => {
         if (sections) {
@@ -101,17 +166,20 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
     }
 
     const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => (
-        <SelectField
-            label={label}
-            name={name}
-            control={control}
-            options={options}
-            placeholder={`Select ${label}`}
-            onChange={onChange}
-            defaultValue={defaultValue}
-            rules={rules}
-            disabled={disabled}
-        />
+        visibleFields[name] && (
+            <SelectField
+                label={label}
+                name={name}
+                control={control}
+                options={options}
+                placeholder={`Select ${label}`}
+                onChange={onChange}
+                defaultValue={defaultValue}
+                rules={rules}
+                disabled={disabled}
+                onRemove={() => handleRemoveField(name)}
+            />
+        )
     );
 
     return (

@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react';
 
-export default function useLocalStorage(props) {
+export default function useLocalStorage({ key, defaultValue }) {
     const [value, setValue] = useState(() => {
-        const storedValue = localStorage.getItem(props.key)
-        return storedValue !== null ? JSON.parse(storedValue) : props.defaultValue
+        const storedValue = localStorage.getItem(key);
+        return storedValue !== null ? JSON.parse(storedValue) : defaultValue;
     });
 
     useEffect(() => {
-        localStorage.setItem(props.key, JSON.stringify(value))
-    }, [value, props.key])
+        if (value === "") {
+            localStorage.removeItem(key);
+        } else {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+    }, [value, key]);
 
-    return [value, setValue]
+    return [value, setValue];
 }
 
 
@@ -19,23 +23,14 @@ export default function useLocalStorage(props) {
 
 // export default function useLocalStorage(props) {
 //     const [value, setValue] = useState(() => {
-//         const storedValue = localStorage.getItem(props.key);
-
-//         try {
-//             return storedValue !== null ? JSON.parse(storedValue) : props.defaultValue;
-//         } catch (e) {
-//             return storedValue !== null ? storedValue : props.defaultValue;
-//         }
+//         const storedValue = localStorage.getItem(props.key)
+//         return storedValue !== null ? JSON.parse(storedValue) : props.defaultValue
 //     });
 
 //     useEffect(() => {
-//         try {
-//             localStorage.setItem(props.key, JSON.stringify(value));
-//         } catch (e) {
-//             localStorage.setItem(props.key, value);
-//         }
-//     }, [value, props.key]);
+//         localStorage.setItem(props.key, JSON.stringify(value))
+//     }, [value, props.key])
 
-//     return [value, setValue];
+//     return [value, setValue]
 // }
 
