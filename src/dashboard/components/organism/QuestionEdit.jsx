@@ -8,37 +8,31 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-import { useGetSingleQuestionsQuery } from "@/features/questions/questionsApi"; // Update this import to use the correct hook
+import { useGetSingleQuestionsQuery } from "@/features/questions/questionsApi";
 import { useEffect, useState } from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { CreativeQuestions } from "../molecules/createquestion/CreativeQuestions";
 import { McqOptions } from "../molecules/createquestion/McqOptions";
 import SelectCategoryForEdit from "../molecules/questionedit/SelectCategoryForEdit";
 
 export default function QuestionEdit() {
+    const dispatch = useDispatch();
+    const selectedCategories = useSelector((state) => state.selectedCategories);
+
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
     const [options, setOptions] = useState([0, 1, 2, 3]);
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
-
-    const [selectedSection, setSelectedSection] = useState("");
-    const [selectedExamType, setSelectedExamType] = useState("");
-    const [selectedExamSubType, setSelectedExamSubType] = useState("");
-    const [selectedGroup, setSelectedGroup] = useState("");
-    const [selectedLevel, setSelectedLevel] = useState("");
-    const [selectedSubject, setSelectedSubject] = useState("");
-    const [selectedLesson, setSelectedLesson] = useState("");
-    const [selectedTopic, setSelectedTopic] = useState("");
-    const [selectedSubTopic, setSelectedSubTopic] = useState("");
-    const [selectedYear, setSelectedYear] = useState("");
 
     const { questionId } = useParams();
     const { data: questionData } = useGetSingleQuestionsQuery(questionId);
@@ -53,15 +47,7 @@ export default function QuestionEdit() {
         setValue,
         handleSubmit,
         reset,
-    } = useForm({
-        defaultValues: {
-            title: "",
-            description: "",
-            type: "",
-            mark: "",
-            mcq_options: [],
-        }
-    });
+    } = useForm();
 
     useEffect(() => {
         if (questionData?.data) {
@@ -73,26 +59,25 @@ export default function QuestionEdit() {
                 title: question.title || "",
                 description: question.description || "",
                 type: question.type || "",
-                mark: question.mark || "",
-                mcq_options: question.mcq_options || [],
+                mark: question.mark || ""
             });
 
-            setSelectedSection(question.attachable?.section_id || "");
-            setSelectedExamType(question.attachable?.exam_type_id || "");
-            setSelectedExamSubType(question.attachable?.exam_sub_type_id || "");
-            setSelectedGroup(question.attachable?.group_id || "");
-            setSelectedLevel(question.attachable?.level_id || "");
-            setSelectedSubject(question.attachable?.subject_id || "");
-            setSelectedLesson(question.attachable?.lesson_id || "");
-            setSelectedTopic(question.attachable?.topic_id || "");
-            setSelectedTopic(question.attachable?.sub_topic_id || "");
-            setSelectedYear(question.attachable?.year_id || "");
+            dispatch(setSelectedSection({ selectedSection: question.attachable?.section_id || "" }));
+            dispatch(setSelectedExamType({ selectedExamType: question.attachable?.exam_type_id || "" }));
+            dispatch(setSelectedExamSubType({ selectedExamSubType: question.attachable?.exam_sub_type_id || "" }));
+            dispatch(setSelectedGroup({ selectedGroup: question.attachable?.group_id || "" }));
+            dispatch(setSelectedLevel({ selectedLevel: question.attachable?.level_id || "" }));
+            dispatch(setSelectedSubject({ selectedSubject: question.attachable?.subject_id || "" }));
+            dispatch(setSelectedLesson({ selectedLesson: question.attachable?.lesson_id || "" }));
+            dispatch(setSelectedTopic({ selectedTopic: question.attachable?.topic_id || "" }));
+            dispatch(setSelectedSubTopic({ selectedSubTopic: question.attachable?.sub_topic_id || "" }));
+            dispatch(setSelectedYear({ selectedYear: question.attachable?.year_id || "" }));
 
             setIsPaid(question.is_paid || false);
             setIsFeatured(question.is_featured || false);
             setStatusCheck(question.status || false);
         }
-    }, [questionData?.data, reset, setValue]);
+    }, [questionData?.data, reset, dispatch]);
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -115,17 +100,17 @@ export default function QuestionEdit() {
 
     const handleUpdate = (formData) => {
         const categoriesPayload = {
-            section_id: selectedSection || formData.section,
-            exam_type_id: selectedExamType || formData.exam_type,
-            exam_sub_type_id: selectedExamSubType || formData.exam_sub_type,
-            group_id: selectedGroup || formData.group,
-            level_id: selectedLevel || formData.level,
-            subject_id: selectedSubject || formData.subject,
-            lesson_id: selectedLesson || formData.lesson,
-            topic_id: selectedTopic || formData.topic,
-            sub_topic_id: selectedSubTopic || formData.sub_topic,
-            year_id: selectedYear || formData.year
-        }
+            section_id: selectedCategories.selectedSection || formData.section,
+            exam_type_id: selectedCategories.selectedExamType || formData.exam_type,
+            exam_sub_type_id: selectedCategories.selectedExamSubType || formData.exam_sub_type,
+            group_id: selectedCategories.selectedGroup || formData.group,
+            level_id: selectedCategories.selectedLevel || formData.level,
+            subject_id: selectedCategories.selectedSubject || formData.subject,
+            lesson_id: selectedCategories.selectedLesson || formData.lesson,
+            topic_id: selectedCategories.selectedTopic || formData.topic,
+            sub_topic_id: selectedCategories.selectedSubTopic || formData.sub_topic,
+            year_id: selectedCategories.selectedYear || formData.year,
+        };
         console.log(categoriesPayload)
     }
 
@@ -262,6 +247,7 @@ export default function QuestionEdit() {
                             setCorrectOptions={setCorrectOptions}
                         />
                     )}
+
                     {/* creative question */}
                     {type === "creative" && (
                         <CreativeQuestions
@@ -275,26 +261,6 @@ export default function QuestionEdit() {
                     <SelectCategoryForEdit
                         setValue={setValue}
                         control={control}
-                        setSelectedSection={setSelectedSection}
-                        setSelectedExamType={setSelectedExamType}
-                        setSelectedExamSubType={setSelectedExamSubType}
-                        setSelectedGroup={setSelectedGroup}
-                        setSelectedLesson={setSelectedLesson}
-                        setSelectedLevel={setSelectedLevel}
-                        setSelectedSubject={setSelectedSubject}
-                        setSelectedTopic={setSelectedTopic}
-                        setSelectedSubTopic={setSelectedSubTopic}
-                        setSelectedYear={setSelectedYear}
-                        selectedSection={selectedSection}
-                        selectedExamType={selectedExamType}
-                        selectedExamSubType={selectedExamSubType}
-                        selectedGroup={selectedGroup}
-                        selectedLevel={selectedLevel}
-                        selectedSubject={selectedSubject}
-                        selectedLesson={selectedLesson}
-                        selectedTopic={selectedTopic}
-                        selectedSubTopic={selectedSubTopic}
-                        selectedYear={selectedYear}
                     />
 
                     {/* Submit Button */}
