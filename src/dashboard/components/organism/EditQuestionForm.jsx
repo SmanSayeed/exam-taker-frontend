@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
     Select,
@@ -10,20 +8,22 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
-import { useState } from "react";
+import { useGetSingleQuestionsQuery } from "@/features/questions/questionsApi";
+import { useEffect, useState } from "react";
 
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import { CreativeQuestions } from "./CreativeQuestions";
-import { McqOptions } from "./McqOptions";
-import SelectCategory2 from "./SelectCategoryTest";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { CreativeQuestions } from "../molecules/createquestion/CreativeQuestions";
+import { McqOptions } from "../molecules/createquestion/McqOptions";
+import SelectCategoryForEdit from "../molecules/questionedit/SelectCategoryForEdit";
 
-const QuestionCreateForm2 = () => {
+export default function EditQuestionForm() {
     const [statusCheck, setStatusCheck] = useState(true);
     const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
@@ -31,152 +31,100 @@ const QuestionCreateForm2 = () => {
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
 
-    const question = useSelector(state => state.question);
-    const { title, description, mcq_options } = question;
+    const { questionId } = useParams();
+    const { data: questionData } = useGetSingleQuestionsQuery(questionId);
+    const [question, setQuestion] = useState({});
+    const dispatch = useDispatch();
+    const selectedCategories = useSelector((state) => state.selectedCategories);
 
-    const [selectedType, setSelectedType] = useLocalStorage({ key: 'questionType', defaultValue: "" });
-    const [mark, setMark] = useLocalStorage({ key: 'questionMark', defaultValue: '' });
+    const { type } = question || {};
 
     const {
         register,
         formState: { errors },
         control,
         setValue,
-        handleSubmit
+        handleSubmit,
+        reset,
     } = useForm({
         defaultValues: {
-            title: title || "",
-            description: description || "",
-            type: selectedType || "",
-            mark: mark || "",
-            mcq_options: mcq_options || []
+            title: "",
+            description: "",
+            type: "",
+            mark: "",
+            mcq_options: [],
         }
     });
 
-    const [selectedSection, setSelectedSection] = useLocalStorage({ key: 'selectedSection', defaultValue: "" });
-    const [selectedExamType, setSelectedExamType] = useLocalStorage({ key: 'selectedExamType', defaultValue: "" });
-    const [selectedExamSubType, setSelectedExamSubType] = useLocalStorage({ key: 'selectedExamSubType', defaultValue: "" });
-    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'selectedGroup', defaultValue: "" });
-    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'selectedLevel', defaultValue: "" });
-    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'selectedSubject', defaultValue: "" });
-    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'selectedLesson', defaultValue: "" });
-    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'selectedTopic', defaultValue: "" });
-    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'selectedSubTopic', defaultValue: "" });
-    const [selectedYear, setSelectedYear] = useLocalStorage({ key: 'selectedYear', defaultValue: "" });
+    useEffect(() => {
+        if (questionData?.data) {
+            const question = questionData.data;
+            setQuestion(question);
+            console.log("question", question)
 
-    // const { selected: selectedSection } = useCategoryData("sections", "selectedSection");
-    // const { selected: selectedExamType } = useCategoryData("examTypes", "selectedExamType");
-    // const { selected: selectedExamSubType } = useCategoryData("examSubTypes", "selectedExamSubType");
-    // const { selected: selectedGroup } = useCategoryData("groups", "selectedGroup");
-    // const { selected: selectedLevel } = useCategoryData("levels", "selectedLevel");
-    // const { selected: selectedSubject } = useCategoryData("subjects", "selectedSubject");
-    // const { selected: selectedLesson } = useCategoryData("lessons", "selectedLesson");
-    // const { selected: selectedTopic } = useCategoryData("topics", "selectedTopic");
-    // const { selected: selectedSubTopic } = useCategoryData("subTopics", "selectedSubTopic");
-    // const { selected: selectedYear } = useCategoryData("years", "selectedYear");
+            reset({
+                title: question.title || "",
+                description: question.description || "",
+                type: question.type || "",
+                mark: question.mark || "",
+                mcq_options: question.mcq_options || [],
+            });
 
-    const handleTypeChange = (val) => {
-        setSelectedType(val);
-        setValue("type", val);
-    };
+            dispatch(setSelectedSection({ selectedSection: question.attachable?.section_id || "" }));
+            dispatch(setSelectedExamType({ selectedExamType: question.attachable?.exam_type_id || "" }));
+            dispatch(setSelectedExamSubType({ selectedExamSubType: question.attachable?.exam_sub_type_id || "" }));
+            dispatch(setSelectedGroup({ selectedGroup: question.attachable?.group_id || "" }));
+            dispatch(setSelectedLevel({ selectedLevel: question.attachable?.level_id || "" }));
+            dispatch(setSelectedSubject({ selectedSubject: question.attachable?.subject_id || "" }));
+            dispatch(setSelectedLesson({ selectedLesson: question.attachable?.lesson_id || "" }));
+            dispatch(setSelectedTopic({ selectedTopic: question.attachable?.topic_id || "" }));
+            dispatch(setSelectedSubTopic({ selectedSubTopic: question.attachable?.sub_topic_id || "" }));
+            dispatch(setSelectedYear({ selectedYear: question.attachable?.year_id || "" }));
 
-    const handleMarkChange = (e) => {
-        const value = e.target.value;
-        setMark(value);
-        setValue("mark", value);
-    };
+            setIsPaid(question.is_paid || false);
+            setIsFeatured(question.is_featured || false);
+            setStatusCheck(question.status || false);
+        }
+    }, [questionData?.data, reset, dispatch]);
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
         ['link', 'formula'],
-
         [{ 'header': 1 }, { 'header': 2 }, { 'header': 3 }],
         [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
         [{ 'script': 'sub' }, { 'script': 'super' }],
         [{ 'indent': '-1' }, { 'indent': '+1' }],
         [{ 'direction': 'rtl' }],
-
         [{ 'size': ['small', false, 'large', 'huge'] }],
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
         [{ 'color': [] }, { 'background': [] }],
         [{ 'font': [] }],
         [{ 'align': [] }],
-
         ['clean']
     ];
     const module = {
         toolbar: toolbarOptions
     }
 
-    const [createQuestion, { isLoading }] = useCreateQuestionMutation();
-
-    const handleCreate = async (formData) => {
-        const mcqOptions = options.map((optionIndex) => {
-            const optionText = formData[`mcq_question_text${optionIndex}`];
-            const explanation = formData[`explanation${optionIndex}`] || null;
-
-            return {
-                mcq_question_text: optionText,
-                is_correct: correctOptions[optionIndex] || false,
-                description: explanation,
-                mcq_images: null
-            };
-        });
-
-        const creativeQuestions = creativeQueTypes.map((queTypeIndex) => {
-            const queText = formData[`creative_question_text${queTypeIndex}`];
-            const explanation = formData[`explanation${queTypeIndex}`] || null;
-            const queType = formData[`creative_que_type${queTypeIndex}`];
-
-            return {
-                creative_question_text: queText,
-                creative_question_type: queType,
-                description: explanation
-            };
-        });
-
-        console.log("formdatasection", formData.section)
-        console.log("selectedSection", selectedSection)
-
+    const handleUpdate = (formData) => {
         const categoriesPayload = {
-            section_id: selectedSection || formData.section,
-            exam_type_id: selectedExamType || formData.exam_type,
-            exam_sub_type_id: selectedExamSubType || formData.exam_sub_type,
-            group_id: selectedGroup || formData.group,
-            level_id: selectedLevel || formData.level,
-            subject_id: selectedSubject || formData.subject,
-            lesson_id: selectedLesson || formData.lesson,
-            topic_id: selectedTopic || formData.topic,
-            sub_topic_id: selectedSubTopic || formData.sub_topic,
-            year_id: selectedYear || formData.year
-        }
-
-        const payload = {
-            title: formData.title,
-            description: formData.description,
-            type: formData.type,
-            mark: formData.mark,
-            images: null,
-            is_paid: isPaid,
-            is_featured: isFeatured,
-            status: statusCheck,
-            mcq_options: mcqOptions,
-            creative_options: creativeQuestions,
-            categories: categoriesPayload
+            section_id: selectedCategories.selectedSection || formData.section,
+            exam_type_id: selectedCategories.selectedExamType || formData.exam_type,
+            exam_sub_type_id: selectedCategories.selectedExamSubType || formData.exam_sub_type,
+            group_id: selectedCategories.selectedGroup || formData.group,
+            level_id: selectedCategories.selectedLevel || formData.level,
+            subject_id: selectedCategories.selectedSubject || formData.subject,
+            lesson_id: selectedCategories.selectedLesson || formData.lesson,
+            topic_id: selectedCategories.selectedTopic || formData.topic,
+            sub_topic_id: selectedCategories.selectedSubTopic || formData.sub_topic,
+            year_id: selectedCategories.selectedYear || formData.year,
         };
-
-        try {
-            const response = await createQuestion(payload).unwrap();
-            toast.success(response?.message);
-        } catch (err) {
-            toast.error(err?.data?.message || "An error occurred");
-        }
-    };
+        console.log(categoriesPayload)
+    }
 
     return (
         <>
-            <form onSubmit={handleSubmit(handleCreate)} id="question-form">
+            <form onSubmit={handleSubmit(handleUpdate)} id="edit-question-form">
                 <div className="space-y-4 mt-4">
                     {/* Question Type */}
                     <div className="space-y-1">
@@ -187,19 +135,13 @@ const QuestionCreateForm2 = () => {
                             rules={{ required: "Type is required" }}
                             render={({ field }) => (
                                 <Select
-                                    onValueChange={(val) => {
-                                        handleTypeChange(val)
-                                        field.onChange(val)
-                                    }}
                                     value={field.value}
                                 >
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Type" />
+                                        <SelectValue placeholder={type} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="normal">Normal</SelectItem>
-                                        <SelectItem value="mcq">MCQ</SelectItem>
-                                        <SelectItem value="creative">Creative</SelectItem>
+                                        <SelectItem value={type}>{type}</SelectItem>
                                     </SelectContent>
                                 </Select>
                             )}
@@ -289,7 +231,6 @@ const QuestionCreateForm2 = () => {
                             id="mark"
                             name="mark"
                             type="number"
-                            onChange={handleMarkChange}
                         />
                         {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
                     </div>
@@ -305,7 +246,7 @@ const QuestionCreateForm2 = () => {
                     </div>
 
                     {/* mcq question */}
-                    {selectedType === "mcq" && (
+                    {type === "mcq" && (
                         <McqOptions
                             control={control}
                             options={options}
@@ -315,7 +256,7 @@ const QuestionCreateForm2 = () => {
                         />
                     )}
                     {/* creative question */}
-                    {selectedType === "creative" && (
+                    {type === "creative" && (
                         <CreativeQuestions
                             control={control}
                             creativeQueTypes={creativeQueTypes}
@@ -324,31 +265,20 @@ const QuestionCreateForm2 = () => {
                     )}
 
                     {/* select category */}
-                    <SelectCategory2
+                    <SelectCategoryForEdit
                         setValue={setValue}
                         control={control}
-                        setSelectedSection={setSelectedSection}
-                        setSelectedExamType={setSelectedExamType}
-                        setSelectedExamSubType={setSelectedExamSubType}
-                        setSelectedGroup={setSelectedGroup}
-                        setSelectedLesson={setSelectedLesson}
-                        setSelectedLevel={setSelectedLevel}
-                        setSelectedSubject={setSelectedSubject}
-                        setSelectedTopic={setSelectedTopic}
-                        setSelectedSubTopic={setSelectedSubTopic}
-                        setSelectedYear={setSelectedYear}
                     />
 
+                    {/* Submit Button */}
                     <Button
-                        disabled={isLoading}
                         type="submit"
                         className="w-full"
                     >
-                        {isLoading ? "Proceeding" : "Create Question"}
+                        Update Question
                     </Button>
                 </div>
             </form>
         </>
-    )
+    );
 }
-export default QuestionCreateForm2

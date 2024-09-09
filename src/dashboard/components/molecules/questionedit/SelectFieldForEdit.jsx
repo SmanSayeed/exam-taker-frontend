@@ -9,7 +9,7 @@ import {
 import { XIcon } from "lucide-react";
 import { Controller } from "react-hook-form";
 
-const SelectField = ({
+const SelectFieldForEdit = ({
     label,
     name,
     control,
@@ -18,17 +18,9 @@ const SelectField = ({
     onChange,
     rules = {},
     onRemove,
-    defaultValue,
+    selectedValue,
     disabled = false,
 }) => {
-    // const [isVisible, setIsVisible] = useState(true);
-
-    // const handleRemoveField = () => {
-    //     // setIsVisible(false);
-    //     if (onRemove) onRemove();
-    // };
-
-    // if (!isVisible) return null;
 
     return (
         <div className="grid gap-2">
@@ -37,7 +29,6 @@ const SelectField = ({
                 name={name}
                 control={control}
                 rules={rules}
-                defaultValue={defaultValue}
                 render={({ field, formState: { errors } }) => (
                     <>
                         <div className="flex items-center gap-2">
@@ -46,7 +37,7 @@ const SelectField = ({
                                     field.onChange(val)
                                     if (onChange) onChange(val)
                                 }}
-                                value={field.value || ""}
+                                value={selectedValue || field.value || ""}
                                 disabled={disabled}
                             >
                                 <SelectTrigger className="w-[300px]">
@@ -81,4 +72,4 @@ const SelectField = ({
     );
 }
 
-export default SelectField;
+export default SelectFieldForEdit;
