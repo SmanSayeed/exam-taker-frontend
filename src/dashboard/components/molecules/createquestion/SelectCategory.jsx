@@ -99,7 +99,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
 
     const handleExamSubTypeChange = (id) => {
         setSelectedExamSubType(id)
-        setValue("exam_su_type", id)
+        setValue("exam_sub_type", id)
     };
 
     const handleGroupChange = (id) => {

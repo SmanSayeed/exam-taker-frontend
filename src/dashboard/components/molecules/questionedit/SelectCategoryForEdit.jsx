@@ -1,99 +1,165 @@
-import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
-import { useEffect, useState } from "react";
-import SelectField from "../createquestion/SelectField";
+import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useCategoryData } from "../createquestion/useCategoryData";
+import SelectFieldForEdit from "./SelectFieldForEdit";
 
-const SelectCategoryForEdit = ({ control, defaultValues }) => {
-    const [sectionData, setSectionData] = useState(null);
-    const [examTypeData, setExamTypeData] = useState(null);
-    const [groupData, setGroupData] = useState(null);
-    const [levelData, setLevelData] = useState(null);
-    const [subjectData, setSubjectData] = useState(null);
-    const [lessonData, setLessonData] = useState(null);
-    const [topicData, setTopicData] = useState(null);
+export default function SelectCategoryForEdit({ control, setValue }) {
 
-    const { data: sectionsData, isLoading, error } = useGetQuestionsCategoryQuery("sections");
-    const { data: examTypesData } = useGetQuestionsCategoryQuery("exam-types");
-    const { data: groupsData } = useGetQuestionsCategoryQuery("groups");
-    const { data: levelsData } = useGetQuestionsCategoryQuery("levels");
-    const { data: subjectsData } = useGetQuestionsCategoryQuery("subjects");
-    const { data: lessonsData } = useGetQuestionsCategoryQuery("lessons");
-    const { data: topicsData } = useGetQuestionsCategoryQuery("topics");
-    const { data: yearsData } = useGetQuestionsCategoryQuery("years");
+    const dispatch = useDispatch();
+    const selectedCategories = useSelector((state) => state.selectedCategories);
 
-    useEffect(() => {
-        // Set initial state based on defaultValues
-        if (defaultValues?.section) {
-            handleSectionChange(defaultValues.section, false);
-        }
-        if (defaultValues?.exam_type) {
-            handleExamTypeChange(defaultValues.exam_type, false);
-        }
-        if (defaultValues?.group) {
-            handleGroupChange(defaultValues.group, false);
-        }
-        if (defaultValues?.level) {
-            handleLevelChange(defaultValues.level, false);
-        }
-        if (defaultValues?.subject) {
-            handleSubjectChange(defaultValues.subject, false);
-        }
-        if (defaultValues?.lesson) {
-            handleLessonChange(defaultValues.lesson, false);
-        }
-        if (defaultValues?.topic) {
-            handleTopicChange(defaultValues.topic, false);
-        }
-    }, [defaultValues]);
+    const [visibleFields, setVisibleFields] = useState({
+        section: true,
+        exam_type: true,
+        exam_sub_type: true,
+        group: true,
+        level: true,
+        subject: true,
+        lesson: true,
+        topic: true,
+        sub_topic: true,
+        year: true,
+    });
 
-    const handleSectionChange = (sectionId, reset = true) => {
-        if (sectionsData?.data?.data) {
-            const sectionDataById = sectionsData?.data?.data.find(item => item?.id == sectionId);
-            setSectionData(sectionDataById || null);
-            if (reset) setExamTypeData(null); // Reset exam type if section changes
+    const { data: sections, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
+    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
+    // const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "selectedExamSubType");
+    const { data: groups, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "selectedGroup");
+    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "selectedLevel");
+    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "selectedSubject");
+    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "selectedLesson");
+    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "selectedTopic");
+    // const { selected: selectedSubTopic } = useCategoryData("sub-topics", "selectedSubTopic");
+    const { data: years } = useCategoryData("years", "selectedYear");
+
+    const handleRemoveField = (fieldName) => {
+        setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
+
+        setValue(fieldName, "");
+        clearSelectedState(fieldName);
+    };
+
+    const clearSelectedState = (fieldName) => {
+        switch (fieldName) {
+            case "section":
+                dispatch(setSelectedSection({ selectedSection: "" }));
+                setSectionData(null);
+                break;
+            case "exam_type":
+                dispatch(setSelectedExamType({ selectedExamType: "" }));
+                setExamTypeData(null);
+                break;
+            case "exam_sub_type":
+                dispatch(setSelectedExamSubType({ selectedExamSubType: "" }));
+                break;
+            case "group":
+                dispatch(setSelectedGroup({ selectedGroup: "" }));
+                setGroupData(null);
+                break;
+            case "level":
+                dispatch(setSelectedLevel({ selectedLevel: "" }));
+                setLevelData(null);
+                break;
+            case "subject":
+                dispatch(setSelectedSubject({ selectedSubject: "" }));
+                setSubjectData(null);
+                break;
+            case "lesson":
+                dispatch(setSelectedLesson({ selectedLesson: "" }));
+                setLessonData(null);
+                break;
+            case "topic":
+                dispatch(setSelectedTopic({ selectedTopic: "" }));
+                setTopicData(null);
+                break;
+            case "sub_topic":
+                dispatch(setSelectedSubTopic({ selectedSubTopic: "" }));
+                break;
+            case "year":
+                dispatch(setSelectedYear({ selectedYear: "" }));
+                break;
+            default:
+                break;
         }
     };
 
-    const handleExamTypeChange = (examTypeId, reset = true) => {
-        if (examTypesData?.data?.data) {
-            const examTypeDataById = examTypesData?.data?.data.find(item => item?.id == examTypeId);
-            setExamTypeData(examTypeDataById || null);
+    const handleSectionChange = (id) => {
+        if (sections) {
+            const foundData = sections.find(item => item.id == id);
+            setSectionData(foundData || null);
+            dispatch(setSelectedSection({ selectedSection: id }))
+            setValue("section", id)
         }
+    }
+
+    const handleExamTypeChange = (id) => {
+        if (examTypes) {
+            const foundData = examTypes.find(item => item.id == id);
+            setExamTypeData(foundData || null);
+            dispatch(setSelectedExamType({ selectedExamType: id }))
+            setValue("exam_type", id)
+        }
+    }
+
+    const handleExamSubTypeChange = (id) => {
+        dispatch(setSelectedExamSubType({ selectedExamSubType: id }))
+        setValue("exam_sub_type", id)
     };
 
-    const handleGroupChange = (groupId, reset = true) => {
-        if (groupsData?.data?.data) {
-            const groupDataById = groupsData?.data?.data.find(item => item?.id == groupId);
-            setGroupData(groupDataById || null);
-            if (reset) setLevelData(null); // Reset level if group changes
+    const handleGroupChange = (id) => {
+        if (groups) {
+            const foundData = groups.find(item => item.id == id);
+            setGroupData(foundData || null);
+            dispatch(setSelectedGroup({ selectedGroup: id }))
+            setValue("group", id)
         }
+    }
+
+    const handleLevelChange = (id) => {
+        if (levels) {
+            const foundData = levels.find(item => item.id == id);
+            setLevelData(foundData || null);
+            dispatch(setSelectedLevel({ selectedLevel: id }))
+            setValue("level", id)
+        }
+    }
+
+    const handleLessonChange = (id) => {
+        if (lessons) {
+            const foundData = lessons.find(item => item.id == id);
+            setLessonData(foundData || null);
+            dispatch(setSelectedLesson({ selectedLesson: id }))
+            setValue("lesson", id)
+        }
+    }
+
+    const handleSubjectChange = (id) => {
+        if (subjects) {
+            const foundData = subjects.find(item => item.id == id);
+            setSubjectData(foundData || null);
+            dispatch(setSelectedSubject({ selectedSubject: id }))
+            setValue("subject", id)
+        }
+    }
+
+    const handleTopicChange = (id) => {
+        if (topics) {
+            const foundData = topics.find(item => item.id == id);
+            setTopicData(foundData || null);
+            dispatch(setSelectedTopic({ selectedTopic: id }))
+            setValue("topic", id)
+        }
+    }
+
+    const handleSubTopicChange = (id) => {
+        dispatch(setSelectedSubTopic({ selectedSubTopic: id }))
+        setValue("sub_topic", id)
     };
 
-    const handleLevelChange = (levelId, reset = true) => {
-        if (levelsData?.data?.data) {
-            const levelDataById = levelsData?.data?.data.find(item => item?.id == levelId);
-            setLevelData(levelDataById || null);
-        }
-    };
-
-    const handleSubjectChange = (subjectId, reset = true) => {
-        if (subjectsData?.data?.data) {
-            const subjectDataById = subjectsData?.data?.data.find(item => item?.id == subjectId);
-            setSubjectData(subjectDataById || null);
-        }
-    };
-
-    const handleLessonChange = (lessonId, reset = true) => {
-        if (lessonsData?.data?.data) {
-            const lessonDataById = lessonsData?.data?.data.find(item => item?.id == lessonId);
-            setLessonData(lessonDataById || null);
-        }
-    };
-
-    const handleTopicChange = (topicId, reset = true) => {
-        if (topicsData?.data?.data) {
-            const topicDataById = topicsData?.data?.data.find(item => item?.id == topicId);
-            setTopicData(topicDataById || null);
-        }
+    const handleYearChange = (id) => {
+        dispatch(setSelectedYear({ selectedYear: id }))
+        setValue("year", id)
     };
 
     if (isLoading) {
@@ -104,146 +170,120 @@ const SelectCategoryForEdit = ({ control, defaultValues }) => {
         return <div>Error loading sections: {error.message}</div>;
     }
 
+    const renderSelectField = ({ label, name, options, onChange, selectedValue, rules, disabled }) => (
+        visibleFields[name] && (
+            <SelectFieldForEdit
+                label={label}
+                name={name}
+                control={control}
+                options={options}
+                placeholder={`Select ${label}`}
+                onChange={onChange}
+                selectedValue={selectedValue}
+                rules={rules}
+                disabled={disabled}
+                onRemove={() => handleRemoveField(name)}
+            />
+        )
+    );
+
     return (
         <div className="space-y-4 mt-4">
-            {/* Section → exam_types → exam_sub_types */}
+            {/* Section → Exam Type → Exam Sub Type */}
             <div className="flex flex-col md:flex-row gap-4 mb-6">
-                <SelectField
-                    label="Section"
-                    name="section"
-                    control={control}
-                    options={sectionsData?.data?.data || []}
-                    placeholder="Select Section"
-                    onChange={handleSectionChange}
-                    defaultValue={defaultValues?.section}
-                    rules={{ required: "Section is required" }}
-                />
+                {renderSelectField({
+                    label: "Section",
+                    name: "section",
+                    options: sections,
+                    onChange: handleSectionChange,
+                    selectedValue: selectedCategories.selectedSection,
+                })}
 
-                {sectionData && sectionData.exam_types && (
-                    <SelectField
-                        label="Exam Type"
-                        name="exam_type"
-                        control={control}
-                        options={sectionData.exam_types}
-                        placeholder="Select Exam Type"
-                        onChange={handleExamTypeChange}
-                        defaultValue={defaultValues?.exam_type}
-                        rules={{ required: "Exam Type is required" }}
-                        disabled={!sectionData}
-                    />
-                )}
+                {sectionData?.exam_types && renderSelectField({
+                    label: "Exam Type",
+                    name: "exam_type",
+                    options: sectionData.exam_types,
+                    onChange: handleExamTypeChange,
+                    selectedValue: selectedCategories.selectedExamType,
+                    disabled: !sectionData
+                })}
 
-                {examTypeData && examTypeData.exam_sub_types && (
-                    <SelectField
-                        label="Exam Sub Type"
-                        name="exam_sub_type"
-                        control={control}
-                        options={examTypeData.exam_sub_types}
-                        placeholder="Select Exam Sub Type"
-                        defaultValue={defaultValues?.exam_sub_type}
-                        rules={{ required: "Exam Sub Type is required" }}
-                        disabled={!examTypeData}
-                    />
-                )}
+                {examTypeData?.exam_sub_types && renderSelectField({
+                    label: "Exam Sub Type",
+                    name: "exam_sub_type",
+                    options: examTypeData.exam_sub_types,
+                    onChange: handleExamSubTypeChange,
+                    selectedValue: selectedCategories.selectedExamSubType,
+                    disabled: !examTypeData
+                })}
             </div>
 
-            {/* Group → Level → Subject → lesson → topics → sub_topics */}
+            {/* Group → Level → Subject → Lesson → Topic → Sub Topic */}
             <div className="grid md:grid-cols-3 gap-2">
-                <SelectField
-                    label="Group"
-                    name="group"
-                    control={control}
-                    options={groupsData?.data?.data || []}
-                    placeholder="Select Group"
-                    onChange={handleGroupChange}
-                    defaultValue={defaultValues?.group}
-                    rules={{ required: "Group is required" }}
-                />
+                {renderSelectField({
+                    label: "Group",
+                    name: "group",
+                    options: groups,
+                    onChange: handleGroupChange,
+                    selectedValue: selectedCategories.selectedGroup,
+                })}
 
-                {groupData && groupData.levels && (
-                    <SelectField
-                        label="Level"
-                        name="level"
-                        control={control}
-                        options={groupData.levels}
-                        placeholder="Select Level"
-                        onChange={handleLevelChange}
-                        defaultValue={defaultValues?.level}
-                        rules={{ required: "Level is required" }}
-                        disabled={!groupData}
-                    />
-                )}
+                {groupData?.levels && renderSelectField({
+                    label: "Level",
+                    name: "level",
+                    options: groupData.levels,
+                    onChange: handleLevelChange,
+                    selectedValue: selectedCategories.selectedLevel,
+                    disabled: !groupData
+                })}
 
-                {levelData && levelData.subjects && (
-                    <SelectField
-                        label="Subject"
-                        name="subject"
-                        control={control}
-                        options={levelData.subjects}
-                        onChange={handleSubjectChange}
-                        placeholder="Select Subject"
-                        defaultValue={defaultValues?.subject}
-                        rules={{ required: "Subject is required" }}
-                        disabled={!levelData}
-                    />
-                )}
+                {levelData?.subjects && renderSelectField({
+                    label: "Subject",
+                    name: "subject",
+                    options: levelData.subjects,
+                    onChange: handleSubjectChange,
+                    selectedValue: selectedCategories.selectedSubject,
+                    disabled: !levelData
+                })}
 
-                {subjectData && subjectData.lessons && (
-                    <SelectField
-                        label="Lesson"
-                        name="lesson"
-                        control={control}
-                        options={subjectData.lessons}
-                        onChange={handleLessonChange}
-                        placeholder="Select Lesson"
-                        defaultValue={defaultValues?.lesson}
-                        rules={{ required: "Lesson is required" }}
-                        disabled={!subjectData}
-                    />
-                )}
+                {subjectData?.lessons && renderSelectField({
+                    label: "Lesson",
+                    name: "lesson",
+                    options: subjectData.lessons,
+                    onChange: handleLessonChange,
+                    selectedValue: selectedCategories.selectedLesson,
+                    disabled: !subjectData
+                })}
 
-                {lessonData && lessonData.topics && (
-                    <SelectField
-                        label="Topic"
-                        name="topic"
-                        control={control}
-                        options={lessonData.topics}
-                        onChange={handleTopicChange}
-                        placeholder="Select Topic"
-                        defaultValue={defaultValues?.topic}
-                        rules={{ required: "Topic is required" }}
-                        disabled={!lessonData}
-                    />
-                )}
+                {lessonData?.topics && renderSelectField({
+                    label: "Topic",
+                    name: "topic",
+                    options: lessonData.topics,
+                    onChange: handleTopicChange,
+                    selectedValue: selectedCategories.selectedTopic,
+                    disabled: !lessonData
+                })}
 
-                {topicData && topicData.sub_topics && (
-                    <SelectField
-                        label="Sub Topic"
-                        name="sub_topic"
-                        control={control}
-                        options={topicData.sub_topics}
-                        placeholder="Select Sub Topic"
-                        defaultValue={defaultValues?.sub_topic}
-                        rules={{ required: "Sub Topic is required" }}
-                        disabled={!topicData}
-                    />
-                )}
+                {topicData?.sub_topics && renderSelectField({
+                    label: "Sub Topic",
+                    name: "sub_topic",
+                    options: topicData.sub_topics,
+                    onChange: handleSubTopicChange,
+                    selectedValue: selectedCategories.selectedSubTopic,
+                    disabled: !topicData
+                })}
             </div>
 
-            {/* year */}
+            {/* Year */}
             <div className="pt-4">
-                <SelectField
-                    label="Year"
-                    name="year"
-                    control={control}
-                    options={yearsData?.data?.data || []}
-                    placeholder="Select Year"
-                    defaultValue={defaultValues?.year}
-                    rules={{ required: "Year is required" }}
-                />
+                {renderSelectField({
+                    label: "Year",
+                    name: "year",
+                    options: years,
+                    onChange: handleYearChange,
+                    selectedValue: selectedCategories.selectedYear,
+                })}
             </div>
         </div>
     );
-};
-
-export default SelectCategoryForEdit;
+}
