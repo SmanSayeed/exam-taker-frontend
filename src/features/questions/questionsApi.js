@@ -77,20 +77,6 @@ export const questionsApi = apiSlice.injectEndpoints({
                 }
             },
         }),
-        attachCategory: builder.mutation({
-            query: (data) => ({
-                url: "/que/attach",
-                method: "POST",
-                body: data,
-            }),
-        }),
-        editAttachCategory: builder.mutation({
-            query: ({ id, data }) => ({
-                url: `que/attach/update/${id}`,
-                method: "PUT",
-                body: data
-            }),
-        }),
         questionSearch: builder.query({
             query: (data) => ({
                 url: "/que/search",
@@ -106,8 +92,6 @@ export const {
     useGetQuestionsQuery,
     useDeleteQuestionMutation,
     useEditQuestionMutation,
-    useAttachCategoryMutation,
-    useEditAttachCategoryMutation,
     useQuestionSearchQuery,
     useGetSingleQuestionsQuery
 } = questionsApi;
