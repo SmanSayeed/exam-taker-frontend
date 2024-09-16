@@ -125,9 +125,6 @@ export default function QuestionCreateForm() {
             };
         });
 
-        console.log("formdatasection", formData.section)
-        console.log("selectedSection", selectedSection)
-
         const categoriesPayload = {
             section_id: selectedSection || formData.section,
             exam_type_id: selectedExamType || formData.exam_type,

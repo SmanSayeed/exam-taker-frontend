@@ -1,5 +1,5 @@
 import Loading from "@/dashboard/components/atoms/Loading";
-import QuestionCategoryForm from "@/dashboard/components/molecules/QuestionCategoryForm";
+import QuestionCategoryFormWithSelect from "@/dashboard/components/molecules/QuestionCategoryFormWithSelect";
 import { DataTable } from "@/dashboard/components/templates/DataTable";
 import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
@@ -23,7 +23,8 @@ const LevelForQuestionPage = () => {
             </Layout.Header>
 
             <Layout.Body>
-                <QuestionCategoryForm
+                <QuestionCategoryFormWithSelect
+                    fromLevels={true}
                     type={"levels"}
                     refetchOnQuestionsCategoryQuery={refetch}
                 />
