@@ -21,7 +21,20 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["Questions"]
         }),
+        editQuestionsCategory: builder.mutation({
+            query: ({ type, data, id }) => ({
+                url: `/questions/${type}/${id}`,
+                method: "PUT",
+                body: data,
+            }),
+            invalidatesTags: ["Questions"],
+        }),
     }),
 });
 
-export const { useCreateQuestionsCategoryMutation, useGetQuestionsCategoryQuery, useDeleteQuestionsCategoryMutation, } = questionsCategoryApi;
+export const { 
+    useCreateQuestionsCategoryMutation, 
+    useGetQuestionsCategoryQuery, 
+    useDeleteQuestionsCategoryMutation,
+    useEditQuestionsCategoryMutation 
+} = questionsCategoryApi;

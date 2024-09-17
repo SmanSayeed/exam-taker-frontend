@@ -27,9 +27,7 @@ export function DataTableRowActions({ row, type }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 {/* Edit button */}
-                <DropdownMenuItem className="cursor-pointer">
-                    <TableRowEditBtn />
-                </DropdownMenuItem>
+                <TableRowEditBtn row={row} type={type} />
 
                 <DropdownMenuSeparator />
 

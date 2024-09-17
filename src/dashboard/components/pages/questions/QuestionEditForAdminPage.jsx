@@ -30,7 +30,6 @@ const QuestionEditForAdminPage = () => {
 
                             <CardContent className="flex flex-col gap-10">
                                 <EditQuestionForm />
-                                {/* <QuestionEdit /> */}
                             </CardContent>
                         </Card>
                     </div>

@@ -1,19 +1,18 @@
-import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    DialogTrigger
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Edit } from "lucide-react";
 import { useState } from "react";
+import TableRowEditForm from "./TableRowEditForm";
 
-const TableRowEditBtn = () => {
+const TableRowEditBtn = ({ row, type }) => {
+
     const [open, setOpen] = useState(false);
 
     const handleOpen = (event) => {
@@ -25,10 +24,12 @@ const TableRowEditBtn = () => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild onClick={handleOpen}>
-                <span className="flex">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                </span>
+                <DropdownMenuItem className="cursor-pointer">
+                    <button className="flex">
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
+                    </button>
+                </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent
                 onClick={(e) => e.stopPropagation()}
@@ -40,31 +41,13 @@ const TableRowEditBtn = () => {
                         Make changes to your categories here. Click save when you&apos;re done.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">
-                            Name
-                        </Label>
-                        <Input
-                            id="name"
-                            defaultValue="Pedro Duarte"
-                            className="col-span-3"
-                        />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="username" className="text-right">
-                            Username
-                        </Label>
-                        <Input
-                            id="username"
-                            defaultValue="@peduarte"
-                            className="col-span-3"
-                        />
-                    </div>
-                </div>
-                <DialogFooter>
-                    <Button type="submit">Save changes</Button>
-                </DialogFooter>
+
+                <TableRowEditForm
+                    open={open}
+                    rowData={row.original}
+                    type={type}
+                />
+
             </DialogContent>
         </Dialog>
     )
