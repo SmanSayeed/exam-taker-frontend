@@ -15,7 +15,7 @@ const SubjectForQuestionPage = () => {
     return (
         <Layout>
             <Layout.Header>
-                <PageTitle title={"Group"} />
+                <PageTitle title={"Subject"} />
                 <div className='ml-auto flex items-center space-x-4'>
                     <ThemeSwitch />
                     <UserNav />

@@ -1,9 +1,6 @@
 import ErrorPage from "@/Error";
 import NotFound from "@/NotFound";
 import AdminLoginPage from "@/components/pages/AdminLoginPage";
-import HomePage from "@/components/pages/HomePage";
-import StudentLoginPage from "@/components/pages/StudentLoginPage";
-import StudentRegisterPage from "@/components/pages/StudentRegisterPage";
 import DashboardPage from "@/dashboard/components/pages/DashboardPage";
 import StudentCreateForAdminPage from "@/dashboard/components/pages/StudentCreateForAdminPage";
 import StudentListForAdminPage from "@/dashboard/components/pages/StudentListForAdminPage";
@@ -31,19 +28,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <HomePage />
-            },
-            {
-                path: "/login/student",
-                element: <StudentLoginPage />
-            },
-            {
-                path: "/login/admin",
                 element: <AdminLoginPage />
-            },
-            {
-                path: "/register",
-                element: <StudentRegisterPage />
             },
             {
                 element: <PrivateRoutes />,
@@ -117,7 +102,7 @@ const router = createBrowserRouter([
                         element: <QuestionListForAdminPage />
                     },
                     {
-                        path: "/admin/question/edit/:id",
+                        path: "/admin/question/edit/:questionId",
                         element: <QuestionEditForAdminPage />
                     },
                 ]

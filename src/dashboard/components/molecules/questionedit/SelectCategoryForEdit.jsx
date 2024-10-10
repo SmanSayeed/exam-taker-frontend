@@ -1,8 +1,13 @@
+import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { useState } from "react";
-import SelectField from "./SelectField";
-import { useCategoryData } from "./useCategoryData";
+import { useDispatch, useSelector } from "react-redux";
+import { useCategoryData } from "../createquestion/useCategoryData";
+import SelectFieldForEdit from "./SelectFieldForEdit";
 
-export default function SelectCategory({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
+export default function SelectCategoryForEdit({ control, setValue }) {
+
+    const dispatch = useDispatch();
+    const selectedCategories = useSelector((state) => state.selectedCategories);
 
     const [visibleFields, setVisibleFields] = useState({
         section: true,
@@ -17,16 +22,16 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         year: true,
     });
 
-    const { data: sections, selected: selectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
-    const { data: examTypes, selected: selectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
-    const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "selectedExamSubType");
-    const { data: groups, selected: selectedGroup, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "selectedGroup");
-    const { data: levels, selected: selectedLevel, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "selectedLevel");
-    const { data: subjects, selected: selectedSubject, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "selectedSubject");
-    const { data: lessons, selected: selectedLesson, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "selectedLesson");
-    const { data: topics, selected: selectedTopic, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "selectedTopic");
-    const { selected: selectedSubTopic } = useCategoryData("sub-topics", "selectedSubTopic");
-    const { data: years, selected: selectedYear } = useCategoryData("years", "selectedYear");
+    const { data: sections, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
+    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
+    // const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "selectedExamSubType");
+    const { data: groups, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "selectedGroup");
+    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "selectedLevel");
+    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "selectedSubject");
+    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "selectedLesson");
+    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "selectedTopic");
+    // const { selected: selectedSubTopic } = useCategoryData("sub-topics", "selectedSubTopic");
+    const { data: years } = useCategoryData("years", "selectedYear");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
@@ -38,41 +43,41 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
     const clearSelectedState = (fieldName) => {
         switch (fieldName) {
             case "section":
-                setSelectedSection("");
+                dispatch(setSelectedSection({ selectedSection: "" }));
                 setSectionData(null);
                 break;
             case "exam_type":
-                setSelectedExamType("");
+                dispatch(setSelectedExamType({ selectedExamType: "" }));
                 setExamTypeData(null);
                 break;
             case "exam_sub_type":
-                setSelectedExamSubType("");
+                dispatch(setSelectedExamSubType({ selectedExamSubType: "" }));
                 break;
             case "group":
-                setSelectedGroup("");
+                dispatch(setSelectedGroup({ selectedGroup: "" }));
                 setGroupData(null);
                 break;
             case "level":
-                setSelectedLevel("");
+                dispatch(setSelectedLevel({ selectedLevel: "" }));
                 setLevelData(null);
                 break;
             case "subject":
-                setSelectedSubject("");
+                dispatch(setSelectedSubject({ selectedSubject: "" }));
                 setSubjectData(null);
                 break;
             case "lesson":
-                setSelectedLesson("");
+                dispatch(setSelectedLesson({ selectedLesson: "" }));
                 setLessonData(null);
                 break;
             case "topic":
-                setSelectedTopic("");
+                dispatch(setSelectedTopic({ selectedTopic: "" }));
                 setTopicData(null);
                 break;
             case "sub_topic":
-                setSelectedSubTopic("");
+                dispatch(setSelectedSubTopic({ selectedSubTopic: "" }));
                 break;
             case "year":
-                setSelectedYear("");
+                dispatch(setSelectedYear({ selectedYear: "" }));
                 break;
             default:
                 break;
@@ -83,7 +88,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         if (sections) {
             const foundData = sections.find(item => item.id == id);
             setSectionData(foundData || null);
-            setSelectedSection(id)
+            dispatch(setSelectedSection({ selectedSection: id }))
             setValue("section", id)
         }
     }
@@ -92,13 +97,13 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         if (examTypes) {
             const foundData = examTypes.find(item => item.id == id);
             setExamTypeData(foundData || null);
-            setSelectedExamType(id)
+            dispatch(setSelectedExamType({ selectedExamType: id }))
             setValue("exam_type", id)
         }
     }
 
     const handleExamSubTypeChange = (id) => {
-        setSelectedExamSubType(id)
+        dispatch(setSelectedExamSubType({ selectedExamSubType: id }))
         setValue("exam_sub_type", id)
     };
 
@@ -106,7 +111,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         if (groups) {
             const foundData = groups.find(item => item.id == id);
             setGroupData(foundData || null);
-            setSelectedGroup(id)
+            dispatch(setSelectedGroup({ selectedGroup: id }))
             setValue("group", id)
         }
     }
@@ -115,7 +120,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         if (levels) {
             const foundData = levels.find(item => item.id == id);
             setLevelData(foundData || null);
-            setSelectedLevel(id)
+            dispatch(setSelectedLevel({ selectedLevel: id }))
             setValue("level", id)
         }
     }
@@ -124,7 +129,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         if (lessons) {
             const foundData = lessons.find(item => item.id == id);
             setLessonData(foundData || null);
-            setSelectedLesson(id)
+            dispatch(setSelectedLesson({ selectedLesson: id }))
             setValue("lesson", id)
         }
     }
@@ -133,7 +138,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         if (subjects) {
             const foundData = subjects.find(item => item.id == id);
             setSubjectData(foundData || null);
-            setSelectedSubject(id)
+            dispatch(setSelectedSubject({ selectedSubject: id }))
             setValue("subject", id)
         }
     }
@@ -142,18 +147,18 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         if (topics) {
             const foundData = topics.find(item => item.id == id);
             setTopicData(foundData || null);
-            setSelectedTopic(id)
+            dispatch(setSelectedTopic({ selectedTopic: id }))
             setValue("topic", id)
         }
     }
 
     const handleSubTopicChange = (id) => {
-        setSelectedSubTopic(id)
+        dispatch(setSelectedSubTopic({ selectedSubTopic: id }))
         setValue("sub_topic", id)
     };
 
     const handleYearChange = (id) => {
-        setSelectedYear(id)
+        dispatch(setSelectedYear({ selectedYear: id }))
         setValue("year", id)
     };
 
@@ -165,16 +170,16 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
         return <div>Error loading sections: {error.message}</div>;
     }
 
-    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => (
+    const renderSelectField = ({ label, name, options, onChange, selectedValue, rules, disabled }) => (
         visibleFields[name] && (
-            <SelectField
+            <SelectFieldForEdit
                 label={label}
                 name={name}
                 control={control}
                 options={options}
                 placeholder={`Select ${label}`}
                 onChange={onChange}
-                defaultValue={defaultValue}
+                selectedValue={selectedValue}
                 rules={rules}
                 disabled={disabled}
                 onRemove={() => handleRemoveField(name)}
@@ -191,7 +196,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "section",
                     options: sections,
                     onChange: handleSectionChange,
-                    defaultValue: selectedSection,
+                    selectedValue: selectedCategories.selectedSection,
                 })}
 
                 {sectionData?.exam_types && renderSelectField({
@@ -199,7 +204,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "exam_type",
                     options: sectionData.exam_types,
                     onChange: handleExamTypeChange,
-                    defaultValue: selectedExamType,
+                    selectedValue: selectedCategories.selectedExamType,
                     disabled: !sectionData
                 })}
 
@@ -208,7 +213,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "exam_sub_type",
                     options: examTypeData.exam_sub_types,
                     onChange: handleExamSubTypeChange,
-                    defaultValue: selectedExamSubType,
+                    selectedValue: selectedCategories.selectedExamSubType,
                     disabled: !examTypeData
                 })}
             </div>
@@ -220,7 +225,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "group",
                     options: groups,
                     onChange: handleGroupChange,
-                    defaultValue: selectedGroup,
+                    selectedValue: selectedCategories.selectedGroup,
                 })}
 
                 {groupData?.levels && renderSelectField({
@@ -228,7 +233,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "level",
                     options: groupData.levels,
                     onChange: handleLevelChange,
-                    defaultValue: selectedLevel,
+                    selectedValue: selectedCategories.selectedLevel,
                     disabled: !groupData
                 })}
 
@@ -237,7 +242,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "subject",
                     options: levelData.subjects,
                     onChange: handleSubjectChange,
-                    defaultValue: selectedSubject,
+                    selectedValue: selectedCategories.selectedSubject,
                     disabled: !levelData
                 })}
 
@@ -246,7 +251,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "lesson",
                     options: subjectData.lessons,
                     onChange: handleLessonChange,
-                    defaultValue: selectedLesson,
+                    selectedValue: selectedCategories.selectedLesson,
                     disabled: !subjectData
                 })}
 
@@ -255,7 +260,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "topic",
                     options: lessonData.topics,
                     onChange: handleTopicChange,
-                    defaultValue: selectedTopic,
+                    selectedValue: selectedCategories.selectedTopic,
                     disabled: !lessonData
                 })}
 
@@ -264,7 +269,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "sub_topic",
                     options: topicData.sub_topics,
                     onChange: handleSubTopicChange,
-                    defaultValue: selectedSubTopic,
+                    selectedValue: selectedCategories.selectedSubTopic,
                     disabled: !topicData
                 })}
             </div>
@@ -276,7 +281,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
                     name: "year",
                     options: years,
                     onChange: handleYearChange,
-                    defaultValue: selectedYear,
+                    selectedValue: selectedCategories.selectedYear,
                 })}
             </div>
         </div>

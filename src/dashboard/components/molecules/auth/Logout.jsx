@@ -38,7 +38,7 @@ const Logout = () => {
         if (isSuccess) {
             setOpen(false);
             toast.success("Logout Succes!");
-            navigate("/login/admin");
+            navigate("/");
         }
     }, [isSuccess, navigate, isError, error]);
 
