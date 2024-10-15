@@ -1,10 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-
-import { useState } from "react";
-
-
 import {
     Command,
     CommandEmpty,
@@ -13,34 +8,45 @@ import {
     CommandItem,
     CommandList
 } from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover";
+import { useState } from "react";
 
 import { useCreateModelTestMutation } from "@/features/modelTests/modelTestApi";
-import { useGetPackagesQuery, useGetSinglePackageQuery } from "@/features/packages/packageApi";
+import { useGetPackagesQuery } from "@/features/packages/packageApi";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+import { toast } from "sonner";
+import SelectCatForModelTest from "../molecules/modelTests/SelectCatForModelTest";
 
 export default function ModelTestCreateForm() {
     const [statusCheck, setStatusCheck] = useState(true);
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedPackageName, setSelectedPackageName] = useState("");
-    const [selectedPackage, setSelectedPackage] = useState(null);
 
     const { data: allPackages } = useGetPackagesQuery();
-    const { data: singlePackage } = useGetSinglePackageQuery(selectedPackage);
-    console.log("singlePackage", singlePackage)
     const [createModelTest, { isLoading }] = useCreateModelTestMutation();
 
     const {
         formState: { errors },
         control,
+        setValue,
         handleSubmit
     } = useForm();
+
+    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'selectedGroup', defaultValue: "" });
+    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'selectedLevel', defaultValue: "" });
+    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'selectedSubject', defaultValue: "" });
+    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'selectedLesson', defaultValue: "" });
+    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'selectedTopic', defaultValue: "" });
+    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'selectedSubTopic', defaultValue: "" });
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -66,7 +72,15 @@ export default function ModelTestCreateForm() {
     }
 
     const handleCreate = async (formData) => {
-        console.log(formData)
+
+        const categoriesPayload = {
+            group_id: selectedGroup || formData.group,
+            level_id: selectedLevel || formData.level,
+            subject_id: selectedSubject || formData.subject,
+            lesson_id: selectedLesson || formData.lesson,
+            topic_id: selectedTopic || formData.topic,
+            sub_topic_id: selectedSubTopic || formData.sub_topic,
+        }
 
         const payload = {
             "package_id": formData.package,
@@ -75,20 +89,15 @@ export default function ModelTestCreateForm() {
             "start_time": formData.start_time,
             "end_time": formData.end_time,
             "is_active": statusCheck,
-            "category": {
-                "section_id": singlePackage?.data?.category?.section_id || null,
-                "exam_type_id": singlePackage?.data?.category?.exam_type_id || null,
-                "exam_sub_type_id": singlePackage?.data?.category?.exam_sub_type_id || null
-            }
+            "category": categoriesPayload
         }
-
-        console.log("payload", payload)
 
         try {
             const response = await createModelTest(payload).unwrap();
-            console.log(response)
+            toast.success(response.message);
         } catch (error) {
             console.error(error);
+            toast.error(error?.data?.message)
         }
     }
 
@@ -115,19 +124,24 @@ export default function ModelTestCreateForm() {
                                             <CommandList>
                                                 <CommandEmpty>No results found.</CommandEmpty>
                                                 <CommandGroup>
-                                                    {allPackages?.data.map((type) => (
-                                                        <CommandItem
-                                                            key={type?.id}
-                                                            onSelect={() => {
-                                                                field.onChange(type?.id);
-                                                                setSelectedPackage(type?.id);
-                                                                setSelectedPackageName(type?.name);
-                                                                setPopoverOpen(false);
-                                                            }}
-                                                        >
-                                                            {type?.name.charAt(0).toUpperCase() + type?.name.slice(1)}
-                                                        </CommandItem>
-                                                    ))}
+                                                    {
+                                                        allPackages?.data.map((type) => {
+                                                            const plainText = getPlainTextFromHtml(type?.name);
+
+                                                            return (
+                                                                <CommandItem
+                                                                    key={type?.id}
+                                                                    onSelect={() => {
+                                                                        field.onChange(type?.id);
+                                                                        setSelectedPackageName(plainText);
+                                                                        setPopoverOpen(false);
+                                                                    }}
+                                                                >
+                                                                    {plainText.charAt(0).toUpperCase() + plainText.slice(1)}
+                                                                </CommandItem>
+                                                            )
+                                                        })
+                                                    }
                                                 </CommandGroup>
                                             </CommandList>
                                         </Command>
@@ -224,13 +238,24 @@ export default function ModelTestCreateForm() {
                     <Label htmlFor="status" className="ml-2">Status</Label>
                 </div>
 
+                {/* select category */}
+                <SelectCatForModelTest
+                    control={control}
+                    setValue={setValue}
+                    setSelectedGroup={setSelectedGroup}
+                    setSelectedLevel={setSelectedLevel}
+                    setSelectedSubject={setSelectedSubject}
+                    setSelectedLesson={setSelectedLesson}
+                    setSelectedTopic={setSelectedTopic}
+                    setSelectedSubTopic={setSelectedSubTopic}
+                />
+
                 <Button
-                    // disabled={isLoading}
+                    disabled={isLoading}
                     type="submit"
                     className="w-full"
                 >
-                    {/* {isLoading ? "Proceeding" : "Create Question"} */}
-                    Create Model Test
+                    {isLoading ? "Proceeding" : "Create Model Test"}
                 </Button>
             </div>
         </form>
