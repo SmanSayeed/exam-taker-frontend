@@ -1,75 +1,46 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 
-import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
 import { useState } from "react";
 
-import useLocalStorage from "@/hooks/useLocalStorage";
+
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList
+} from "@/components/ui/command";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger
+} from "@/components/ui/popover";
+
+import { useCreateModelTestMutation } from "@/features/modelTests/modelTestApi";
+import { useGetPackagesQuery, useGetSinglePackageQuery } from "@/features/packages/packageApi";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
 
 export default function ModelTestCreateForm() {
     const [statusCheck, setStatusCheck] = useState(true);
-    const [isPaid, setIsPaid] = useState(false);
-    const [isFeatured, setIsFeatured] = useState(false);
-    const [options, setOptions] = useState([0, 1, 2, 3]);
-    const [correctOptions, setCorrectOptions] = useState([]);
-    const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const [selectedPackageName, setSelectedPackageName] = useState("");
+    const [selectedPackage, setSelectedPackage] = useState(null);
 
-    const question = useSelector(state => state.question);
-    const { title, description, mcq_options } = question;
-
-    const [selectedType, setSelectedType] = useLocalStorage({ key: 'questionType', defaultValue: "" });
-    const [mark, setMark] = useLocalStorage({ key: 'questionMark', defaultValue: '' });
+    const { data: allPackages } = useGetPackagesQuery();
+    const { data: singlePackage } = useGetSinglePackageQuery(selectedPackage);
+    console.log("singlePackage", singlePackage)
+    const [createModelTest, { isLoading }] = useCreateModelTestMutation();
 
     const {
-        register,
         formState: { errors },
         control,
-        setValue,
         handleSubmit
-    } = useForm({
-        defaultValues: {
-            title: title || "",
-            description: description || "",
-            type: selectedType || "",
-            mark: mark || "",
-            mcq_options: mcq_options || []
-        }
-    });
-
-    const [selectedSection, setSelectedSection] = useLocalStorage({ key: 'selectedSection', defaultValue: "" });
-    const [selectedExamType, setSelectedExamType] = useLocalStorage({ key: 'selectedExamType', defaultValue: "" });
-    const [selectedExamSubType, setSelectedExamSubType] = useLocalStorage({ key: 'selectedExamSubType', defaultValue: "" });
-    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'selectedGroup', defaultValue: "" });
-    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'selectedLevel', defaultValue: "" });
-    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'selectedSubject', defaultValue: "" });
-    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'selectedLesson', defaultValue: "" });
-    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'selectedTopic', defaultValue: "" });
-    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'selectedSubTopic', defaultValue: "" });
-    const [selectedYear, setSelectedYear] = useLocalStorage({ key: 'selectedYear', defaultValue: "" });
-
-    const handleTypeChange = (val) => {
-        setSelectedType(val);
-        setValue("type", val);
-    };
-
-    const handleMarkChange = (e) => {
-        const value = e.target.value;
-        setMark(value);
-        setValue("mark", value);
-    };
+    } = useForm();
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -94,98 +65,77 @@ export default function ModelTestCreateForm() {
         toolbar: toolbarOptions
     }
 
-    const [createQuestion, { isLoading }] = useCreateQuestionMutation();
-
     const handleCreate = async (formData) => {
-        const mcqOptions = options.map((optionIndex) => {
-            const optionText = formData[`mcq_question_text${optionIndex}`];
-            const explanation = formData[`explanation${optionIndex}`] || null;
-
-            return {
-                mcq_question_text: optionText,
-                is_correct: correctOptions[optionIndex] || false,
-                description: explanation,
-                mcq_images: null
-            };
-        });
-
-        const creativeQuestions = creativeQueTypes.map((queTypeIndex) => {
-            const queText = formData[`creative_question_text${queTypeIndex}`];
-            const explanation = formData[`explanation${queTypeIndex}`] || null;
-            const queType = formData[`creative_que_type${queTypeIndex}`];
-
-            return {
-                creative_question_text: queText,
-                creative_question_type: queType,
-                description: explanation
-            };
-        });
-
-        const categoriesPayload = {
-            section_id: selectedSection || formData.section,
-            exam_type_id: selectedExamType || formData.exam_type,
-            exam_sub_type_id: selectedExamSubType || formData.exam_sub_type,
-            group_id: selectedGroup || formData.group,
-            level_id: selectedLevel || formData.level,
-            subject_id: selectedSubject || formData.subject,
-            lesson_id: selectedLesson || formData.lesson,
-            topic_id: selectedTopic || formData.topic,
-            sub_topic_id: selectedSubTopic || formData.sub_topic,
-            year_id: selectedYear || formData.year
-        }
+        console.log(formData)
 
         const payload = {
-            title: formData.title,
-            description: formData.description,
-            type: formData.type,
-            mark: formData.mark,
-            images: null,
-            is_paid: isPaid,
-            is_featured: isFeatured,
-            status: statusCheck,
-            mcq_options: mcqOptions,
-            creative_options: creativeQuestions,
-            categories: categoriesPayload
-        };
+            "package_id": formData.package,
+            "title": formData.title,
+            "description": formData.description,
+            "start_time": formData.start_time,
+            "end_time": formData.end_time,
+            "is_active": statusCheck,
+            "category": {
+                "section_id": singlePackage?.data?.category?.section_id || null,
+                "exam_type_id": singlePackage?.data?.category?.exam_type_id || null,
+                "exam_sub_type_id": singlePackage?.data?.category?.exam_sub_type_id || null
+            }
+        }
+
+        console.log("payload", payload)
 
         try {
-            const response = await createQuestion(payload).unwrap();
-            toast.success(response?.message);
-        } catch (err) {
-            toast.error(err?.data?.message || "An error occurred");
+            const response = await createModelTest(payload).unwrap();
+            console.log(response)
+        } catch (error) {
+            console.error(error);
         }
-    };
+    }
 
     return (
         <form onSubmit={handleSubmit(handleCreate)} id="question-form">
             <div className="space-y-4 mt-4">
                 {/* select packages */}
-                <div className="space-y-1">
-                    <Label className="text-md font-bold">Question Type</Label>
+                <div className="space-y-2">
+                    <Label className="text-md font-bold">Select Package: </Label>
                     <Controller
-                        name="type"
+                        name="package"
                         control={control}
-                        rules={{ required: "Type is required" }}
                         render={({ field }) => (
-                            <Select
-                                onValueChange={(val) => {
-                                    handleTypeChange(val)
-                                    field.onChange(val)
-                                }}
-                                value={field.value}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Type" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="normal">Normal</SelectItem>
-                                    <SelectItem value="mcq">MCQ</SelectItem>
-                                    <SelectItem value="creative">Creative</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <>
+                                <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                                    <PopoverTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-start">
+                                            {selectedPackageName ? selectedPackageName.charAt(0).toUpperCase() + selectedPackageName.slice(1) : "Select Package"}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-full p-0">
+                                        <Command>
+                                            <CommandInput placeholder="Search package..." />
+                                            <CommandList>
+                                                <CommandEmpty>No results found.</CommandEmpty>
+                                                <CommandGroup>
+                                                    {allPackages?.data.map((type) => (
+                                                        <CommandItem
+                                                            key={type?.id}
+                                                            onSelect={() => {
+                                                                field.onChange(type?.id);
+                                                                setSelectedPackage(type?.id);
+                                                                setSelectedPackageName(type?.name);
+                                                                setPopoverOpen(false);
+                                                            }}
+                                                        >
+                                                            {type?.name.charAt(0).toUpperCase() + type?.name.slice(1)}
+                                                        </CommandItem>
+                                                    ))}
+                                                </CommandGroup>
+                                            </CommandList>
+                                        </Command>
+                                    </PopoverContent>
+                                </Popover>
+                            </>
                         )}
                     />
-                    {errors.type && <span className="text-red-600">{errors.type.message}</span>}
                 </div>
 
                 {/* title */}
@@ -226,6 +176,44 @@ export default function ModelTestCreateForm() {
                     {errors.description && <span className="text-red-600">{errors.description.message}</span>}
                 </div>
 
+                {/* start time */}
+                <div className="space-y-1">
+                    <Label htmlFor="start_time" className="text-md font-bold">Start Time</Label>
+                    <Controller
+                        name="start_time"
+                        control={control}
+                        rules={{ required: "Start time is required" }}
+                        render={({ field }) => (
+                            <input
+                                type="datetime-local"
+                                id="start_time"
+                                {...field}
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+                        )}
+                    />
+                    {errors.start_time && <p className="text-red-500">{errors.start_time.message}</p>}
+                </div>
+
+                {/* end time */}
+                <div className="space-y-1">
+                    <Label htmlFor="end_time" className="text-md font-bold">End Time</Label>
+                    <Controller
+                        name="end_time"
+                        control={control}
+                        rules={{ required: "End time is required" }}
+                        render={({ field }) => (
+                            <input
+                                type="datetime-local"
+                                id="end_time"
+                                {...field}
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+                        )}
+                    />
+                    {errors.end_time && <p className="text-red-500">{errors.end_time.message}</p>}
+                </div>
+
                 {/* is active */}
                 <div>
                     <Checkbox
@@ -236,28 +224,13 @@ export default function ModelTestCreateForm() {
                     <Label htmlFor="status" className="ml-2">Status</Label>
                 </div>
 
-                {/* select category */}
-                {/* <SelectCategory
-                    setValue={setValue}
-                    control={control}
-                    setSelectedSection={setSelectedSection}
-                    setSelectedExamType={setSelectedExamType}
-                    setSelectedExamSubType={setSelectedExamSubType}
-                    setSelectedGroup={setSelectedGroup}
-                    setSelectedLesson={setSelectedLesson}
-                    setSelectedLevel={setSelectedLevel}
-                    setSelectedSubject={setSelectedSubject}
-                    setSelectedTopic={setSelectedTopic}
-                    setSelectedSubTopic={setSelectedSubTopic}
-                    setSelectedYear={setSelectedYear}
-                /> */}
-
                 <Button
-                    disabled={isLoading}
+                    // disabled={isLoading}
                     type="submit"
                     className="w-full"
                 >
-                    {isLoading ? "Proceeding" : "Create Question"}
+                    {/* {isLoading ? "Proceeding" : "Create Question"} */}
+                    Create Model Test
                 </Button>
             </div>
         </form>
