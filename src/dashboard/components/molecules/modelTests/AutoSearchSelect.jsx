@@ -80,7 +80,6 @@ export const AutoSearchSelect = ({
                                         if (onRemove) onRemove();
                                     }}
                                     className="p-2 rounded-full bg-gray-200 hover:bg-red-200 text-gray-500 hover:text-red-500"
-                                    aria-label={`Clear ${label}`}
                                 >
                                     <XIcon className="w-5 h-5" aria-hidden="true" />
                                 </button>

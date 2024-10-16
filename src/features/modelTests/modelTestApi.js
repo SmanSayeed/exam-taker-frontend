@@ -2,9 +2,9 @@ import { apiSlice } from "@/features/api/apiSlice";
 
 export const modelTestApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // getPackages: builder.query({
-    //   query: () => "/packages",
-    // }),
+    getAllModelTests: builder.query({
+      query: () => "/model-tests",
+    }),
     createModelTest: builder.mutation({
       query: (data) => ({
         url: "/model-tests",
@@ -34,5 +34,6 @@ export const modelTestApi = apiSlice.injectEndpoints({
 });
 
 export const {
-    useCreateModelTestMutation
+    useCreateModelTestMutation,
+    useGetAllModelTestsQuery
 } = modelTestApi;

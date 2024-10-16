@@ -24,7 +24,7 @@ import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { toast } from "sonner";
-import SelectCatForModelTest from "../molecules/modelTests/SelectCatForModelTest";
+import SelectCatForModelTest from "../../molecules/modelTests/SelectCatForModelTest";
 
 export default function ModelTestCreateForm() {
     const [statusCheck, setStatusCheck] = useState(true);

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import ModelTestCreateForm from "../../organism/ModelTestCreateForm";
+import ModelTestCreateForm from "../../organism/modelTests/ModelTestCreateForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
@@ -38,4 +38,5 @@ const ModelTestCreatePage = () => {
         </Layout>
     )
 }
+
 export default ModelTestCreatePage;

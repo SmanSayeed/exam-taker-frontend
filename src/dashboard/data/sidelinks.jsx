@@ -149,6 +149,12 @@ export const sidelinks = [
                 href: "/admin/model-tests/create",
                 icon: <BookOpenCheck size={18} />
             },
+            {
+                title: "Model Tests List",
+                label: "",
+                href: "/admin/model-tests",
+                icon: <BookOpenCheck size={18} />
+            },
         ]
     },
     {

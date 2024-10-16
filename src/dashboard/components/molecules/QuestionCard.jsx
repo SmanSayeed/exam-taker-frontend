@@ -1,22 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { useDeleteQuestionMutation } from "@/features/questions/questionsApi";
-import DOMPurify from "dompurify";
+import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { SquareX } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { ViewModal } from "./ViewModal";
-
-// Helper function to parse HTML string and convert to JSX with Tailwind classes
-const parseHtmlContent = (htmlContent) => {
-    return (
-        <div
-            dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(htmlContent),
-            }}
-        />
-    );
-};
 
 export default function QuestionCard({ data: questionData }) {
     const { id, title, description, is_paid, is_featured, type, mark } =
@@ -40,7 +29,6 @@ export default function QuestionCard({ data: questionData }) {
     return (
         <Card className="p-4 text-gray-500 relative group shadow-md my-3 hover:shadow-lg duration-500">
             <CardTitle>
-
                 <p className="mb-4">
                     {parseHtmlContent(title)}
                 </p>

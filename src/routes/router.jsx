@@ -7,6 +7,7 @@ import StudentListForAdminPage from "@/dashboard/components/pages/StudentListFor
 import UserCreateForAdminPage from "@/dashboard/components/pages/UserCreateForAdminPage";
 import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminPage";
 import ModelTestCreatePage from "@/dashboard/components/pages/modelTests/ModelTestCreatePage";
+import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
 import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/model-tests/create",
                         element: <ModelTestCreatePage />
+                    },
+                    {
+                        path: "/admin/model-tests",
+                        element: <ModelTestsPage />
                     },
                 ]
             },
