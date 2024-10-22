@@ -54,7 +54,6 @@ export default function EditQuestionForm() {
         if (questionData?.data) {
             const question = questionData.data;
             setQuestion(question);
-            console.log("question", question)
 
             reset({
                 title: question.title || "",
@@ -186,7 +185,6 @@ export default function EditQuestionForm() {
             "creative_options": creativeQuestions,
             "categories": categoriesPayload
         }
-        console.log("payload", payload)
 
         try {
             const response = await editQuestion({ id: questionId, data: payload }).unwrap();

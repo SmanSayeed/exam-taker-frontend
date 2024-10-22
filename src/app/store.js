@@ -1,4 +1,5 @@
 import authSliceReducer from "@/features/auth/authSlice";
+import modelTestFormReducer from "@/features/modelTests/modelTestFormSlice";
 import questionSliceReducer from "@/features/questions/questionSlice";
 import selectedCategoriesReducer from "@/features/questions/selectedCategoriesSlice";
 import { configureStore } from "@reduxjs/toolkit";
@@ -10,6 +11,7 @@ export const store = configureStore({
         auth: authSliceReducer,
         question: questionSliceReducer,
         selectedCategories: selectedCategoriesReducer,
+        modelTestForm: modelTestFormReducer
     },
     // devTools: import.meta.env.NODE_ENV !== "production",
     middleware: (getDefaultMiddlewares) => getDefaultMiddlewares().concat(apiSlice.middleware),
