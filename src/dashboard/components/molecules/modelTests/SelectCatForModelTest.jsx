@@ -14,12 +14,12 @@ export default function SelectCatForModelTest({ control, setValue, setSelectedGr
         year: true,
     });
 
-    const { data: groups, selected: selectedGroup, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "selectedGroup");
-    const { data: levels, selected: selectedLevel, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "selectedLevel");
-    const { data: subjects, selected: selectedSubject, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "selectedSubject");
-    const { data: lessons, selected: selectedLesson, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "selectedLesson");
-    const { data: topics, selected: selectedTopic, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "selectedTopic");
-    const { selected: selectedSubTopic } = useCategoryData("sub-topics", "selectedSubTopic");
+    const { data: groups, selected: selectedGroup, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "group");
+    const { data: levels, selected: selectedLevel, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "level");
+    const { data: subjects, selected: selectedSubject, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "subject");
+    const { data: lessons, selected: selectedLesson, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "lesson");
+    const { data: topics, selected: selectedTopic, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "topic");
+    const { selected: selectedSubTopic } = useCategoryData("sub-topics", "sub_topic");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));

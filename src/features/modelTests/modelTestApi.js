@@ -4,6 +4,7 @@ export const modelTestApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllModelTests: builder.query({
       query: () => "/model-tests",
+      providesTags: ["ModelTests"],
     }),
     createModelTest: builder.mutation({
       query: (data) => ({
@@ -11,24 +12,19 @@ export const modelTestApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["ModelTests"],
 
-    //   async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-    //     try {
-    //       const result = await queryFulfilled;
+    // Refetch the list of model tests after creation
+    async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+      try {
+        await queryFulfilled;
 
-    //       dispatch(
-    //         savePackage({
-    //           id: result.data.data.id,
-    //           name: result.data.data.name,
-    //           description: result.data.data.description,
-    //           duration_days: result.data.data.duration_days,
-    //           is_active: result.data.data.is_active,
-    //         })
-    //       );
-    //     } catch (err) {
-    //       console.log("err from same package ", err);
-    //     }
-    //   },
+        // Manually refetch the model tests list
+        dispatch(modelTestApi.util.invalidateTags(["ModelTests"]));
+      } catch (err) {
+        console.log("Error from createModelTest", err);
+      }
+    },
     }),
   }),
 });

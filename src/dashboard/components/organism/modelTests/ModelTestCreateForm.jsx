@@ -14,39 +14,46 @@ import {
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useCreateModelTestMutation } from "@/features/modelTests/modelTestApi";
+import { updateField } from "@/features/modelTests/modelTestFormSlice";
 import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import SelectCatForModelTest from "../../molecules/modelTests/SelectCatForModelTest";
 
 export default function ModelTestCreateForm() {
-    const [statusCheck, setStatusCheck] = useState(true);
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedPackageName, setSelectedPackageName] = useState("");
 
     const { data: allPackages } = useGetPackagesQuery();
     const [createModelTest, { isLoading }] = useCreateModelTestMutation();
 
+    const dispatch = useDispatch();
+    const modelTestForm = useSelector((state) => state.modelTestForm);
+
     const {
         formState: { errors },
         control,
         setValue,
-        handleSubmit
-    } = useForm();
+        handleSubmit,
+        reset
+    } = useForm({
+        defaultValues: modelTestForm,
+    });
 
-    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'selectedGroup', defaultValue: "" });
-    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'selectedLevel', defaultValue: "" });
-    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'selectedSubject', defaultValue: "" });
-    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'selectedLesson', defaultValue: "" });
-    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'selectedTopic', defaultValue: "" });
-    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'selectedSubTopic', defaultValue: "" });
+    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'group', defaultValue: "" });
+    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'level', defaultValue: "" });
+    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'subject', defaultValue: "" });
+    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'lesson', defaultValue: "" });
+    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'topic', defaultValue: "" });
+    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'sub_topic', defaultValue: "" });
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -71,6 +78,23 @@ export default function ModelTestCreateForm() {
         toolbar: toolbarOptions
     }
 
+    useEffect(() => {
+        if (modelTestForm.package && allPackages) {
+            const selectedPackage = allPackages?.data.find(pkg => pkg.id === modelTestForm.package);
+
+            if (selectedPackage) {
+                const plainText = getPlainTextFromHtml(selectedPackage.name);
+                setSelectedPackageName(plainText.charAt(0).toUpperCase() + plainText.slice(1));
+            }
+        }
+    }, [modelTestForm.package, allPackages]);
+
+    const handlePackageSelect = (packageId, packageName) => {
+        dispatch(updateField({ field: 'package', value: packageId }));
+        setSelectedPackageName(packageName);
+        setPopoverOpen(false);
+    };
+
     const handleCreate = async (formData) => {
 
         const categoriesPayload = {
@@ -83,18 +107,19 @@ export default function ModelTestCreateForm() {
         }
 
         const payload = {
-            "package_id": formData.package,
+            "package_id": modelTestForm.package || formData.package,
             "title": formData.title,
             "description": formData.description,
             "start_time": formData.start_time,
             "end_time": formData.end_time,
-            "is_active": statusCheck,
+            "is_active": modelTestForm.is_active,
             "category": categoriesPayload
         }
 
         try {
             const response = await createModelTest(payload).unwrap();
             toast.success(response.message);
+            reset();
         } catch (error) {
             console.error(error);
             toast.error(error?.data?.message)
@@ -111,43 +136,40 @@ export default function ModelTestCreateForm() {
                         name="package"
                         control={control}
                         render={({ field }) => (
-                            <>
-                                <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                                    <PopoverTrigger asChild>
-                                        <Button variant="outline" className="w-full justify-start">
-                                            {selectedPackageName ? selectedPackageName.charAt(0).toUpperCase() + selectedPackageName.slice(1) : "Select Package"}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-full p-0">
-                                        <Command>
-                                            <CommandInput placeholder="Search package..." />
-                                            <CommandList>
-                                                <CommandEmpty>No results found.</CommandEmpty>
-                                                <CommandGroup>
-                                                    {
-                                                        allPackages?.data.map((type) => {
-                                                            const plainText = getPlainTextFromHtml(type?.name);
+                            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button variant="outline" className="w-full justify-start">
+                                        {selectedPackageName ? selectedPackageName : "Select Package"}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-full p-0">
+                                    <Command>
+                                        <CommandInput placeholder="Search package..." />
+                                        <CommandList>
+                                            <CommandEmpty>No results found.</CommandEmpty>
+                                            <CommandGroup>
+                                                {
+                                                    allPackages?.data.map((type) => {
+                                                        const plainText = getPlainTextFromHtml(type?.name);
 
-                                                            return (
-                                                                <CommandItem
-                                                                    key={type?.id}
-                                                                    onSelect={() => {
-                                                                        field.onChange(type?.id);
-                                                                        setSelectedPackageName(plainText);
-                                                                        setPopoverOpen(false);
-                                                                    }}
-                                                                >
-                                                                    {plainText.charAt(0).toUpperCase() + plainText.slice(1)}
-                                                                </CommandItem>
-                                                            )
-                                                        })
-                                                    }
-                                                </CommandGroup>
-                                            </CommandList>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover>
-                            </>
+                                                        return (
+                                                            <CommandItem
+                                                                key={type?.id}
+                                                                onSelect={() => {
+                                                                    field.onChange(type?.id, plainText);
+                                                                    handlePackageSelect(type?.id, plainText)
+                                                                }}
+                                                            >
+                                                                {plainText.charAt(0).toUpperCase() + plainText.slice(1)}
+                                                            </CommandItem>
+                                                        )
+                                                    })
+                                                }
+                                            </CommandGroup>
+                                        </CommandList>
+                                    </Command>
+                                </PopoverContent>
+                            </Popover>
                         )}
                     />
                 </div>
@@ -163,7 +185,10 @@ export default function ModelTestCreateForm() {
                             <ReactQuill
                                 theme="snow"
                                 value={field.value}
-                                onChange={field.onChange}
+                                onChange={(value) => {
+                                    field.onChange(value);
+                                    dispatch(updateField({ field: 'title', value }));
+                                }}
                                 modules={module}
                             />
                         )}
@@ -182,7 +207,10 @@ export default function ModelTestCreateForm() {
                             <ReactQuill
                                 theme="snow"
                                 value={field.value}
-                                onChange={field.onChange}
+                                onChange={(value) => {
+                                    field.onChange(value);
+                                    dispatch(updateField({ field: 'description', value }));
+                                }}
                                 modules={module}
                             />
                         )}
@@ -202,7 +230,11 @@ export default function ModelTestCreateForm() {
                                 type="datetime-local"
                                 id="start_time"
                                 {...field}
-                                className="w-full p-2 border border-gray-300 rounded"
+                                onChange={(e) => {
+                                    field.onChange(e.target.value);
+                                    dispatch(updateField({ field: 'start_time', value: e.target.value }));
+                                }}
+                                className="w-full p-2 border border-gray-300 bg-inherit rounded"
                             />
                         )}
                     />
@@ -221,7 +253,11 @@ export default function ModelTestCreateForm() {
                                 type="datetime-local"
                                 id="end_time"
                                 {...field}
-                                className="w-full p-2 border border-gray-300 rounded"
+                                onChange={(e) => {
+                                    field.onChange(e.target.value);
+                                    dispatch(updateField({ field: 'end_time', value: e.target.value }));
+                                }}
+                                className="w-full p-2 border border-gray-300 bg-inherit rounded"
                             />
                         )}
                     />
@@ -232,8 +268,8 @@ export default function ModelTestCreateForm() {
                 <div>
                     <Checkbox
                         id="status"
-                        checked={statusCheck}
-                        onCheckedChange={(checked) => setStatusCheck(checked)}
+                        checked={modelTestForm.is_active}
+                        onCheckedChange={(checked) => dispatch(updateField({ field: 'is_active', value: checked }))}
                     />
                     <Label htmlFor="status" className="ml-2">Status</Label>
                 </div>

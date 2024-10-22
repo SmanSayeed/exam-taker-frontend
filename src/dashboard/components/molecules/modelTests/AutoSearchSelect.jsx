@@ -13,8 +13,9 @@ import {
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { XIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
 export const AutoSearchSelect = ({
@@ -31,6 +32,24 @@ export const AutoSearchSelect = ({
 }) => {
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedCatName, setSelectedCatName] = useState("");
+    const [selectedCatId, setSelectedCatId] = useLocalStorage({ key: name, defaultValue: "" });
+
+    useEffect(() => {
+        if (selectedCatId && options.length > 0) {
+            const selectedOption = options.find((item) => item.id.toString() === selectedCatId);
+
+            if (selectedOption) {
+                setSelectedCatName(selectedOption.title.charAt(0).toUpperCase() + selectedOption.title.slice(1));
+            }
+        }
+    }, [selectedCatId, options]);
+
+    const handleSelect = (item) => {
+        setSelectedCatId(item.id.toString());
+        setSelectedCatName(item.title);
+        setPopoverOpen(false);
+        if (onChange) onChange(item.id.toString());
+    };
 
     return (
         <div className="grid gap-2">
@@ -46,7 +65,7 @@ export const AutoSearchSelect = ({
                             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" className="w-full justify-start">
-                                        {selectedCatName ? selectedCatName.charAt(0).toUpperCase() + selectedCatName.slice(1) : placeholder}
+                                        {selectedCatName ? selectedCatName : placeholder}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
@@ -60,9 +79,7 @@ export const AutoSearchSelect = ({
                                                         key={item?.id.toString()}
                                                         onSelect={() => {
                                                             field.onChange(item?.id.toString());
-                                                            if (onChange) onChange(item?.id.toString());
-                                                            setSelectedCatName(item?.title);
-                                                            setPopoverOpen(false);
+                                                            handleSelect(item);
                                                         }}
                                                     >
                                                         {item?.title.charAt(0).toUpperCase() + item?.title.slice(1)}
@@ -73,17 +90,21 @@ export const AutoSearchSelect = ({
                                     </Command>
                                 </PopoverContent>
                             </Popover>
-                            {field.value && (
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        if (onRemove) onRemove();
-                                    }}
-                                    className="p-2 rounded-full bg-gray-200 hover:bg-red-200 text-gray-500 hover:text-red-500"
-                                >
-                                    <XIcon className="w-5 h-5" aria-hidden="true" />
-                                </button>
-                            )}
+                            {
+                                field.value && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (onRemove) onRemove();
+                                            setSelectedCatName("");
+                                            setSelectedCatId("");
+                                        }}
+                                        className="p-2 rounded-full bg-gray-200 hover:bg-red-200 text-gray-500 hover:text-red-500"
+                                    >
+                                        <XIcon className="w-5 h-5" aria-hidden="true" />
+                                    </button>
+                                )
+                            }
                         </div>
 
                         {errors[name] && <span className="text-red-600">{errors[name]?.message}</span>}
