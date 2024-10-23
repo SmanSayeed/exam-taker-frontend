@@ -10,12 +10,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomSelect from "../atoms/CustomSelect";
 
-
 const QuestionCategoryFormWithSelect = ({
     type,
     refetchOnQuestionsCategoryQuery,
     fromExamTypes = false,
     fromExamSubTypes = false,
+    fromLevels = false,
     fromSubjects = false,
     fromLessons = false,
     fromTopics = false,
@@ -28,7 +28,6 @@ const QuestionCategoryFormWithSelect = ({
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors },
         setError,
         control
@@ -100,10 +99,9 @@ const QuestionCategoryFormWithSelect = ({
 
         if (isSuccess) {
             toast.success(data?.message);
-            reset();
             refetchOnQuestionsCategoryQuery();
         }
-    }, [data, isSuccess, error, setError, reset, refetchOnQuestionsCategoryQuery]);
+    }, [data, isSuccess, error, setError, refetchOnQuestionsCategoryQuery]);
 
     return (
         <Card>
@@ -150,6 +148,21 @@ const QuestionCategoryFormWithSelect = ({
                                     errors={errors}
                                 />
                                 {errors.exam_types && <span className="text-red-600">{errors.exam_types.message}</span>}
+                            </>
+                        )
+                    }
+
+                    {/* select group */}
+                    {
+                        fromLevels && (
+                            <>
+                                <CustomSelect
+                                    label={"group"}
+                                    categoryData={groupsData?.data?.data}
+                                    control={control}
+                                    errors={errors}
+                                />
+                                {errors.group && <span className="text-red-600">{errors.group.message}</span>}
                             </>
                         )
                     }
@@ -228,8 +241,8 @@ const QuestionCategoryFormWithSelect = ({
                                     <CustomSelect
                                         label={"part"}
                                         categoryData={[
-                                            { id: "1st", title: "1st part" },
-                                            { id: "2nd", title: "2nd part" }
+                                            { id: "1", title: "1st part" },
+                                            { id: "2", title: "2nd part" }
                                         ]}
                                         control={control}
                                         errors={errors}
