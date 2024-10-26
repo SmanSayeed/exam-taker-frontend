@@ -29,7 +29,7 @@ const SubjectForQuestionPage = () => {
                     fromSubjects={true}
                 />
 
-                <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
+                <div className='mt-8 mb-2 flex items-center justify-between space-y-2 '>
                     <div>
                         <h2 className='text-2xl font-bold tracking-tight'>Welcome back!</h2>
                         <p className='text-muted-foreground'>

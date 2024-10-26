@@ -17,13 +17,13 @@ const QuestionCreateForAdminPage = () => {
             <Layout.Body>
                 <div className="body w-full">
                     <div>
-                        <Card className="container ">
+                        <Card className="border-2 ">
                             <CardHeader>
                                 <CardTitle className="text-xl font-semibold">
                                     Question Creation
                                 </CardTitle>
                                 <CardDescription>
-                                    Enter proper information to create an question
+                                    Enter proper information to create a question
                                 </CardDescription>
                             </CardHeader>
 

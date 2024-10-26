@@ -31,35 +31,41 @@ const SelectField = ({
     // if (!isVisible) return null;
 
     return (
-        <div className="grid gap-2">
-            <Label className="text-md font-bold">{label}</Label>
-            <Controller
-                name={name}
-                control={control}
-                rules={rules}
-                defaultValue={defaultValue}
-                render={({ field, formState: { errors } }) => (
-                    <>
-                        <div className="flex items-center gap-2">
-                            <Select
-                                onValueChange={(val) => {
-                                    field.onChange(val)
-                                    if (onChange) onChange(val)
-                                }}
-                                value={field.value || ""}
-                                disabled={disabled}
-                            >
-                                <SelectTrigger className="w-[300px]">
-                                    <SelectValue placeholder={placeholder} aria-label={`${label} select`} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {options && options.map((item) => (
-                                        <SelectItem key={item?.id.toString()} value={item?.id.toString()}>
-                                            {item?.title}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+        <div className="border py-1.5 px-3 rounded-md ">
+            <div className="w-full flex flex-col space-y-1 ">
+                <Label className="text-md font-semibold ">{label}</Label>
+                
+                <Controller
+                    name={name}
+                    control={control}
+                    rules={rules}
+                    defaultValue={defaultValue}
+                    className="border-4 flex"
+                    render={({ field, formState: { errors } }) => (
+                        <div className="flex items-center justify-between gap-2">
+                            <div>
+                                <Select
+                                    onValueChange={(val) => {
+                                        field.onChange(val)
+                                        if (onChange) onChange(val)
+                                    }}
+                                    value={field.value || ""}
+                                    disabled={disabled}
+                                    className="w-[100%] "
+                                >
+                                    <SelectTrigger className="w-[100%] ">
+                                        <SelectValue placeholder={placeholder} aria-label={`${label} select`} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {options && options.map((item) => (
+                                            <SelectItem key={item?.id.toString()} value={item?.id.toString()}>
+                                                {item?.title}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {errors[name] && <span className="text-red-600">{errors[name]?.message}</span>}
+                            </div>
                             {field.value && (
                                 <button
                                     type="button"
@@ -72,13 +78,13 @@ const SelectField = ({
                                     <XIcon className="w-5 h-5" aria-hidden="true" />
                                 </button>
                             )}
+
+
                         </div>
-                        {errors[name] && <span className="text-red-600">{errors[name]?.message}</span>}
-                    </>
-                )}
-            />
+                    )}
+                />
+            </div>
         </div>
     );
 }
-
 export default SelectField;

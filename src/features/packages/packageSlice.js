@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const packageSlice = createSlice({
-  name: "question",
+  name: "package",
   initialState,
   reducers: {
     savePackage: (state, action) => {

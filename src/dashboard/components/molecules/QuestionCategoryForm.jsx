@@ -78,8 +78,8 @@ if (isSuccess) {
 
 return (
     <Card>
-        <form onSubmit={handleSubmit(handleCreate)} className="container gap-2 p-8 ">
-            <div className="space-y-4 mt-4 ">
+        <form onSubmit={handleSubmit(handleCreate)} className="p-4 md:p-8 ">
+            <div className="space-y-4">
                 {/* category title */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
