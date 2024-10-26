@@ -1,4 +1,5 @@
 import {
+    BookHeart,
     BookOpenCheck,
     CalendarFold,
     FileQuestion,
@@ -133,6 +134,26 @@ export const sidelinks = [
                 label: "",
                 href: "/admin/questions",
                 icon: <FileQuestion size={18} />
+            },
+        ]
+    },
+    {
+        title: "Model Tests",
+        label: "",
+        href: "/admin/model-tests",
+        icon: <BookHeart size={18} />,
+        sub: [
+            {
+                title: "Create Model Test",
+                label: "",
+                href: "/admin/model-tests/create",
+                icon: <BookOpenCheck size={18} />
+            },
+            {
+                title: "Model Tests List",
+                label: "",
+                href: "/admin/model-tests",
+                icon: <BookOpenCheck size={18} />
             },
         ]
     },
