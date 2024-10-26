@@ -105,8 +105,8 @@ const QuestionCategoryFormWithSelect = ({
 
     return (
         <Card>
-            <form onSubmit={handleSubmit(handleCreate)} className="container gap-2 p-8 ">
-                <div className="space-y-4 mt-4 ">
+            <form onSubmit={handleSubmit(handleCreate)} className="p-4 md:p-8 ">
+                <div className="space-y-4">
 
                     {/* section and year select */}
                     {
@@ -215,11 +215,11 @@ const QuestionCategoryFormWithSelect = ({
                     {/* select level, group and and part */}
                     {
                         fromSubjects && (
-                            <div className="flex flex-col md:flex-row gap-4">
+                            <div className="flex flex-col md:flex-row gap-4 w-full ">
                                 {/* select level */}
-                                <div>
+                                <div className="w-full">
                                     <CustomSelect
-                                        label={"level"}
+                                        label={"Level"}
                                         categoryData={levelsData?.data?.data}
                                         control={control}
                                         errors={errors}
@@ -227,9 +227,9 @@ const QuestionCategoryFormWithSelect = ({
                                     {errors.level && <span className="text-red-600">{errors.level.message}</span>}
                                 </div>
                                 {/* select group */}
-                                <div>
+                                <div className="w-full">
                                     <CustomSelect
-                                        label={"group"}
+                                        label={"Group"}
                                         categoryData={groupsData?.data?.data}
                                         control={control}
                                         errors={errors}
@@ -237,9 +237,9 @@ const QuestionCategoryFormWithSelect = ({
                                     {errors.group && <span className="text-red-600">{errors.group.message}</span>}
                                 </div>
                                 {/* part select */}
-                                <div>
+                                <div className="w-full">
                                     <CustomSelect
-                                        label={"part"}
+                                        label={"Part"}
                                         categoryData={[
                                             { id: "1", title: "1st part" },
                                             { id: "2", title: "2nd part" }

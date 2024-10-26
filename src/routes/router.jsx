@@ -21,6 +21,9 @@ import TopicsForQuestionPage from "@/dashboard/components/pages/questions/questi
 import YearForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/YearForQuestionPage";
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
+import PackageManagementForAdminPage from "@/dashboard/components/pages/packages/PackageCreateForAdminPage";
+import AllPackagesForAdminPage from "@/dashboard/components/pages/packages/AllPackagesForAdminPage";
+import PackageEditForAdminPage from "@/dashboard/components/pages/packages/PackageEditForAdminPage";
 
 const router = createBrowserRouter([
     {
@@ -105,6 +108,18 @@ const router = createBrowserRouter([
                         path: "/admin/question/edit/:questionId",
                         element: <QuestionEditForAdminPage />
                     },
+                    {
+                        path: "/admin/package/create",
+                        element: <PackageManagementForAdminPage />
+                    },
+                    {
+                        path: "/admin/package/edit/:packageId",
+                        element: <PackageEditForAdminPage />
+                    },
+                    {
+                        path: "/admin/packages",
+                        element: <AllPackagesForAdminPage />
+                    }
                 ]
             },
         ],

@@ -13,7 +13,7 @@ const CustomSelect = ({ label, categoryData, control }) => {
                 rules={{ required: `${label} is required` }}
                 render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger className="w-[300px]">
+                        <SelectTrigger>
                             <SelectValue placeholder={label} />
                         </SelectTrigger>
                         <SelectContent>

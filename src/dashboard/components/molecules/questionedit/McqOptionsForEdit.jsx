@@ -32,7 +32,7 @@ export const McqOptionsForEdit = ({
     return (
         <div>
             {options.map((_, optionIndex) => (
-                <div key={optionIndex} className="flex items-center justify-between mb-4">
+                <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 mb-4">
                     <McqOption
                         optionIndex={optionIndex}
                         control={control}
@@ -40,7 +40,7 @@ export const McqOptionsForEdit = ({
                         setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
                     />
                     {options.length > 2 && optionIndex > 1 && (
-                        <Button type="button" onClick={() => deleteOption(optionIndex)} className="ml-4">Delete</Button>
+                        <Button type="button" onClick={() => deleteOption(optionIndex)} className="md:ml-4">Delete</Button>
                     )}
                 </div>
             ))}
