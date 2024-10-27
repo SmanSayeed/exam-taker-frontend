@@ -218,7 +218,7 @@ export default function QuestionCreateForm() {
                         <Controller
                             name="description"
                             control={control}
-                            rules={{ required: "Description is required" }}
+                            // rules={{ required: "Description is required" }}
                             render={({ field }) => (
                                 <ReactQuill
                                     theme="snow"
