@@ -1,10 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import QuestionCreateForm from "../../molecules/createquestion/QuestionCreateForm";
+import ModelTestCreateForm from "../../organism/modelTests/ModelTestCreateForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
-const QuestionCreateForAdminPage = () => {
+const ModelTestCreatePage = () => {
+
     return (
         <Layout>
             <Layout.Header>
@@ -17,18 +18,18 @@ const QuestionCreateForAdminPage = () => {
             <Layout.Body>
                 <div className="body w-full">
                     <div>
-                        <Card className="border-2 ">
+                        <Card className="container ">
                             <CardHeader>
                                 <CardTitle className="text-xl font-semibold">
-                                    Question Creation
+                                    Model Test Creation
                                 </CardTitle>
                                 <CardDescription>
-                                    Enter proper information to create a question
+                                    Enter proper information to create a Model Test
                                 </CardDescription>
                             </CardHeader>
 
                             <CardContent className="flex flex-col gap-10">
-                                <QuestionCreateForm />
+                                <ModelTestCreateForm />
                             </CardContent>
                         </Card>
                     </div>
@@ -37,4 +38,5 @@ const QuestionCreateForAdminPage = () => {
         </Layout>
     )
 }
-export default QuestionCreateForAdminPage;
+
+export default ModelTestCreatePage;

@@ -53,16 +53,16 @@ export default function QuestionCreateForm() {
         }
     });
 
-    const [selectedSection, setSelectedSection] = useLocalStorage({ key: 'selectedSection', defaultValue: "" });
-    const [selectedExamType, setSelectedExamType] = useLocalStorage({ key: 'selectedExamType', defaultValue: "" });
-    const [selectedExamSubType, setSelectedExamSubType] = useLocalStorage({ key: 'selectedExamSubType', defaultValue: "" });
-    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'selectedGroup', defaultValue: "" });
-    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'selectedLevel', defaultValue: "" });
-    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'selectedSubject', defaultValue: "" });
-    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'selectedLesson', defaultValue: "" });
-    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'selectedTopic', defaultValue: "" });
-    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'selectedSubTopic', defaultValue: "" });
-    const [selectedYear, setSelectedYear] = useLocalStorage({ key: 'selectedYear', defaultValue: "" });
+    const [selectedSection, setSelectedSection] = useLocalStorage({ key: 'section', defaultValue: "" });
+    const [selectedExamType, setSelectedExamType] = useLocalStorage({ key: 'exam_type', defaultValue: "" });
+    const [selectedExamSubType, setSelectedExamSubType] = useLocalStorage({ key: 'exam_sub_type', defaultValue: "" });
+    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'group', defaultValue: "" });
+    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'level', defaultValue: "" });
+    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'subject', defaultValue: "" });
+    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'lesson', defaultValue: "" });
+    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'topic', defaultValue: "" });
+    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'sub_topic', defaultValue: "" });
+    const [selectedYear, setSelectedYear] = useLocalStorage({ key: 'year', defaultValue: "" });
 
     const handleTypeChange = (val) => {
         setSelectedType(val);

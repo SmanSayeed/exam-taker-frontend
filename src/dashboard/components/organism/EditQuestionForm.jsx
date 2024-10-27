@@ -54,7 +54,6 @@ export default function EditQuestionForm() {
         if (questionData?.data) {
             const question = questionData.data;
             setQuestion(question);
-            console.log("question", question)
 
             reset({
                 title: question.title || "",
@@ -186,7 +185,6 @@ export default function EditQuestionForm() {
             "creative_options": creativeQuestions,
             "categories": categoriesPayload
         }
-        console.log("payload", payload)
 
         try {
             const response = await editQuestion({ id: questionId, data: payload }).unwrap();
@@ -198,7 +196,7 @@ export default function EditQuestionForm() {
 
     return (
         <form onSubmit={handleSubmit(handleUpdate)} id="edit-question-form">
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 ">
                 {/* Question Type */}
                 <div className="space-y-1">
                     <Label className="text-md font-bold">Question Type</Label>

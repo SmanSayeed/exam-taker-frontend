@@ -1,4 +1,5 @@
 import {
+    BookHeart,
     BookOpenCheck,
     CalendarFold,
     FileQuestion,
@@ -137,6 +138,26 @@ export const sidelinks = [
         ]
     },
     {
+        title: "Model Tests",
+        label: "",
+        href: "/admin/model-tests",
+        icon: <BookHeart size={18} />,
+        sub: [
+            {
+                title: "Create Model Test",
+                label: "",
+                href: "/admin/model-tests/create",
+                icon: <BookOpenCheck size={18} />
+            },
+            {
+                title: "Model Tests List",
+                label: "",
+                href: "/admin/model-tests",
+                icon: <BookOpenCheck size={18} />
+            },
+        ]
+    },
+    {
         title: "Exam",
         label: "",
         href: "/admin/exam/type",
@@ -149,5 +170,25 @@ export const sidelinks = [
                 icon: <BookOpenCheck size={18} />
             },
         ]
-    }
+    },
+    {
+        title: "Packages",
+        label: "",
+        href: "/admin/package-management",
+        icon: <LayoutDashboard size={18} />,
+        sub: [
+            {
+                title: "Create a Package",
+                label: "",
+                href: "/admin/package/create",
+                icon: <BookOpenCheck size={18} />
+            },
+            {
+                title: "All Packages",
+                label: "",
+                href: "/admin/packages",
+                icon: <BookOpenCheck size={18} />
+            },
+        ]
+    },
 ]
