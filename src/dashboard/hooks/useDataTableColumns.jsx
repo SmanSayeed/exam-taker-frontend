@@ -16,7 +16,6 @@ const useDataTableColumns = (type) => {
     const [includeTopicId, setIncludeTopicId] = useState(false);
 
     const { data: categoryData, isLoading, isError } = useGetQuestionsCategoryQuery(type);
-    console.log("topicsData", categoryData)
 
     useEffect(() => {
         if (categoryData?.data) {

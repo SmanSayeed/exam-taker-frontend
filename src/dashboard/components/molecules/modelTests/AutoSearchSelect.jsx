@@ -14,7 +14,8 @@ import {
     PopoverTrigger
 } from "@/components/ui/popover";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { XIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Check, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
@@ -82,6 +83,13 @@ export const AutoSearchSelect = ({
                                                             handleSelect(item);
                                                         }}
                                                     >
+                                                        <Check
+                                                            className={cn(
+                                                                "mr-2 h-4 w-4",
+                                                                selectedCatId.includes(item?.id) ? "opacity-100" : "opacity-0"
+                                                            )}
+                                                        />
+
                                                         {item?.title.charAt(0).toUpperCase() + item?.title.slice(1)}
                                                     </CommandItem>
                                                 ))}
