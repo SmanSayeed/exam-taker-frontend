@@ -338,7 +338,6 @@ export default function QuestionCreateForm() {
                                 </>
                             ) : "Create Question"
                         }
-                        {/* {isLoading ? "Proceeding" : "Create Question"} */}
                     </Button>
                 </div>
             </form>

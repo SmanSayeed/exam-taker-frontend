@@ -93,7 +93,6 @@ const useDataTableColumns = (type) => {
                 <DataTableColumnHeader column={column} title="Status" />
             ),
             cell: ({ row }) => {
-                console.log("topics row data:", row.getValue("status"))
                 return (
                     <div className="flex space-x-2">
                         <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
