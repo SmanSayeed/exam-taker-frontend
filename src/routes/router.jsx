@@ -8,6 +8,9 @@ import UserCreateForAdminPage from "@/dashboard/components/pages/UserCreateForAd
 import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminPage";
 import ModelTestCreatePage from "@/dashboard/components/pages/modelTests/ModelTestCreatePage";
 import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPage";
+import AllPackagesForAdminPage from "@/dashboard/components/pages/packages/AllPackagesForAdminPage";
+import PackageManagementForAdminPage from "@/dashboard/components/pages/packages/PackageCreateForAdminPage";
+import PackageEditForAdminPage from "@/dashboard/components/pages/packages/PackageEditForAdminPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
 import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
@@ -23,9 +26,6 @@ import TopicsForQuestionPage from "@/dashboard/components/pages/questions/questi
 import YearForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/YearForQuestionPage";
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoutes from "./PrivateRoutes";
-import PackageManagementForAdminPage from "@/dashboard/components/pages/packages/PackageCreateForAdminPage";
-import AllPackagesForAdminPage from "@/dashboard/components/pages/packages/AllPackagesForAdminPage";
-import PackageEditForAdminPage from "@/dashboard/components/pages/packages/PackageEditForAdminPage";
 
 const router = createBrowserRouter([
     {
@@ -121,7 +121,15 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/packages",
                         element: <AllPackagesForAdminPage />
-                    }
+                    },
+                    {
+                        path: "/admin/model-tests/create",
+                        element: <ModelTestCreatePage />
+                    },
+                    {
+                        path: "/admin/model-tests",
+                        element: <ModelTestsPage />
+                    },
                 ]
             },
         ],

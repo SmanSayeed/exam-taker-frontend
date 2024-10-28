@@ -79,7 +79,7 @@ export default function ModelTestCreateForm() {
     }
 
     useEffect(() => {
-        if (modelTestForm.package && allPackages) {
+        if (modelTestForm?.package && allPackages) {
             const selectedPackage = allPackages?.data.find(pkg => pkg.id === modelTestForm.package);
 
             if (selectedPackage) {
@@ -87,7 +87,7 @@ export default function ModelTestCreateForm() {
                 setSelectedPackageName(plainText.charAt(0).toUpperCase() + plainText.slice(1));
             }
         }
-    }, [modelTestForm.package, allPackages]);
+    }, [modelTestForm?.package, allPackages]);
 
     const handlePackageSelect = (packageId, packageName) => {
         dispatch(updateField({ field: 'package', value: packageId }));
@@ -268,7 +268,7 @@ export default function ModelTestCreateForm() {
                 <div>
                     <Checkbox
                         id="status"
-                        checked={modelTestForm.is_active}
+                        checked={modelTestForm?.is_active}
                         onCheckedChange={(checked) => dispatch(updateField({ field: 'is_active', value: checked }))}
                     />
                     <Label htmlFor="status" className="ml-2">Status</Label>

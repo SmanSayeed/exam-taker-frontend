@@ -1,13 +1,10 @@
+import { useGetPackagesQuery } from "@/features/packages/packagesApi";
 import { useState } from "react";
 import Loading from "../../atoms/Loading";
-import PageTitle from "../../atoms/PageTitle";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import PaginationSCN from "../../molecules/PaginationSCN";
-import FilteringQuestions from "../../organism/FilteringQuestions";
+import PackageCardAndDetails from "../../molecules/package/PackageCardAndDetails";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
-import { useGetPackagesQuery } from "@/features/packages/packagesApi";
-import PackageCardAndDetails from "../../molecules/package/PackageCardAndDetails";
 
 const AllPackagesForAdminPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
