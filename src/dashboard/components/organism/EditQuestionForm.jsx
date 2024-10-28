@@ -196,7 +196,7 @@ export default function EditQuestionForm() {
 
     return (
         <form onSubmit={handleSubmit(handleUpdate)} id="edit-question-form">
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 ">
                 {/* Question Type */}
                 <div className="space-y-1">
                     <Label className="text-md font-bold">Question Type</Label>

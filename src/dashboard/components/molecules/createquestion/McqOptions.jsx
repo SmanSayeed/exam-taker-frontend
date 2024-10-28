@@ -36,7 +36,7 @@ export const McqOptions = ({
         <div>
             {
                 options.map((optionIndex) => (
-                    <div key={optionIndex} className="flex items-center justify-between mb-4">
+                    <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 mb-4">
                         <McqOption
                             optionIndex={optionIndex}
                             control={control}
@@ -48,7 +48,7 @@ export const McqOptions = ({
                             <Button
                                 type="button"
                                 onClick={() => deleteOption(optionIndex)}
-                                className="ml-4"
+                                className="md:ml-4"
                             >
                                 Delete
                             </Button>

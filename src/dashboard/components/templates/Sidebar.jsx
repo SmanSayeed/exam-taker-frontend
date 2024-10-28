@@ -32,7 +32,7 @@ const Sidebar = ({ className, isCollapsed, setIsCollapsed }) => {
                 className={`absolute inset-0 transition-[opacity] delay-100 duration-700 ${navOpened ? 'h-svh opacity-50' : 'h-0 opacity-0'} w-full bg-black md:hidden`}
             />
 
-            <Layout fixed className={navOpened ? 'h-svh' : ''}>
+            <Layout fixed className={`${navOpened ? 'h-svh' : ''} `}>
                 {/* Header */}
                 <Layout.Header
                     sticky

@@ -42,7 +42,7 @@ export const questionsApi = apiSlice.injectEndpoints({
         }),
         deleteQuestion: builder.mutation({
             query: (id) => ({
-                url: `que/delete/${id}`,
+                url: `que/delete-question/${id}`,
                 method: "DELETE",
             }),
         }),

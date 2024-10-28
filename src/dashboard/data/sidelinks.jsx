@@ -170,5 +170,25 @@ export const sidelinks = [
                 icon: <BookOpenCheck size={18} />
             },
         ]
-    }
+    },
+    {
+        title: "Packages",
+        label: "",
+        href: "/admin/package-management",
+        icon: <LayoutDashboard size={18} />,
+        sub: [
+            {
+                title: "Create a Package",
+                label: "",
+                href: "/admin/package/create",
+                icon: <BookOpenCheck size={18} />
+            },
+            {
+                title: "All Packages",
+                label: "",
+                href: "/admin/packages",
+                icon: <BookOpenCheck size={18} />
+            },
+        ]
+    },
 ]
