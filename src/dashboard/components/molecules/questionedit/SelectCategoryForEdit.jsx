@@ -8,6 +8,7 @@ export default function SelectCategoryForEdit({ control, setValue }) {
 
     const dispatch = useDispatch();
     const selectedCategories = useSelector((state) => state.selectedCategories);
+    console.log("selectedCategories", selectedCategories)
 
     const [visibleFields, setVisibleFields] = useState({
         section: true,
@@ -22,16 +23,16 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         year: true,
     });
 
-    const { data: sections, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
-    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
-    // const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "selectedExamSubType");
-    const { data: groups, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "selectedGroup");
-    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "selectedLevel");
-    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "selectedSubject");
-    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "selectedLesson");
-    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "selectedTopic");
-    // const { selected: selectedSubTopic } = useCategoryData("sub-topics", "selectedSubTopic");
-    const { data: years } = useCategoryData("years", "selectedYear");
+    const { data: sections, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "section");
+    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "exam_type");
+    const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "exam_sub_type");
+    const { data: groups, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "group");
+    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "level");
+    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "subject");
+    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "lesson");
+    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "topic");
+    const { selected: selectedSubTopic } = useCategoryData("sub-topics", "sub_topic");
+    const { data: years } = useCategoryData("years", "year");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));

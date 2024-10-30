@@ -135,11 +135,12 @@ export default function EditQuestionForm() {
     const [editQuestion, { isLoading }] = useEditQuestionMutation();
 
     const handleUpdate = async (formData) => {
-        const mcqOptions = options.map((_, optionIndex) => {
+        const mcqOptions = options.map((option, optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
 
             return {
+                id: option.id,
                 mcq_question_text: optionText,
                 is_correct: correctOptions[optionIndex] || false,
                 description: explanation,

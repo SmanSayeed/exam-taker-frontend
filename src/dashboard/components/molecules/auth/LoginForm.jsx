@@ -83,10 +83,10 @@ const LoginForm = () => {
                 >
                     {
                         isLoading ? (
-                            <>
+                            <span className="flex items-center justify-center gap-2">
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 Please wait
-                            </>
+                            </span>
                         ) : "Login"
                     }
                 </button>
