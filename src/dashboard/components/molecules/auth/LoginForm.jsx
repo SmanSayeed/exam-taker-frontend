@@ -4,6 +4,7 @@ import { Label } from "../../../../components/ui/label";
 import { useNavigate } from "react-router-dom";
 
 import { useLoginMutation } from "@/features/auth/authApi";
+import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -80,7 +81,14 @@ const LoginForm = () => {
                     type="submit"
                     className="w-full bg-slate-500 py-1 hover:bg-gray-400"
                 >
-                    Login
+                    {
+                        isLoading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Please wait
+                            </span>
+                        ) : "Login"
+                    }
                 </button>
             </div>
         </form>

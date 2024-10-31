@@ -19,7 +19,7 @@ import { Check, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
-export const AutoSearchSelect = ({
+export const AutoSearchSelectForEdit = ({
     label,
     name,
     control,
@@ -31,6 +31,8 @@ export const AutoSearchSelect = ({
     defaultValue,
     disabled = false,
 }) => {
+    console.log("defaultvalue", defaultValue)
+
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedCatName, setSelectedCatName] = useState("");
     const [selectedCatId, setSelectedCatId] = useLocalStorage({ key: name, defaultValue: "" });
@@ -70,7 +72,7 @@ export const AutoSearchSelect = ({
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
-                                    <Command>
+                                    <Command value={defaultValue}>
                                         <CommandInput placeholder={placeholder} />
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>

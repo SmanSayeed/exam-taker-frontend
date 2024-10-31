@@ -57,8 +57,9 @@ export const sidelinks = [
             }
         ]
     },
+    // categories
     {
-        title: "Questions",
+        title: "Categories",
         label: "",
         href: "/admin/questions",
         icon: <FileQuestion size={18} />,
@@ -122,7 +123,16 @@ export const sidelinks = [
                 label: "",
                 href: "/admin/questions/sub-topics",
                 icon: <Group size={18} />
-            },
+            }
+        ]
+    },
+    // questions
+    {
+        title: "Questions",
+        label: "",
+        href: "/admin/questions",
+        icon: <FileQuestion size={18} />,
+        sub: [
             {
                 title: "Create Question",
                 label: "",

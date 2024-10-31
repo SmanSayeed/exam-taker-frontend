@@ -62,6 +62,8 @@ export default function EditQuestionForm() {
                 mark: question.mark || ""
             });
 
+            console.log("question attachable", question.attachable)
+
             dispatch(setSelectedSection({ selectedSection: question.attachable?.section_id || "" }));
             dispatch(setSelectedExamType({ selectedExamType: question.attachable?.exam_type_id || "" }));
             dispatch(setSelectedExamSubType({ selectedExamSubType: question.attachable?.exam_sub_type_id || "" }));
@@ -135,11 +137,12 @@ export default function EditQuestionForm() {
     const [editQuestion, { isLoading }] = useEditQuestionMutation();
 
     const handleUpdate = async (formData) => {
-        const mcqOptions = options.map((_, optionIndex) => {
+        const mcqOptions = options.map((option, optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
 
             return {
+                id: option.id,
                 mcq_question_text: optionText,
                 is_correct: correctOptions[optionIndex] || false,
                 description: explanation,

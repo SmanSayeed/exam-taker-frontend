@@ -14,6 +14,7 @@ import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
 import { useState } from "react";
 
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { Loader2 } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
@@ -218,7 +219,6 @@ export default function QuestionCreateForm() {
                         <Controller
                             name="description"
                             control={control}
-                            // rules={{ required: "Description is required" }}
                             render={({ field }) => (
                                 <ReactQuill
                                     theme="snow"
@@ -330,7 +330,14 @@ export default function QuestionCreateForm() {
                         type="submit"
                         className="w-full"
                     >
-                        {isLoading ? "Proceeding" : "Create Question"}
+                        {
+                            isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Please wait
+                                </>
+                            ) : "Create Question"
+                        }
                     </Button>
                 </div>
             </form>

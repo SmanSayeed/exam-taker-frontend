@@ -1,8 +1,9 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { AutoSearchSelect } from "../modelTests/AutoSearchSelect";
 import { useCategoryData } from "./useCategoryData";
 
-export default function SelectCategory({ control, setValue, setSelectedSection , setSelectedExamType, setSelectedExamSubType, setSelectedGroup = null , setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
+export default function SelectCategory({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup = null, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
 
     const [visibleFields, setVisibleFields] = useState({
         section: true,
@@ -17,16 +18,16 @@ export default function SelectCategory({ control, setValue, setSelectedSection ,
         year: true,
     });
 
-    const { data: sections, selected: selectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "section");
+    const { data: sections, selected: selectedSection, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "section");
     const { data: examTypes, selected: selectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "exam_type");
     const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "exam_sub_type");
-    const { data: groups, selected: selectedGroup, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "group");
+    const { data: groups, selected: selectedGroup, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "group");
     const { data: levels, selected: selectedLevel, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "level");
     const { data: subjects, selected: selectedSubject, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "subject");
     const { data: lessons, selected: selectedLesson, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "lesson");
     const { data: topics, selected: selectedTopic, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "topic");
     const { selected: selectedSubTopic } = useCategoryData("sub-topics", "sub_topic");
-    const { data: years, selected: selectedYear } = useCategoryData("years", "year");
+    const { data: years, selected: selectedYear, isLoading: isYearLoading } = useCategoryData("years", "year");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
@@ -164,35 +165,47 @@ export default function SelectCategory({ control, setValue, setSelectedSection ,
         setValue("year", id)
     };
 
-    if (isLoading) {
-        return <div>Loading sections...</div>;
-    }
-
     if (error) {
         return <div>Error loading sections: {error.message}</div>;
     }
 
-    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => (
-        visibleFields[name] && (
-            <AutoSearchSelect
-                label={label}
-                name={name}
-                control={control}
-                options={options}
-                placeholder={`Select ${label}`}
-                onChange={onChange}
-                defaultValue={defaultValue}
-                rules={rules}
-                disabled={disabled}
-                onRemove={() => handleRemoveField(name)}
-            />
+    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => {
+        // If no options are available, don't render the selector
+        if (!options || options.length === 0) {
+            return null;
+        }
+
+        return (
+            visibleFields[name] && (
+                <AutoSearchSelect
+                    label={label}
+                    name={name}
+                    control={control}
+                    options={options}
+                    placeholder={`Select ${label}`}
+                    onChange={onChange}
+                    defaultValue={defaultValue}
+                    rules={rules}
+                    disabled={disabled}
+                    onRemove={() => handleRemoveField(name)}
+                />
+            )
         )
-    );
+    };
 
     return (
         <div className="space-y-4 mt-4">
             {/* Section → Exam Type → Exam Sub Type */}
             <div className="flex flex-col md:flex-row gap-4 mb-6">
+                {
+                    isSectionLoading && (
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[150px]" />
+                            <Skeleton className="h-4 w-[250px]" />
+                        </div>
+                    )
+                }
+
                 {renderSelectField({
                     label: "Section",
                     name: "section",
@@ -222,6 +235,15 @@ export default function SelectCategory({ control, setValue, setSelectedSection ,
 
             {/* Group → Level → Subject → Lesson → Topic → Sub Topic */}
             <div className="grid md:grid-cols-3 gap-2">
+                {
+                    isGroupLoading && (
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[150px]" />
+                            <Skeleton className="h-4 w-[250px]" />
+                        </div>
+                    )
+                }
+
                 {renderSelectField({
                     label: "Group",
                     name: "group",
@@ -278,6 +300,15 @@ export default function SelectCategory({ control, setValue, setSelectedSection ,
 
             {/* Year */}
             <div className="pt-4">
+                {
+                    isYearLoading && (
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[150px]" />
+                            <Skeleton className="h-4 w-[250px]" />
+                        </div>
+                    )
+                }
+
                 {renderSelectField({
                     label: "Year",
                     name: "year",
