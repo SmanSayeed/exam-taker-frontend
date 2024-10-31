@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AutoSearchSelect } from "../modelTests/AutoSearchSelect";
 import { useCategoryData } from "./useCategoryData";
 
-export default function SelectCategory({ control, setValue, setSelectedSection , setSelectedExamType, setSelectedExamSubType, setSelectedGroup = null , setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
+export default function SelectCategory({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup = null, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
 
     const [visibleFields, setVisibleFields] = useState({
         section: true,
@@ -164,10 +164,6 @@ export default function SelectCategory({ control, setValue, setSelectedSection ,
         setSelectedYear(id)
         setValue("year", id)
     };
-
-    // if (isLoading) {
-    //     return <div>Loading sections...</div>;
-    // }
 
     if (error) {
         return <div>Error loading sections: {error.message}</div>;

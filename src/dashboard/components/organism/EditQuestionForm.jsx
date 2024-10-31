@@ -62,6 +62,8 @@ export default function EditQuestionForm() {
                 mark: question.mark || ""
             });
 
+            console.log("question attachable", question.attachable)
+
             dispatch(setSelectedSection({ selectedSection: question.attachable?.section_id || "" }));
             dispatch(setSelectedExamType({ selectedExamType: question.attachable?.exam_type_id || "" }));
             dispatch(setSelectedExamSubType({ selectedExamSubType: question.attachable?.exam_sub_type_id || "" }));
