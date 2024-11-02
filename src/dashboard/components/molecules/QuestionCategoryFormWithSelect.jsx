@@ -22,15 +22,16 @@ const QuestionCategoryFormWithSelect = ({
     fromSubtopics = false,
 }) => {
     const [statusCheck, setStatusCheck] = useState(false);
-    const [image, setImage] = useState(null);
-    const [imageError, setImageError] = useState("");
+    // const [image, setImage] = useState(null);
+    // const [imageError, setImageError] = useState("");
 
     const {
         register,
         handleSubmit,
         formState: { errors },
         setError,
-        control
+        control,
+        reset
     } = useForm();
 
     const [createQuestionsCategory, { data, isSuccess, isLoading, error }] = useCreateQuestionsCategoryMutation();
@@ -43,31 +44,30 @@ const QuestionCategoryFormWithSelect = ({
     const { data: lessonsData } = useGetQuestionsCategoryQuery("lessons");
     const { data: topicsData } = useGetQuestionsCategoryQuery("topics");
 
-   
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
+    // const handleImageChange = (e) => {
+    //     const file = e.target.files[0];
 
-        if (file) {
-            const validTypes = ["image/jpeg", "image/jpg", "image/png"];
-            const isValidType = validTypes.includes(file.type);
-            const isValidSize = file.size <= 2 * 1024 * 1024; // 2 MB
-            if (!isValidType) {
-                setImageError("Only jpg, jpeg, and png formats are allowed.");
-                setImage(null);
-                return;
-            }
-            if (!isValidSize) {
-                setImageError("File size should not exceed 2 MB.");
-                setImage(null);
-                return;
-            }
-            setImageError("");
-            setImage(file);
-        }
-    };
+    //     if (file) {
+    //         const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+    //         const isValidType = validTypes.includes(file.type);
+    //         const isValidSize = file.size <= 2 * 1024 * 1024; // 2 MB
+    //         if (!isValidType) {
+    //             setImageError("Only jpg, jpeg, and png formats are allowed.");
+    //             setImage(null);
+    //             return;
+    //         }
+    //         if (!isValidSize) {
+    //             setImageError("File size should not exceed 2 MB.");
+    //             setImage(null);
+    //             return;
+    //         }
+    //         setImageError("");
+    //         setImage(file);
+    //     }
+    // };
 
     const handleCreate = (formData) => {
-        console.log("formData ",formData);
+        console.log("formData ", formData);
         const payload = {
             section_id: formData.sections,
             level_id: formData.levels,
@@ -81,9 +81,9 @@ const QuestionCategoryFormWithSelect = ({
             title: formData.title,
             status: statusCheck,
             details: formData.details,
-            picture: image
+            // picture: image
         }
-        console.log("payload ",payload);
+
         createQuestionsCategory({
             type,
             data: payload
@@ -102,8 +102,9 @@ const QuestionCategoryFormWithSelect = ({
         if (isSuccess) {
             toast.success(data?.message);
             refetchOnQuestionsCategoryQuery();
+            reset();
         }
-    }, [data, isSuccess, error, setError, refetchOnQuestionsCategoryQuery]);
+    }, [data, isSuccess, error, setError, refetchOnQuestionsCategoryQuery, reset]);
 
     return (
         <Card>

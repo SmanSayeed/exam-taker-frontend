@@ -20,6 +20,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import Loading from "../atoms/Loading";
 import { CreativeQuesForEdit } from "../molecules/questionedit/CreativeQuesForEdit";
 import { McqOptionsForEdit } from "../molecules/questionedit/McqOptionsForEdit";
 import SelectCategoryForEdit from "../molecules/questionedit/SelectCategoryForEdit";
@@ -36,7 +37,7 @@ export default function EditQuestionForm() {
     const [creativeQueTypes, setCreativeQueTypes] = useState([]);
 
     const { questionId } = useParams();
-    const { data: questionData } = useGetSingleQuestionsQuery(questionId);
+    const { data: questionData, isLoading: isQuestionLoading } = useGetSingleQuestionsQuery(questionId);
     const [question, setQuestion] = useState({});
 
     const { type } = question || {};
@@ -52,7 +53,7 @@ export default function EditQuestionForm() {
 
     useEffect(() => {
         if (questionData?.data) {
-            const question = questionData.data;
+            const question = questionData?.data;
             setQuestion(question);
 
             reset({
@@ -132,7 +133,7 @@ export default function EditQuestionForm() {
         toolbar: toolbarOptions
     }
 
-    const [editQuestion, { isLoading }] = useEditQuestionMutation();
+    const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleUpdate = async (formData) => {
         const mcqOptions = options.map((option, optionIndex) => {
@@ -195,9 +196,83 @@ export default function EditQuestionForm() {
         }
     }
 
+    if (isQuestionLoading) return <Loading />
+
     return (
         <form onSubmit={handleSubmit(handleUpdate)} id="edit-question-form">
             <div className="space-y-4 ">
+
+                {/* title */}
+                <div className="space-y-1">
+                    <Label htmlFor="title" className="text-md font-bold">Title</Label>
+                    <Controller
+                        name="title"
+                        control={control}
+                        rules={{ required: "Title is required" }}
+                        render={({ field }) => (
+                            <ReactQuill
+                                theme="snow"
+                                value={field.value}
+                                onChange={field.onChange}
+                                modules={module}
+                            />
+                        )}
+                    />
+                    {errors.title && <span className="text-red-600">{errors.title.message}</span>}
+                </div>
+
+                {/* mcq question */}
+                {type === "mcq" && (
+                    <McqOptionsForEdit
+                        control={control}
+                        options={options}
+                        setOptions={setOptions}
+                        correctOptions={correctOptions}
+                        setCorrectOptions={setCorrectOptions}
+                    />
+                )}
+
+                {/* creative question */}
+                {type === "creative" && (
+                    <CreativeQuesForEdit
+                        control={control}
+                        creativeQueTypes={creativeQueTypes}
+                        setCreativeQueTypes={setCreativeQueTypes}
+                    />
+                )}
+
+                {/* description */}
+                {/* <div className="space-y-1">
+                    <Label htmlFor="details" className="text-md font-bold">Description</Label>
+                    <Controller
+                        name="description"
+                        control={control}
+                        render={({ field }) => (
+                            <ReactQuill
+                                theme="snow"
+                                value={field.value}
+                                onChange={field.onChange}
+                                modules={module}
+                            />
+                        )}
+                    />
+                    {errors.description && <span className="text-red-600">{errors.description.message}</span>}
+                </div> */}
+
+                {/* images(optional) later */}
+                {/* <div className="space-y-1">
+                    <Label htmlFor="picture" className="text-md font-bold">Picture</Label>
+                    <Input
+                        {...register("picture")}
+                        id="picture"
+                        type="file"
+                        name="picture"
+                        accept="image/jpeg, image/jpg, image/png"
+                        className="dark:bg-gray-600"
+                    />
+                    {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
+                </div> */}
+
                 {/* Question Type */}
                 <div className="space-y-1">
                     <Label className="text-md font-bold">Question Type</Label>
@@ -221,58 +296,19 @@ export default function EditQuestionForm() {
                     {errors.type && <span className="text-red-600">{errors.type.message}</span>}
                 </div>
 
-                {/* title */}
-                <div className="space-y-1">
-                    <Label htmlFor="title" className="text-md font-bold">Title</Label>
-                    <Controller
-                        name="title"
-                        control={control}
-                        rules={{ required: "Title is required" }}
-                        render={({ field }) => (
-                            <ReactQuill
-                                theme="snow"
-                                value={field.value}
-                                onChange={field.onChange}
-                                modules={module}
-                            />
-                        )}
-                    />
-                    {errors.title && <span className="text-red-600">{errors.title.message}</span>}
-                </div>
-
-                {/* description */}
-                <div className="space-y-1">
-                    <Label htmlFor="details" className="text-md font-bold">Description</Label>
-                    <Controller
-                        name="description"
-                        control={control}
-                        render={({ field }) => (
-                            <ReactQuill
-                                theme="snow"
-                                value={field.value}
-                                onChange={field.onChange}
-                                modules={module}
-                            />
-                        )}
-                    />
-                    {errors.description && <span className="text-red-600">{errors.description.message}</span>}
-                </div>
-
-                {/* images(optional) later */}
-                <div className="space-y-1">
-                    <Label htmlFor="picture" className="text-md font-bold">Picture</Label>
+                {/* marks */}
+                <div className="grid gap-2">
+                    <Label htmlFor="mark" className="text-md font-bold">Marks</Label>
                     <Input
-                        {...register("picture")}
-                        id="picture"
-                        type="file"
-                        name="picture"
-                        accept="image/jpeg, image/jpg, image/png"
-                        className="dark:bg-gray-600"
+                        {...register("mark", { required: "Marks is Required" })}
+                        id="mark"
+                        name="mark"
+                        type="number"
                     />
-                    {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
+                    {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
                 </div>
 
-                <div className="grid grid-cols-2 gap-8 space-y-1">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4 space-y-1 pb-10">
                     {/* is_paid */}
                     <div>
                         <Checkbox
@@ -292,49 +328,17 @@ export default function EditQuestionForm() {
                         />
                         <Label htmlFor="is_featured" className="ml-2">Featured</Label>
                     </div>
+
+                    {/* status */}
+                    <div>
+                        <Checkbox
+                            id="status"
+                            checked={statusCheck}
+                            onCheckedChange={(checked) => setStatusCheck(checked)}
+                        />
+                        <Label htmlFor="status" className="ml-2">Status</Label>
+                    </div>
                 </div>
-
-                {/* marks */}
-                <div className="grid gap-2">
-                    <Label htmlFor="mark" className="text-md font-bold">Marks</Label>
-                    <Input
-                        {...register("mark", { required: "Marks is Required" })}
-                        id="mark"
-                        name="mark"
-                        type="number"
-                    />
-                    {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
-                </div>
-
-                {/* status */}
-                <div>
-                    <Checkbox
-                        id="status"
-                        checked={statusCheck}
-                        onCheckedChange={(checked) => setStatusCheck(checked)}
-                    />
-                    <Label htmlFor="status" className="ml-2">Status</Label>
-                </div>
-
-                {/* mcq question */}
-                {type === "mcq" && (
-                    <McqOptionsForEdit
-                        control={control}
-                        options={options}
-                        setOptions={setOptions}
-                        correctOptions={correctOptions}
-                        setCorrectOptions={setCorrectOptions}
-                    />
-                )}
-
-                {/* creative question */}
-                {type === "creative" && (
-                    <CreativeQuesForEdit
-                        control={control}
-                        creativeQueTypes={creativeQueTypes}
-                        setCreativeQueTypes={setCreativeQueTypes}
-                    />
-                )}
 
                 {/* select category */}
                 <SelectCategoryForEdit
@@ -346,9 +350,9 @@ export default function EditQuestionForm() {
                 <Button
                     type="submit"
                     className="w-full"
-                    disabled={isLoading}
+                    disabled={isUpdating}
                 >
-                    {isLoading ? "Updating" : "Update Question"}
+                    {isUpdating ? "Updating" : "Update Question"}
                 </Button>
             </div>
         </form>
