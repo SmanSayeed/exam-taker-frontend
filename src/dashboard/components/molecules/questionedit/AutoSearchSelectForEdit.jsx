@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Check, XIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 
 export const AutoSearchSelectForEdit = ({
@@ -36,15 +36,15 @@ export const AutoSearchSelectForEdit = ({
     const [selectedCatId, setSelectedCatId] = useState(selectedValue);
     // const selectedCategories = useSelector((state) => state.selectedCategories);
 
-    useEffect(() => {
-        if (selectedCatId && options.length > 0) {
-            const selectedOption = options.find((item) => item.id.toString() === selectedCatId);
+    // useEffect(() => {
+    //     if (selectedCatId && options.length > 0) {
+    //         const selectedOption = options.find((item) => item.id.toString() === selectedCatId);
 
-            if (selectedOption) {
-                setSelectedCatName(selectedOption.title.charAt(0).toUpperCase() + selectedOption.title.slice(1));
-            }
-        }
-    }, [selectedCatId, options]);
+    //         if (selectedOption) {
+    //             setSelectedCatName(selectedOption.title.charAt(0).toUpperCase() + selectedOption.title.slice(1));
+    //         }
+    //     }
+    // }, [selectedCatId, options]);
 
     const handleSelect = (item) => {
         setSelectedCatId(item.id.toString());
@@ -60,23 +60,24 @@ export const AutoSearchSelectForEdit = ({
                 name={name}
                 control={control}
                 rules={rules}
-                defaultValue={selectedCatId}
+                defaultValue={selectedValue}
                 render={({ field, formState: { errors } }) => (
                     <>
                         <div className="flex items-center gap-2">
                             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" className="w-full justify-start">
-                                        {selectedCatName ? selectedCatName : placeholder}
+                                        {/* {selectedCatName ? selectedCatName : placeholder} */}
+                                        {selectedCatName ? selectedCatName.charAt(0).toUpperCase() + selectedCatName.slice(1) : placeholder}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
-                                    <Command value={selectedCatId}>
+                                    <Command>
                                         <CommandInput placeholder={placeholder} />
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>
-                                                {options && options.map((item) => (
+                                                {options && options?.map((item) => (
                                                     <CommandItem
                                                         key={item?.id.toString()}
                                                         onSelect={() => {
@@ -87,7 +88,7 @@ export const AutoSearchSelectForEdit = ({
                                                         <Check
                                                             className={cn(
                                                                 "mr-2 h-4 w-4",
-                                                                selectedCatId.includes(item?.id) ? "opacity-100" : "opacity-0"
+                                                                selectedCatId === item?.id ? "opacity-100" : "opacity-0"
                                                             )}
                                                         />
 

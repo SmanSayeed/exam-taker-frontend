@@ -2,13 +2,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AutoSearchSelect } from "../modelTests/AutoSearchSelect";
+import { AutoSearchSelectForEdit } from "./AutoSearchSelectForEdit";
 import { useCategoryDataForEdit } from "./useCategoryDataForEdit";
 
 export default function SelectCategoryForEditTest({ control, setValue }) {
     const dispatch = useDispatch();
     const selectedCategories = useSelector((state) => state.selectedCategories);
-    console.log("selectedCategories", selectedCategories)
 
     const [visibleFields, setVisibleFields] = useState({
         section: true,
@@ -184,7 +183,7 @@ export default function SelectCategoryForEditTest({ control, setValue }) {
 
         return (
             visibleFields[name] && (
-                <AutoSearchSelect
+                <AutoSearchSelectForEdit
                     label={label}
                     name={name}
                     control={control}
