@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import McqOption from "./McqOption";
+import { X } from "lucide-react";
 
 export const McqOptions = ({
     control,

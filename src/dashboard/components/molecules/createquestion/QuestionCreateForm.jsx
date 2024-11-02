@@ -101,6 +101,7 @@ export default function QuestionCreateForm() {
     const [createQuestion, { isLoading }] = useCreateQuestionMutation();
 
     const handleCreate = async (formData) => {
+        console.log("data", formData)
         const mcqOptions = options.map((optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
@@ -140,10 +141,10 @@ export default function QuestionCreateForm() {
 
         const payload = {
             title: formData.title,
-            description: formData.description,
+            // description: formData.description,
             type: formData.type,
             mark: formData.mark,
-            images: null,
+            // images: null,
             is_paid: isPaid,
             is_featured: isFeatured,
             status: statusCheck,

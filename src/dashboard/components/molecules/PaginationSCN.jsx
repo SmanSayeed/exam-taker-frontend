@@ -42,9 +42,9 @@ export default function PaginationSCN() {
   if (isError) return <div>Error loading questions.</div>;
 
   return (
-    <div>
+    <div className="space-y-5">
       {/* Render your list of questions */}
-      <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
         {paginationData?.map((question) => (
           <QuestionCard key={question.id} data={question} />
         ))}
