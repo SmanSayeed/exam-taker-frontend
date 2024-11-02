@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 import McqOption from "./McqOption";
 
 export const McqOptions = ({
@@ -45,13 +46,8 @@ export const McqOptions = ({
                         />
 
                         {options.length > 2 && optionIndex > 1 && (
-                            <Button
-                                type="button"
-                                onClick={() => deleteOption(optionIndex)}
-                                className="md:ml-4"
-                            >
-                                Delete
-                            </Button>
+                            <Trash2 size={30} onClick={() => deleteOption(optionIndex)} className="cursor-pointer" />
+
                         )}
                     </div>
                 ))

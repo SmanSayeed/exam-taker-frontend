@@ -23,16 +23,16 @@ export default function SelectCategoryForEditTest({ control, setValue }) {
         year: true,
     });
 
-    const { data: sections, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryDataForEdit("sections");
-    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryDataForEdit("exam-types", "exam_type");
-    const { selected: selectedExamSubType } = useCategoryDataForEdit("exam-sub-types");
-    const { data: groups, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryDataForEdit("groups");
-    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryDataForEdit("levels");
-    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryDataForEdit("subjects");
-    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryDataForEdit("lessons");
-    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryDataForEdit("topics");
-    const { selected: selectedSubTopic } = useCategoryDataForEdit("sub-topics");
-    const { data: years, isLoading: isYearLoading } = useCategoryDataForEdit("years");
+    const { data: sections, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryDataForEdit("sections", "selectedSection");
+    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryDataForEdit("exam-types", "selectedExamType");
+    const { selected: selectedExamSubType } = useCategoryDataForEdit("exam-sub-types", "selectedExamSubType");
+    const { data: groups, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryDataForEdit("groups", "selectedGroup");
+    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryDataForEdit("levels", "selectedLevel");
+    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryDataForEdit("subjects", "selectedSubject");
+    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryDataForEdit("lessons", "selectedLesson");
+    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryDataForEdit("topics", "selectedTopic");
+    const { selected: selectedSubTopic } = useCategoryDataForEdit("sub-topics", "selectedSubTopic");
+    const { data: years, isLoading: isYearLoading } = useCategoryDataForEdit("years", "selectedYear");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
@@ -191,7 +191,7 @@ export default function SelectCategoryForEditTest({ control, setValue }) {
                     options={options}
                     placeholder={`Select ${label}`}
                     onChange={onChange}
-                    defaultValue={selectedValue}
+                    selectedValue={selectedValue}
                     rules={rules}
                     disabled={disabled}
                     onRemove={() => handleRemoveField(name)}

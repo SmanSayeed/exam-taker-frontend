@@ -2,12 +2,19 @@ import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCate
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-export const useCategoryDataForEdit = (category) => {
+export const useCategoryDataForEdit = (category, selectedCategory) => {
     const { data, isLoading, error } = useGetQuestionsCategoryQuery(category);
     const selectedCategories = useSelector((state) => state.selectedCategories);
-    console.log(selectedCategories)
+
     const [selected, setSelected] = useState(null);
     const [categoryData, setCategoryData] = useState(null);
+
+    useEffect(() => {
+        if (selectedCategories) {
+            const selectedId = selectedCategories[selectedCategory];
+            setSelected(selectedId || null);
+        }
+    }, [selectedCategories, selectedCategory]);
 
     useEffect(() => {
         if (selected && data?.data?.data) {
