@@ -20,7 +20,7 @@ const parseHtmlContent = (htmlContent) => {
 };
 
 export function ViewModal({ data }) {
-    const { id, title, description, is_paid, is_featured, type, mark, mcq_questions, creative_questions
+    const { id, title, description, attachable, is_paid, is_featured, type, mark, mcq_questions, creative_questions
     } = data || {};
 
     const mcqOptionDescription = mcq_questions?.map(title => title?.description)
@@ -32,19 +32,35 @@ export function ViewModal({ data }) {
                     <Eye size={18} />
                 </Link>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[60%] border border-gray-400 ">
+            <DialogContent className="sm:max-w-[80%] md:max-w-[60%] border border-gray-400 ">
                 <DialogHeader>
 
                     <p className="text-2xl mb-3 " >
                         {parseHtmlContent(title)}
                     </p>
 
+
                     <div>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 ">
+                            {
+                                mcq_questions?.map((option, index) => <li key={option.id} className="flex items-center gap-3 border rounded-sm p-2 " >
+                                    <p className="h-8 w-8 flex items-center justify-center border rounded-full" >{index + 1}</p>
+                                    <p>
+                                        {parseHtmlContent(option.mcq_question_text)}
+                                    </p>
+                                </li>)
+                            }
+                        </ul>
+                    </div>
+
+                    {/* <div>
                         {type === "mcq" ? <div>
                             {<div className="">
                                 <ul className="text-sm space-y-1 mb-2 "
                                 >
-                                    {mcq_questions?.map((option, index) => <li key={index} className="list-decimal ml-5  " > {parseHtmlContent(option?.mcq_question_text)} </li>)}
+                                    {mcq_questions?.map((option) => <li key={option.id} className="list-decimal ml-5  " >
+                                        <p>{index+1} </p>
+                                        {parseHtmlContent(option?.mcq_question_text)} </li>)}
                                 </ul>
                             </div>}
                         </div>
@@ -56,7 +72,7 @@ export function ViewModal({ data }) {
                                     </ul>
                                 </div>}
                             </div> : ""}
-                    </div>
+                    </div> */}
 
                     {/* <div className="flex items-start gap-2">
                         <span className="font-medium">Description:</span>
