@@ -34,7 +34,7 @@ export default function QuestionCreateForm() {
     // const question = useSelector(state => state.question);
     // const { title, description, mcq_options } = question;
 
-    const [selectedType, setSelectedType] = useLocalStorage({ key: 'questionType', defaultValue: "" });
+    const [selectedType, setSelectedType] = useLocalStorage({ key: 'questionType', defaultValue: "mcq" });
     const [mark, setMark] = useLocalStorage({ key: 'questionMark', defaultValue: '1' });
 
     const {
@@ -47,7 +47,7 @@ export default function QuestionCreateForm() {
         defaultValues: {
             // title: title || "",
             // description: description || "",
-            type: selectedType || "",
+            type: selectedType || "mcq",
             mark: mark || "",
             // mcq_options: mcq_options || []
         }

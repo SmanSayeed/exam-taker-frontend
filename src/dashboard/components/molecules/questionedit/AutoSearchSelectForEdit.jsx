@@ -34,11 +34,10 @@ export const AutoSearchSelectForEdit = ({
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedCatName, setSelectedCatName] = useState("");
     const [selectedCatId, setSelectedCatId] = useState(selectedValue);
-    // const selectedCategories = useSelector((state) => state.selectedCategories);
 
     useEffect(() => {
         if (selectedCatId && options.length > 0) {
-            const selectedOption = options.find((item) => item.id.toString() === selectedCatId);
+            const selectedOption = options.find((item) => item.id === selectedCatId);
 
             if (selectedOption) {
                 setSelectedCatName(selectedOption.title.charAt(0).toUpperCase() + selectedOption.title.slice(1));
@@ -60,7 +59,7 @@ export const AutoSearchSelectForEdit = ({
                 name={name}
                 control={control}
                 rules={rules}
-                defaultValue={selectedCatId}
+                defaultValue={selectedValue}
                 render={({ field, formState: { errors } }) => (
                     <>
                         <div className="flex items-center gap-2">
@@ -71,12 +70,12 @@ export const AutoSearchSelectForEdit = ({
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
-                                    <Command value={selectedCatId}>
+                                    <Command>
                                         <CommandInput placeholder={placeholder} />
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>
-                                                {options && options.map((item) => (
+                                                {options && options?.map((item) => (
                                                     <CommandItem
                                                         key={item?.id.toString()}
                                                         onSelect={() => {
@@ -87,7 +86,7 @@ export const AutoSearchSelectForEdit = ({
                                                         <Check
                                                             className={cn(
                                                                 "mr-2 h-4 w-4",
-                                                                selectedCatId.includes(item?.id) ? "opacity-100" : "opacity-0"
+                                                                selectedCatId === item?.id ? "opacity-100" : "opacity-0"
                                                             )}
                                                         />
 
