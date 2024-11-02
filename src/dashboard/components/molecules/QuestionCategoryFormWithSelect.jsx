@@ -43,6 +43,7 @@ const QuestionCategoryFormWithSelect = ({
     const { data: lessonsData } = useGetQuestionsCategoryQuery("lessons");
     const { data: topicsData } = useGetQuestionsCategoryQuery("topics");
 
+   
     const handleImageChange = (e) => {
         const file = e.target.files[0];
 
@@ -66,6 +67,7 @@ const QuestionCategoryFormWithSelect = ({
     };
 
     const handleCreate = (formData) => {
+        console.log("formData ",formData);
         const payload = {
             section_id: formData.sections,
             level_id: formData.levels,
@@ -81,7 +83,7 @@ const QuestionCategoryFormWithSelect = ({
             details: formData.details,
             picture: image
         }
-
+        console.log("payload ",payload);
         createQuestionsCategory({
             type,
             data: payload
@@ -219,7 +221,7 @@ const QuestionCategoryFormWithSelect = ({
                                 {/* select level */}
                                 <div className="w-full">
                                     <CustomSelect
-                                        label={"Level"}
+                                        label={"levels"}
                                         categoryData={levelsData?.data?.data}
                                         control={control}
                                         errors={errors}
@@ -229,7 +231,7 @@ const QuestionCategoryFormWithSelect = ({
                                 {/* select group */}
                                 <div className="w-full">
                                     <CustomSelect
-                                        label={"Group"}
+                                        label={"groups"}
                                         categoryData={groupsData?.data?.data}
                                         control={control}
                                         errors={errors}
@@ -239,7 +241,7 @@ const QuestionCategoryFormWithSelect = ({
                                 {/* part select */}
                                 <div className="w-full">
                                     <CustomSelect
-                                        label={"Part"}
+                                        label={"part"}
                                         categoryData={[
                                             { id: "1", title: "1st part" },
                                             { id: "2", title: "2nd part" }
