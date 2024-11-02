@@ -42,7 +42,7 @@ export const questionsApi = apiSlice.injectEndpoints({
         }),
         deleteQuestion: builder.mutation({
             query: (id) => ({
-                url: `que/delete/${id}`,
+                url: `que/delete-question/${id}`,
                 method: "DELETE",
             }),
         }),
@@ -77,6 +77,12 @@ export const questionsApi = apiSlice.injectEndpoints({
                 }
             },
         }),
+        deleteMcqOption: builder.mutation({
+            query: (id) => ({
+                url: `/que/delete-mcq-option/${id}`,
+                method: "DELETE",
+            }),
+        }),
         questionSearch: builder.query({
             query: (data) => ({
                 url: "/que/search",
@@ -93,5 +99,6 @@ export const {
     useDeleteQuestionMutation,
     useEditQuestionMutation,
     useQuestionSearchQuery,
+    useDeleteMcqOptionMutation,
     useGetSingleQuestionsQuery
 } = questionsApi;

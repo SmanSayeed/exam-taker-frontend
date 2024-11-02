@@ -1,5 +1,9 @@
 // McqOptions Component
 import { Button } from "@/components/ui/button";
+import { useDeleteMcqOptionMutation } from "@/features/questions/questionsApi";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import McqOption from "../createquestion/McqOption";
 
 export const McqOptionsForEdit = ({
@@ -10,18 +14,38 @@ export const McqOptionsForEdit = ({
     setCorrectOptions
 }) => {
 
+    const [loadingOptions, setLoadingOptions] = useState({});
+    const [deleteMcqOption] = useDeleteMcqOptionMutation();
+
     const addNewOption = () => {
         if (options.length < 8) {
             setOptions(prevOptions => [...prevOptions, { id: null, mcq_question_text: "", is_correct: false, description: "" }]);
         }
     };
 
-    const deleteOption = (optionIndexToDelete) => {
+    const deleteOption = async (optionId, optionIndexToDelete) => {
         if (options.length > 2) {
-            setOptions(prevOptions => prevOptions.filter((_, index) => index !== optionIndexToDelete));
-            setCorrectOptions(prevCorrectOptions => prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete));
+            setLoadingOptions(prev => ({ ...prev, [optionId]: true }));
+
+            try {
+                const response = await deleteMcqOption(optionId).unwrap();
+                toast.success(response?.message);
+                setOptions(prevOptions => prevOptions.filter((_, index) => index !== optionIndexToDelete));
+            } catch (error) {
+                console.error(error);
+                toast.error("Failed to delete option");
+            } finally {
+                setLoadingOptions(prev => ({ ...prev, [optionId]: false }));
+            }
         }
     };
+
+    // const deleteOption = (optionIndexToDelete) => {
+    //     if (options.length > 2) {
+    //         setOptions(prevOptions => prevOptions.filter((_, index) => index !== optionIndexToDelete));
+    //         setCorrectOptions(prevCorrectOptions => prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete));
+    //     }
+    // };
 
     const handleCorrectChange = (index, checked) => {
         const updatedCorrectOptions = [...correctOptions];
@@ -31,7 +55,7 @@ export const McqOptionsForEdit = ({
 
     return (
         <div>
-            {options.map((_, optionIndex) => (
+            {options.map((option, optionIndex) => (
                 <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 mb-4">
                     <McqOption
                         optionIndex={optionIndex}
@@ -40,7 +64,21 @@ export const McqOptionsForEdit = ({
                         setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
                     />
                     {options.length > 2 && optionIndex > 1 && (
-                        <Button type="button" onClick={() => deleteOption(optionIndex)} className="md:ml-4">Delete</Button>
+                        <Button
+                            type="button"
+                            onClick={() => deleteOption(option.id, optionIndex)}
+                            className="md:ml-4"
+                            disabled={loadingOptions[option.id] || !option.id}
+                        >
+                            {
+                                loadingOptions[option.id] ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Please wait
+                                    </>
+                                ) : "Delete"
+                            }
+                        </Button>
                     )}
                 </div>
             ))}

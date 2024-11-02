@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { AutoSearchSelect } from "../AutoSearchSelect";
 import { useCategoryData } from "../createquestion/useCategoryData";
-import { AutoSearchSelect } from "../AutoSearchSelect ";
 
 export default function SelectCategoryForPackage({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType }) {
 

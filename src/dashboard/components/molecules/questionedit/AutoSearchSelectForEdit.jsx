@@ -13,13 +13,12 @@ import {
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { cn } from "@/lib/utils";
 import { Check, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
-export const AutoSearchSelect = ({
+export const AutoSearchSelectForEdit = ({
     label,
     name,
     control,
@@ -28,12 +27,14 @@ export const AutoSearchSelect = ({
     onChange,
     rules = {},
     onRemove,
-    defaultValue,
+    selectedValue,
     disabled = false,
 }) => {
+
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedCatName, setSelectedCatName] = useState("");
-    const [selectedCatId, setSelectedCatId] = useLocalStorage({ key: name, defaultValue: "" });
+    const [selectedCatId, setSelectedCatId] = useState(selectedValue);
+    // const selectedCategories = useSelector((state) => state.selectedCategories);
 
     useEffect(() => {
         if (selectedCatId && options.length > 0) {
@@ -59,7 +60,7 @@ export const AutoSearchSelect = ({
                 name={name}
                 control={control}
                 rules={rules}
-                defaultValue={defaultValue}
+                defaultValue={selectedCatId}
                 render={({ field, formState: { errors } }) => (
                     <>
                         <div className="flex items-center gap-2">
@@ -70,7 +71,7 @@ export const AutoSearchSelect = ({
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
-                                    <Command>
+                                    <Command value={selectedCatId}>
                                         <CommandInput placeholder={placeholder} />
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>

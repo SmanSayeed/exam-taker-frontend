@@ -1,11 +1,16 @@
 import { Button } from "@/components/ui/button";
+import { useGetAllModelTestsQuery } from "@/features/modelTests/modelTestApi";
 import { Link } from "react-router-dom";
+import Loading from "../../atoms/Loading";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
 import ModelTestList from "../../organism/modelTests/ModelTestList";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
 const ModelTestsPage = () => {
+    const { data: allModelTests, isLoading, isSuccess } = useGetAllModelTestsQuery();
+
+    if (isLoading) return <Loading />
 
     return (
         <Layout>
@@ -26,7 +31,11 @@ const ModelTestsPage = () => {
                     </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <ModelTestList />
+                    {
+                        isSuccess && (
+                            <ModelTestList allModelTests={allModelTests} />
+                        )
+                    }
                 </div>
             </Layout.Body>
         </Layout>

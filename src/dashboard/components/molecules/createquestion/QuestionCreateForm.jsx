@@ -14,10 +14,10 @@ import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
 import { useState } from "react";
 
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { Loader2 } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { CreativeQuestions } from "./CreativeQuestions";
 import { McqOptions } from "./McqOptions";
@@ -31,11 +31,11 @@ export default function QuestionCreateForm() {
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
 
-    const question = useSelector(state => state.question);
-    const { title, description, mcq_options } = question;
+    // const question = useSelector(state => state.question);
+    // const { title, description, mcq_options } = question;
 
     const [selectedType, setSelectedType] = useLocalStorage({ key: 'questionType', defaultValue: "" });
-    const [mark, setMark] = useLocalStorage({ key: 'questionMark', defaultValue: '' });
+    const [mark, setMark] = useLocalStorage({ key: 'questionMark', defaultValue: '1' });
 
     const {
         register,
@@ -45,11 +45,11 @@ export default function QuestionCreateForm() {
         handleSubmit
     } = useForm({
         defaultValues: {
-            title: title || "",
-            description: description || "",
+            // title: title || "",
+            // description: description || "",
             type: selectedType || "",
-            mark: mark || 1,
-            mcq_options: mcq_options || []
+            mark: mark || "",
+            // mcq_options: mcq_options || []
         }
     });
 
@@ -165,6 +165,7 @@ export default function QuestionCreateForm() {
         <>
             <form onSubmit={handleSubmit(handleCreate)} id="question-form">
                 <div className="space-y-4 mt-4">
+
                     {/* title */}
                     <div className="space-y-1">
                         <Label htmlFor="title" className="text-md font-bold">Title</Label>
@@ -184,13 +185,31 @@ export default function QuestionCreateForm() {
                         {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                     </div>
 
+                    {/* mcq question */}
+                    {selectedType === "mcq" && (
+                        <McqOptions
+                            control={control}
+                            options={options}
+                            setOptions={setOptions}
+                            correctOptions={correctOptions}
+                            setCorrectOptions={setCorrectOptions}
+                        />
+                    )}
+                    {/* creative question */}
+                    {selectedType === "creative" && (
+                        <CreativeQuestions
+                            control={control}
+                            creativeQueTypes={creativeQueTypes}
+                            setCreativeQueTypes={setCreativeQueTypes}
+                        />
+                    )}
+
                     {/* description */}
                     {/* <div className="space-y-1">
                         <Label htmlFor="details" className="text-md font-bold">Description</Label>
                         <Controller
                             name="description"
                             control={control}
-                            rules={{ required: "Description is required" }}
                             render={({ field }) => (
                                 <ReactQuill
                                     theme="snow"
@@ -217,72 +236,49 @@ export default function QuestionCreateForm() {
                         {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
                     </div> */}
 
-                    
-
-                    {/* mcq question */}
-                    {selectedType === "mcq" && (
-                        <McqOptions
+                    {/* Question Type */}
+                    <div className="space-y-1">
+                        <Label className="text-md font-bold">Question Type</Label>
+                        <Controller
+                            name="type"
                             control={control}
-                            options={options}
-                            setOptions={setOptions}
-                            correctOptions={correctOptions}
-                            setCorrectOptions={setCorrectOptions}
+                            rules={{ required: "Type is required" }}
+                            render={({ field }) => (
+                                <Select
+                                    onValueChange={(val) => {
+                                        handleTypeChange(val)
+                                        field.onChange(val)
+                                    }}
+                                    value={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {/* <SelectItem value="normal">Normal</SelectItem> */}
+                                        <SelectItem value="mcq">MCQ</SelectItem>
+                                        {/* <SelectItem value="creative">Creative</SelectItem> */}
+                                    </SelectContent>
+                                </Select>
+                            )}
                         />
-                    )}
-                    {/* creative question */}
-                    {selectedType === "creative" && (
-                        <CreativeQuestions
-                            control={control}
-                            creativeQueTypes={creativeQueTypes}
-                            setCreativeQueTypes={setCreativeQueTypes}
-                        />
-                    )}
-
-                    {/* Question Type and marks */}
-                    <div className="w-full flex flex-col md:flex-row gap-6">
-                        {/* Question Type */}
-                        <div className=" w-full space-y-1.5 ">
-                            <Label className="text-md font-bold">Question Type</Label>
-                            <Controller
-                                name="type"
-                                control={control}
-                                rules={{ required: "Type is required" }}
-                                render={({ field }) => (
-                                    <Select
-                                        onValueChange={(val) => {
-                                            handleTypeChange(val)
-                                            field.onChange(val)
-                                        }}
-                                        value={field.value}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Type" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {/* <SelectItem value="normal">Normal</SelectItem> */}
-                                            <SelectItem value="mcq">MCQ</SelectItem>
-                                            {/* <SelectItem value="creative">Creative</SelectItem> */}
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errors.type && <span className="text-red-600">{errors.type.message}</span>}
-                        </div>
-                        {/* marks */}
-                        <div className=" w-full space-y-1.5">
-                            <Label htmlFor="mark" className="text-md font-bold">Marks</Label>
-                            <Input
-                                {...register("mark", { required: "Marks is Required" })}
-                                id="mark"
-                                name="mark"
-                                type="number"
-                                onChange={handleMarkChange}
-                            />
-                            {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
-                        </div>
+                        {errors.type && <span className="text-red-600">{errors.type.message}</span>}
                     </div>
 
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 space-y-1  ">
+                    {/* marks */}
+                    <div>
+                        <Label htmlFor="mark" className="text-md font-bold">Marks</Label>
+                        <Input
+                            {...register("mark", { required: "Marks is Required" })}
+                            id="mark"
+                            name="mark"
+                            type="number"
+                            onChange={handleMarkChange}
+                        />
+                        {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
+                    </div>
+
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 space-y-1 pb-10">
                         {/* is_paid */}
                         <div>
                             <Checkbox
@@ -313,8 +309,6 @@ export default function QuestionCreateForm() {
                         </div>
                     </div>
 
-
-
                     {/* select category */}
                     <SelectCategory
                         setValue={setValue}
@@ -336,7 +330,14 @@ export default function QuestionCreateForm() {
                         type="submit"
                         className="w-full"
                     >
-                        {isLoading ? "Proceeding" : "Create Question"}
+                        {
+                            isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Please wait
+                                </>
+                            ) : "Create Question"
+                        }
                     </Button>
                 </div>
             </form>
