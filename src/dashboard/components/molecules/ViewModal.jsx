@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dialog"
 import { Link } from "react-router-dom"
 import DOMPurify from "dompurify";
+import { Eye } from "lucide-react";
 
 // Helper function to parse HTML string and convert to JSX with Tailwind classes
 const parseHtmlContent = (htmlContent) => {
@@ -27,12 +28,14 @@ export function ViewModal({ data }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Link variant="outline">View</Link>
+                <Link variant="outline">
+                    <Eye size={18} />
+                </Link>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[60%] border border-gray-400 text-gray-400 ">
+            <DialogContent className="sm:max-w-[60%] border border-gray-400 ">
                 <DialogHeader>
 
-                    <p className="text-3xl" >
+                    <p className="text-2xl mb-3 " >
                         {parseHtmlContent(title)}
                     </p>
 
@@ -55,28 +58,28 @@ export function ViewModal({ data }) {
                             </div> : ""}
                     </div>
 
-                    <div className="flex items-start gap-2">
+                    {/* <div className="flex items-start gap-2">
                         <span className="font-medium">Description:</span>
                         <span  >
                             {parseHtmlContent(title)}
                         </span>
-                    </div>
+                    </div> */}
 
                     <div className="text-xs flex items-center gap-3 pt-4 ">
                         <p>Que ID: {id}</p>
                         <p className="border-l border-gray-400 pl-2">{is_paid === 0 ? "Not paid" : "paid"}</p>
+                        <p className="border-l border-gray-400  pl-2">{mark} Marks </p>
                         <p className="border-l border-gray-400  pl-2">{is_featured === 0 ? "Not featured" : "featured"}</p>
                         <p className="border-l border-gray-400  pl-2 capitalize"> <span className={`${type === "mcq" ? "uppercase" : "capitalize"}`} > {type}  </span>question</p>
-                        <p className="border-l border-gray-400  pl-2">{mark} Marks </p>
                     </div>
-                    <div className="text-sm ">
+                    {/* <div className="text-sm ">
                         <div id="section" className="mt-1">
                             <p><span className="font-medium">Section:</span>  &rarr; exam-type &rarr; exam sub-type</p>
                         </div>
                         <div id="group" className="mb-2">
                             <p> <span className="font-medium"> Group: </span> &rarr; level &rarr; subject &rarr; exam topic &rarr; exam sub-topic</p>
                         </div>
-                    </div>
+                    </div> */}
                 </DialogHeader>
             </DialogContent>
         </Dialog>

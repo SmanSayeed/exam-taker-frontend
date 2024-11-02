@@ -254,7 +254,7 @@ const QuestionCategoryFormWithSelect = ({
                     }
 
                     {/* title and picture */}
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="gri md:grid-cols-2 gap-4">
                         <div className="space-y-1">
                             <Label htmlFor="title">Title</Label>
                             <Input
@@ -265,7 +265,7 @@ const QuestionCategoryFormWithSelect = ({
                             />
                             {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                         </div>
-                        <div className="space-y-1">
+                        {/* <div className="space-y-1">
                             <Label htmlFor="picture">Picture</Label>
                             <Input
                                 {...register("picture")}
@@ -278,7 +278,7 @@ const QuestionCategoryFormWithSelect = ({
                             />
                             {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
                             {imageError && <span className="text-red-600">{imageError}</span>}
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* details */}

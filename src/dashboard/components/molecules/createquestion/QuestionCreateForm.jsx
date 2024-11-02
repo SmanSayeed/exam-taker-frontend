@@ -48,7 +48,7 @@ export default function QuestionCreateForm() {
             title: title || "",
             description: description || "",
             type: selectedType || "",
-            mark: mark || "",
+            mark: mark || 1,
             mcq_options: mcq_options || []
         }
     });
@@ -101,6 +101,7 @@ export default function QuestionCreateForm() {
     const [createQuestion, { isLoading }] = useCreateQuestionMutation();
 
     const handleCreate = async (formData) => {
+        console.log("data", formData)
         const mcqOptions = options.map((optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
@@ -140,10 +141,10 @@ export default function QuestionCreateForm() {
 
         const payload = {
             title: formData.title,
-            description: formData.description,
+            // description: formData.description,
             type: formData.type,
             mark: formData.mark,
-            images: null,
+            // images: null,
             is_paid: isPaid,
             is_featured: isFeatured,
             status: statusCheck,
@@ -164,35 +165,6 @@ export default function QuestionCreateForm() {
         <>
             <form onSubmit={handleSubmit(handleCreate)} id="question-form">
                 <div className="space-y-4 mt-4">
-                    {/* Question Type */}
-                    <div className="space-y-1">
-                        <Label className="text-md font-bold">Question Type</Label>
-                        <Controller
-                            name="type"
-                            control={control}
-                            rules={{ required: "Type is required" }}
-                            render={({ field }) => (
-                                <Select
-                                    onValueChange={(val) => {
-                                        handleTypeChange(val)
-                                        field.onChange(val)
-                                    }}
-                                    value={field.value}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Type" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="normal">Normal</SelectItem>
-                                        <SelectItem value="mcq">MCQ</SelectItem>
-                                        <SelectItem value="creative">Creative</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        />
-                        {errors.type && <span className="text-red-600">{errors.type.message}</span>}
-                    </div>
-
                     {/* title */}
                     <div className="space-y-1">
                         <Label htmlFor="title" className="text-md font-bold">Title</Label>
@@ -213,7 +185,7 @@ export default function QuestionCreateForm() {
                     </div>
 
                     {/* description */}
-                    <div className="space-y-1">
+                    {/* <div className="space-y-1">
                         <Label htmlFor="details" className="text-md font-bold">Description</Label>
                         <Controller
                             name="description"
@@ -229,10 +201,10 @@ export default function QuestionCreateForm() {
                             )}
                         />
                         {errors.description && <span className="text-red-600">{errors.description.message}</span>}
-                    </div>
+                    </div> */}
 
                     {/* images(optional) later */}
-                    <div className="space-y-1">
+                    {/* <div className="space-y-1">
                         <Label htmlFor="picture" className="text-md font-bold">Picture</Label>
                         <Input
                             {...register("picture")}
@@ -243,52 +215,9 @@ export default function QuestionCreateForm() {
                             className="dark:bg-gray-600"
                         />
                         {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
-                    </div>
+                    </div> */}
 
-                    <div className="grid grid-cols-2 gap-8 space-y-1">
-                        {/* is_paid */}
-                        <div>
-                            <Checkbox
-                                id="is_paid"
-                                checked={isPaid}
-                                onCheckedChange={(checked) => setIsPaid(checked)}
-                            />
-                            <Label htmlFor="is_paid" className="ml-2">Paid</Label>
-                        </div>
-
-                        {/* is_featured */}
-                        <div>
-                            <Checkbox
-                                id="is_featured"
-                                checked={isFeatured}
-                                onCheckedChange={(checked) => setIsFeatured(checked)}
-                            />
-                            <Label htmlFor="is_featured" className="ml-2">Featured</Label>
-                        </div>
-                    </div>
-
-                    {/* marks */}
-                    <div className="grid gap-2">
-                        <Label htmlFor="mark" className="text-md font-bold">Marks</Label>
-                        <Input
-                            {...register("mark", { required: "Marks is Required" })}
-                            id="mark"
-                            name="mark"
-                            type="number"
-                            onChange={handleMarkChange}
-                        />
-                        {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
-                    </div>
-
-                    {/* status */}
-                    <div>
-                        <Checkbox
-                            id="status"
-                            checked={statusCheck}
-                            onCheckedChange={(checked) => setStatusCheck(checked)}
-                        />
-                        <Label htmlFor="status" className="ml-2">Status</Label>
-                    </div>
+                    
 
                     {/* mcq question */}
                     {selectedType === "mcq" && (
@@ -308,6 +237,83 @@ export default function QuestionCreateForm() {
                             setCreativeQueTypes={setCreativeQueTypes}
                         />
                     )}
+
+                    {/* Question Type and marks */}
+                    <div className="w-full flex flex-col md:flex-row gap-6">
+                        {/* Question Type */}
+                        <div className=" w-full space-y-1.5 ">
+                            <Label className="text-md font-bold">Question Type</Label>
+                            <Controller
+                                name="type"
+                                control={control}
+                                rules={{ required: "Type is required" }}
+                                render={({ field }) => (
+                                    <Select
+                                        onValueChange={(val) => {
+                                            handleTypeChange(val)
+                                            field.onChange(val)
+                                        }}
+                                        value={field.value}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Type" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {/* <SelectItem value="normal">Normal</SelectItem> */}
+                                            <SelectItem value="mcq">MCQ</SelectItem>
+                                            {/* <SelectItem value="creative">Creative</SelectItem> */}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                            {errors.type && <span className="text-red-600">{errors.type.message}</span>}
+                        </div>
+                        {/* marks */}
+                        <div className=" w-full space-y-1.5">
+                            <Label htmlFor="mark" className="text-md font-bold">Marks</Label>
+                            <Input
+                                {...register("mark", { required: "Marks is Required" })}
+                                id="mark"
+                                name="mark"
+                                type="number"
+                                onChange={handleMarkChange}
+                            />
+                            {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 space-y-1  ">
+                        {/* is_paid */}
+                        <div>
+                            <Checkbox
+                                id="is_paid"
+                                checked={isPaid}
+                                onCheckedChange={(checked) => setIsPaid(checked)}
+                            />
+                            <Label htmlFor="is_paid" className="ml-2">Paid</Label>
+                        </div>
+
+                        {/* is_featured */}
+                        <div>
+                            <Checkbox
+                                id="is_featured"
+                                checked={isFeatured}
+                                onCheckedChange={(checked) => setIsFeatured(checked)}
+                            />
+                            <Label htmlFor="is_featured" className="ml-2">Featured</Label>
+                        </div>
+                        {/* status */}
+                        <div>
+                            <Checkbox
+                                id="status"
+                                checked={statusCheck}
+                                onCheckedChange={(checked) => setStatusCheck(checked)}
+                            />
+                            <Label htmlFor="status" className="ml-2">Status</Label>
+                        </div>
+                    </div>
+
+
 
                     {/* select category */}
                     <SelectCategory
