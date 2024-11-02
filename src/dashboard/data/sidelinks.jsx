@@ -147,6 +147,7 @@ export const sidelinks = [
             },
         ]
     },
+    // model tests
     {
         title: "Model Tests",
         label: "",
@@ -167,20 +168,21 @@ export const sidelinks = [
             },
         ]
     },
-    {
-        title: "Exam",
-        label: "",
-        href: "/admin/exam/type",
-        icon: <BookOpenCheck size={18} />,
-        sub: [
-            {
-                title: "Exam Type Create",
-                label: "",
-                href: "/admin/exam/type",
-                icon: <BookOpenCheck size={18} />
-            },
-        ]
-    },
+    // {
+    //     title: "Exam",
+    //     label: "",
+    //     href: "/admin/exam/type",
+    //     icon: <BookOpenCheck size={18} />,
+    //     sub: [
+    //         {
+    //             title: "Exam Type Create",
+    //             label: "",
+    //             href: "/admin/exam/type",
+    //             icon: <BookOpenCheck size={18} />
+    //         },
+    //     ]
+    // },
+    // packages
     {
         title: "Packages",
         label: "",

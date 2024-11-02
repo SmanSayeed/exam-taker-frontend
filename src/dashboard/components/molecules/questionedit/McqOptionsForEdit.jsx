@@ -60,7 +60,7 @@ export const McqOptionsForEdit = ({
     return (
         <div>
             {options.map((option, optionIndex) => (
-                <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 mb-4">
+                <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center gap-2 mb-4">
                     <McqOption
                         optionIndex={optionIndex}
                         control={control}
