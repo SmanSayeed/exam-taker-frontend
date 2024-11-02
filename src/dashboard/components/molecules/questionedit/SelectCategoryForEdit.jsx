@@ -2,14 +2,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCategoryData } from "../createquestion/useCategoryData";
-import { AutoSearchSelect } from "../modelTests/AutoSearchSelect";
+import { AutoSearchSelectForEdit } from "./AutoSearchSelectForEdit";
+import { useCategoryDataForEdit } from "./useCategoryDataForEdit";
 
 export default function SelectCategoryForEdit({ control, setValue }) {
-
     const dispatch = useDispatch();
     const selectedCategories = useSelector((state) => state.selectedCategories);
-    console.log("selectedCategories", selectedCategories)
 
     const [visibleFields, setVisibleFields] = useState({
         section: true,
@@ -24,16 +22,16 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         year: true,
     });
 
-    const { data: sections, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "section");
-    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "exam_type");
-    const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "exam_sub_type");
-    const { data: groups, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "group");
-    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "level");
-    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "subject");
-    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "lesson");
-    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "topic");
-    const { selected: selectedSubTopic } = useCategoryData("sub-topics", "sub_topic");
-    const { data: years, isLoading: isYearLoading } = useCategoryData("years", "year");
+    const { data: sections, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryDataForEdit("sections", "selectedSection");
+    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryDataForEdit("exam-types", "selectedExamType");
+    const { selected: selectedExamSubType } = useCategoryDataForEdit("exam-sub-types", "selectedExamSubType");
+    const { data: groups, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryDataForEdit("groups", "selectedGroup");
+    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryDataForEdit("levels", "selectedLevel");
+    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryDataForEdit("subjects", "selectedSubject");
+    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryDataForEdit("lessons", "selectedLesson");
+    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryDataForEdit("topics", "selectedTopic");
+    const { selected: selectedSubTopic } = useCategoryDataForEdit("sub-topics", "selectedSubTopic");
+    const { data: years, isLoading: isYearLoading } = useCategoryDataForEdit("years", "selectedYear");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
@@ -185,14 +183,14 @@ export default function SelectCategoryForEdit({ control, setValue }) {
 
         return (
             visibleFields[name] && (
-                <AutoSearchSelect
+                <AutoSearchSelectForEdit
                     label={label}
                     name={name}
                     control={control}
                     options={options}
                     placeholder={`Select ${label}`}
                     onChange={onChange}
-                    defaultValue={selectedValue}
+                    selectedValue={selectedValue}
                     rules={rules}
                     disabled={disabled}
                     onRemove={() => handleRemoveField(name)}

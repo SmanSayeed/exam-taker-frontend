@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import McqOption from "./McqOption";
-import { X } from "lucide-react";
 
 export const McqOptions = ({
     control,
@@ -38,7 +37,7 @@ export const McqOptions = ({
         <div>
             {
                 options.map((optionIndex) => (
-                    <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 mb-4">
+                    <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center gap-2 mb-4">
                         <McqOption
                             optionIndex={optionIndex}
                             control={control}
@@ -47,7 +46,7 @@ export const McqOptions = ({
                         />
 
                         {options.length > 2 && optionIndex > 1 && (
-                            <Trash2 size={30} onClick={() => deleteOption(optionIndex)} className="cursor-pointer" />
+                            <Trash2 onClick={() => deleteOption(optionIndex)} className="cursor-pointer" />
 
                         )}
                     </div>

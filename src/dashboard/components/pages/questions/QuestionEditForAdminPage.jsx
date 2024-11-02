@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import EditQuestionFormTest from "../../organism/EditQuestionFormTest";
+import EditQuestionForm from "../../organism/EditQuestionForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
@@ -29,8 +29,7 @@ const QuestionEditForAdminPage = () => {
                             </CardHeader>
 
                             <CardContent className="flex flex-col gap-10">
-                                {/* <EditQuestionForm /> */}
-                                <EditQuestionFormTest />
+                                <EditQuestionForm />
                             </CardContent>
                         </Card>
                     </div>

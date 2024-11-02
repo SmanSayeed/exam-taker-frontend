@@ -23,7 +23,7 @@ const TableRowDeleteBtn = ({ row, type }) => {
         setOpen(true);
     };
 
-    const [deleteQuestionsCategory, { error }] = useDeleteQuestionsCategoryMutation();
+    const [deleteQuestionsCategory] = useDeleteQuestionsCategoryMutation();
 
     const handleDelete = async () => {
         const id = row.original.id;
