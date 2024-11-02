@@ -20,11 +20,12 @@ import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import Loading from "../atoms/Loading";
 import { CreativeQuesForEdit } from "../molecules/questionedit/CreativeQuesForEdit";
 import { McqOptionsForEdit } from "../molecules/questionedit/McqOptionsForEdit";
-import SelectCategoryForEdit from "../molecules/questionedit/SelectCategoryForEdit";
+import SelectCategoryForEditTest from "../molecules/questionedit/SelectCategoryForEditTest";
 
-export default function EditQuestionForm() {
+export default function EditQuestionFormTest() {
     const dispatch = useDispatch();
     const selectedCategories = useSelector((state) => state.selectedCategories);
 
@@ -36,7 +37,7 @@ export default function EditQuestionForm() {
     const [creativeQueTypes, setCreativeQueTypes] = useState([]);
 
     const { questionId } = useParams();
-    const { data: questionData } = useGetSingleQuestionsQuery(questionId);
+    const { data: questionData, isLoading: isQuestionLoading } = useGetSingleQuestionsQuery(questionId);
     const [question, setQuestion] = useState({});
 
     const { type } = question || {};
@@ -52,7 +53,7 @@ export default function EditQuestionForm() {
 
     useEffect(() => {
         if (questionData?.data) {
-            const question = questionData.data;
+            const question = questionData?.data;
             setQuestion(question);
 
             reset({
@@ -132,7 +133,7 @@ export default function EditQuestionForm() {
         toolbar: toolbarOptions
     }
 
-    const [editQuestion, { isLoading }] = useEditQuestionMutation();
+    const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleUpdate = async (formData) => {
         const mcqOptions = options.map((option, optionIndex) => {
@@ -194,6 +195,8 @@ export default function EditQuestionForm() {
             toast.error(err?.data?.message || "An error occurred");
         }
     }
+
+    if (isQuestionLoading) return <Loading />
 
     return (
         <form onSubmit={handleSubmit(handleUpdate)} id="edit-question-form">
@@ -337,7 +340,7 @@ export default function EditQuestionForm() {
                 )}
 
                 {/* select category */}
-                <SelectCategoryForEdit
+                <SelectCategoryForEditTest
                     setValue={setValue}
                     control={control}
                 />
@@ -346,9 +349,9 @@ export default function EditQuestionForm() {
                 <Button
                     type="submit"
                     className="w-full"
-                    disabled={isLoading}
+                    disabled={isUpdating}
                 >
-                    {isLoading ? "Updating" : "Update Question"}
+                    {isUpdating ? "Updating" : "Update Question"}
                 </Button>
             </div>
         </form>
