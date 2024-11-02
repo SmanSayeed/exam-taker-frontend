@@ -92,7 +92,7 @@ return (
                         />
                         {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                     </div>
-                    <div className="space-y-1">
+                    {/* <div className="space-y-1">
                         <Label htmlFor="picture">Picture</Label>
                         <Input
                             {...register("picture")}
@@ -105,7 +105,7 @@ return (
                         />
                         {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
                         {imageError && <span className="text-red-600">{imageError}</span>}
-                    </div>
+                    </div> */}
                 </div>
                 {/* category details */}
                 <div className="space-y-1">

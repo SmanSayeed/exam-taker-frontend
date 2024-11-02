@@ -111,7 +111,7 @@ export default function SelectCategory({ control, setValue, setSelectedSection, 
             setGroupData(foundData || null);
             setSelectedGroup(id);
             setValue("group", id);
-            setVisibleFields((prev) => ({ ...prev, level: true }));
+            setVisibleFields((prev) => ({ ...prev, subject: true }));
         }
     }
 
