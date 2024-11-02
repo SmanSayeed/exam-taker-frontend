@@ -1,7 +1,7 @@
 // McqOptions Component
 import { Button } from "@/components/ui/button";
 import { useDeleteMcqOptionMutation } from "@/features/questions/questionsApi";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import McqOption from "../createquestion/McqOption";
@@ -24,7 +24,11 @@ export const McqOptionsForEdit = ({
     };
 
     const deleteOption = async (optionId, optionIndexToDelete) => {
-        if (options.length > 2) {
+        if (!optionId) {
+            setOptions(prevOptions => prevOptions.filter((_, index) => index !== optionIndexToDelete));
+        }
+
+        if (options.length > 2 && optionId) {
             setLoadingOptions(prev => ({ ...prev, [optionId]: true }));
 
             try {
@@ -56,7 +60,7 @@ export const McqOptionsForEdit = ({
     return (
         <div>
             {options.map((option, optionIndex) => (
-                <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 mb-4">
+                <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center gap-2 mb-4">
                     <McqOption
                         optionIndex={optionIndex}
                         control={control}
@@ -64,21 +68,18 @@ export const McqOptionsForEdit = ({
                         setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
                     />
                     {options.length > 2 && optionIndex > 1 && (
-                        <Button
+                        <button
                             type="button"
                             onClick={() => deleteOption(option.id, optionIndex)}
                             className="md:ml-4"
-                            disabled={loadingOptions[option.id] || !option.id}
+                            disabled={loadingOptions[option.id]}
                         >
                             {
                                 loadingOptions[option.id] ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Please wait
-                                    </>
-                                ) : "Delete"
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                ) : (<Trash2 />)
                             }
-                        </Button>
+                        </button>
                     )}
                 </div>
             ))}
