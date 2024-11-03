@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
 
+import { Input } from "@/components/ui/input";
 import { useCreateModelTestMutation } from "@/features/modelTests/modelTestApi";
 import { updateField } from "@/features/modelTests/modelTestFormSlice";
 import { useGetPackagesQuery } from "@/features/packages/packageApi";
@@ -226,7 +227,7 @@ export default function ModelTestCreateForm() {
                         control={control}
                         rules={{ required: "Start time is required" }}
                         render={({ field }) => (
-                            <input
+                            <Input
                                 type="datetime-local"
                                 id="start_time"
                                 {...field}

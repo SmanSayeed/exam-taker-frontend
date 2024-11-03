@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Keyboard, KeyboardOff } from 'lucide-react';
+import { useState } from 'react';
 import { Controller } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Keyboard } from 'lucide-react';
-import { KeyboardOff } from 'lucide-react';
 
-export default function CInput({ name, label, control, rules, errors }) {
+export default function CInput({ name, label, control, rules, errors, onChange }) {
     const [isRichText, setIsRichText] = useState(false);
 
     const toolbarOptions = [
@@ -19,16 +17,17 @@ export default function CInput({ name, label, control, rules, errors }) {
         ['clean']
     ];
     const modules = { toolbar: toolbarOptions };
-    const iconStyle= `text-md rounded-lg hover:text-slate-600 cursor-pointer ${isRichText ? 'text-slate-500' : 'text-slate-300'}`;
+    const iconStyle = `text-md rounded-lg hover:text-slate-600 cursor-pointer ${isRichText ? 'text-slate-500' : 'text-slate-300'}`;
+
     return (
         <div className="space-y-1">
             <div className="flex items-center justify-start gap-3">
                 <Label htmlFor={name} className="text-md font-bold">{label}</Label>
                 <span
                     onClick={() => setIsRichText(!isRichText)}
-                  
+
                 >
-                    {isRichText ? <KeyboardOff className={iconStyle}/>:<Keyboard className={iconStyle} />}
+                    {isRichText ? <KeyboardOff className={iconStyle} /> : <Keyboard className={iconStyle} />}
                 </span>
             </div>
             <Controller
@@ -40,7 +39,10 @@ export default function CInput({ name, label, control, rules, errors }) {
                         <ReactQuill
                             theme="snow"
                             value={field.value || ""}
-                            onChange={field.onChange}
+                            onChange={(value) => {
+                                field.onChange(value); // Update React Hook Form
+                                onChange({ target: { value } }); // Dispatch value to Redux
+                            }}
                             modules={modules}
                         />
                     ) : (
@@ -48,6 +50,10 @@ export default function CInput({ name, label, control, rules, errors }) {
                             id={name}
                             {...field}
                             placeholder={`Enter ${label.toLowerCase()}`}
+                            onChange={(e) => {
+                                field.onChange(e); // Update React Hook Form
+                                onChange(e); // Dispatch value to Redux
+                            }}
                         />
                     )
                 )}
