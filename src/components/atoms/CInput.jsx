@@ -41,7 +41,7 @@ export default function CInput({ name, label, control, rules, errors, onChange }
                             value={field.value || ""}
                             onChange={(value) => {
                                 field.onChange(value); // Update React Hook Form
-                                onChange({ target: { value } }); // Dispatch value to Redux
+                                if (onChange) onChange({ target: { value } }); // Dispatch value to Redux
                             }}
                             modules={modules}
                         />

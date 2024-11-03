@@ -11,11 +11,11 @@ import {
 import { useEditQuestionMutation, useGetSingleQuestionsQuery } from "@/features/questions/questionsApi";
 import { useEffect, useState } from "react";
 
+import CInput from "@/components/atoms/CInput";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { Controller, useForm } from "react-hook-form";
-import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -114,25 +114,6 @@ export default function EditQuestionForm() {
         }
     }, [questionData?.data, reset, dispatch, setValue]);
 
-    const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['link', 'formula'],
-        [{ 'header': 1 }, { 'header': 2 }, { 'header': 3 }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-        [{ 'script': 'sub' }, { 'script': 'super' }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
-        [{ 'align': [] }],
-        ['clean']
-    ];
-    const module = {
-        toolbar: toolbarOptions
-    }
-
     const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleUpdate = async (formData) => {
@@ -141,7 +122,7 @@ export default function EditQuestionForm() {
             const explanation = formData[`explanation${optionIndex}`] || null;
 
             return {
-                id: option.id,
+                id: option?.id && option?.id,
                 mcq_question_text: optionText,
                 is_correct: correctOptions[optionIndex] || false,
                 description: explanation,
@@ -201,24 +182,15 @@ export default function EditQuestionForm() {
     return (
         <form onSubmit={handleSubmit(handleUpdate)} id="edit-question-form">
             <div className="space-y-4 ">
-
                 {/* title */}
                 <div className="space-y-1">
-                    <Label htmlFor="title" className="text-md font-bold">Title</Label>
-                    <Controller
+                    <CInput
                         name="title"
+                        label="Title"
                         control={control}
                         rules={{ required: "Title is required" }}
-                        render={({ field }) => (
-                            <ReactQuill
-                                theme="snow"
-                                value={field.value}
-                                onChange={field.onChange}
-                                modules={module}
-                            />
-                        )}
+                        errors={errors}
                     />
-                    {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                 </div>
 
                 {/* mcq question */}
@@ -240,38 +212,6 @@ export default function EditQuestionForm() {
                         setCreativeQueTypes={setCreativeQueTypes}
                     />
                 )}
-
-                {/* description */}
-                {/* <div className="space-y-1">
-                    <Label htmlFor="details" className="text-md font-bold">Description</Label>
-                    <Controller
-                        name="description"
-                        control={control}
-                        render={({ field }) => (
-                            <ReactQuill
-                                theme="snow"
-                                value={field.value}
-                                onChange={field.onChange}
-                                modules={module}
-                            />
-                        )}
-                    />
-                    {errors.description && <span className="text-red-600">{errors.description.message}</span>}
-                </div> */}
-
-                {/* images(optional) later */}
-                {/* <div className="space-y-1">
-                    <Label htmlFor="picture" className="text-md font-bold">Picture</Label>
-                    <Input
-                        {...register("picture")}
-                        id="picture"
-                        type="file"
-                        name="picture"
-                        accept="image/jpeg, image/jpg, image/png"
-                        className="dark:bg-gray-600"
-                    />
-                    {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
-                </div> */}
 
                 {/* Question Type */}
                 <div className="space-y-1">
@@ -308,9 +248,9 @@ export default function EditQuestionForm() {
                     {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
                 </div>
 
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4 space-y-1 pb-10">
+                <div className="flex flex-row items-center justify-between gap-4 space-y-1 pb-10">
                     {/* is_paid */}
-                    <div>
+                    <div className="flex items-center">
                         <Checkbox
                             id="is_paid"
                             checked={isPaid}
@@ -320,7 +260,7 @@ export default function EditQuestionForm() {
                     </div>
 
                     {/* is_featured */}
-                    <div>
+                    <div className="flex items-center">
                         <Checkbox
                             id="is_featured"
                             checked={isFeatured}
@@ -330,7 +270,7 @@ export default function EditQuestionForm() {
                     </div>
 
                     {/* status */}
-                    <div>
+                    <div className="flex items-center">
                         <Checkbox
                             id="status"
                             checked={statusCheck}

@@ -1,5 +1,4 @@
-import CInputMcq from "@/components/atoms/CInputMCQ"; // Import your CInputMcq component
-import { Checkbox } from "@/components/ui/checkbox";
+import CInputMcq from "@/components/atoms/CInputMCQ";
 import { removeMcqOption, updateField } from "@/features/questions/questionFormSlice";
 import { Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -24,12 +23,12 @@ const McqOption = ({
     });
 
     const deleteOption = (optionIndexToDelete) => {
-        if (options.length > 2) {
+        if (options?.length > 2) {
             setOptions(prevOptions =>
-                prevOptions.filter(optionIndex => optionIndex !== optionIndexToDelete)
+                prevOptions.filter((_, idx) => idx !== optionIndexToDelete)
             );
             setCorrectOptions(prevCorrectOptions =>
-                prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete)
+                prevCorrectOptions.filter((_, idx) => idx !== optionIndexToDelete)
             );
             dispatch(removeMcqOption(optionIndexToDelete));
         }
@@ -37,41 +36,32 @@ const McqOption = ({
 
     return (
         <div className="space-y-1.5 my-2 w-full">
-            <div className="flex items-center justify-between gap-4  ">
-                {/* mcq_option_text */}
+            <div className="flex items-center gap-2">
+                {/* MCQ Option Text */}
                 <CInputMcq
                     name={`mcq_question_text${optionIndex}`}
                     label={`Option ${optionIndex + 1}`}
                     control={control}
                     rules={{ required: "MCQ Question Text is required" }}
                     errors={errors}
+                    isCorrect={isCorrect}
+                    setIsCorrect={(checked) => setIsCorrect(checked)}
+                    optionIndex={optionIndex}
                     onChange={(e) => {
-                        dispatch(updateField({ field: "mcq_options.mcq_question_text", value: e.target.value, index: optionIndex }));
+                        dispatch(updateField({
+                            field: "mcq_options.mcq_question_text",
+                            value: e.target.value,
+                            index: optionIndex
+                        }));
                     }}
                 />
 
-                {options.length > 2 && optionIndex > 1 && (
-                    <Trash2 onClick={() => deleteOption(optionIndex)} className="cursor-pointer" />
+                {options?.length > 2 && optionIndex > 1 && (
+                    <Trash2
+                        onClick={() => deleteOption(optionIndex)}
+                        className="cursor-pointer mt-8"
+                    />
                 )}
-            </div>
-
-
-            {/* is correct */}
-            <div className="flex items-center space-x-2">
-                <Checkbox
-                    id={`is_Correct_${optionIndex}`}
-                    checked={isCorrect}
-                    onCheckedChange={(checked) => {
-                        setIsCorrect(checked);
-                        dispatch(updateField({ field: "mcq_options.is_correct", value: checked, index: optionIndex }));
-                    }}
-                />
-                <label
-                    htmlFor={`is_Correct_${optionIndex}`}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                    Is Correct
-                </label>
             </div>
 
             {/* Explanation */}
@@ -82,7 +72,11 @@ const McqOption = ({
                     control={control}
                     errors={errors}
                     onChange={(e) => {
-                        dispatch(updateField({ field: "mcq_options.description", value: e.target.value, index: optionIndex }));
+                        dispatch(updateField({
+                            field: "mcq_options.description",
+                            value: e.target.value,
+                            index: optionIndex
+                        }));
                     }}
                 />
             )}

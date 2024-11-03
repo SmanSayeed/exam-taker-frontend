@@ -261,7 +261,7 @@ export default function QuestionCreateForm() {
                         )}
                     </div>
 
-                    <div className="flex flex-row items-center justify-between gap-4 space-y-1 pb-4">
+                    <div className="flex flex-row items-center justify-between gap-4 space-y-1 pb-10">
                         {/* is_paid */}
                         <div className="flex items-center">
                             <Checkbox
