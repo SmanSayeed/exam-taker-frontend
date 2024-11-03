@@ -16,16 +16,16 @@ export const McqOptions = ({
         }
     };
 
-    const deleteOption = (optionIndexToDelete) => {
-        if (options.length > 2) {
-            setOptions(prevOptions =>
-                prevOptions.filter(optionIndex => optionIndex !== optionIndexToDelete)
-            );
-            setCorrectOptions(prevCorrectOptions =>
-                prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete)
-            );
-        }
-    };
+    // const deleteOption = (optionIndexToDelete) => {
+    //     if (options.length > 2) {
+    //         setOptions(prevOptions =>
+    //             prevOptions.filter(optionIndex => optionIndex !== optionIndexToDelete)
+    //         );
+    //         setCorrectOptions(prevCorrectOptions =>
+    //             prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete)
+    //         );
+    //     }
+    // };
 
     const handleCorrectChange = (index, checked) => {
         const updatedCorrectOptions = [...correctOptions];
@@ -39,16 +39,19 @@ export const McqOptions = ({
                 options.map((optionIndex) => (
                     <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center gap-2 mb-4">
                         <McqOption
+                            options={options}
+                            setOptions={setOptions}
+                            setCorrectOptions={setCorrectOptions}
                             optionIndex={optionIndex}
                             control={control}
                             isCorrect={!!correctOptions[optionIndex]}
                             setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
                         />
 
-                        {options.length > 2 && optionIndex > 1 && (
+                        {/* {options.length > 2 && optionIndex > 1 && (
                             <Trash2 onClick={() => deleteOption(optionIndex)} className="cursor-pointer" />
 
-                        )}
+                        )} */}
                     </div>
                 ))
             }

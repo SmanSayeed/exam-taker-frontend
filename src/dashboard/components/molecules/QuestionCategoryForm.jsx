@@ -82,7 +82,7 @@ const QuestionCategoryForm = ({ type, refetchOnQuestionsCategoryQuery }) => {
             <form onSubmit={handleSubmit(handleCreate)} className="p-4 md:p-8 ">
                 <div className="space-y-4">
                     {/* category title */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="">
                         <div className="space-y-1">
                             <Label htmlFor="title">Title</Label>
                             <Input

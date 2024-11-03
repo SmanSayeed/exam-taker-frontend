@@ -22,9 +22,9 @@ export default function CInputMcq({ name, label, control, rules, errors }) {
     const iconStyle = `text-lg rounded-full hover:text-gray-700 cursor-pointer ${isRichText ? 'text-gray-600' : 'text-gray-400'}`;
 
     return (
-        <div className="space-y-2 mb-4  ">
+        <div className=" w-full ">
             <div className="flex items-center gap-2">
-                <Label htmlFor={name} className="text-lg font-semibold">{label}</Label>
+                <Label htmlFor={name} className="font-bold mb-1.5 ">{label}</Label>
                 <span onClick={() => setIsRichText(!isRichText)}>
                     {isRichText ? (
                         <KeyboardOff className={iconStyle} />
@@ -51,7 +51,7 @@ export default function CInputMcq({ name, label, control, rules, errors }) {
                             id={name}
                             {...field}
                             placeholder={`Enter ${label.toLowerCase()}`}
-                            className="border rounded-lg px-3 py-2"
+                            className="border rounded-lg px-3 py-2 w-full "
                         />
                     )
                 )}
