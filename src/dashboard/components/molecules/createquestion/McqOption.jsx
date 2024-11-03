@@ -1,7 +1,9 @@
+import CInputMcq from "@/components/atoms/CInputMCQ"; // Import your CInputMcq component
 import { Checkbox } from "@/components/ui/checkbox";
-import { Controller, useForm } from "react-hook-form";
-import CInputMcq from "@/components/atoms/CInputMCQ";// Import your CInputMcq component
+import { removeMcqOption, updateField } from "@/features/questions/questionFormSlice";
 import { Trash2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 
 const McqOption = ({
     optionIndex,
@@ -12,10 +14,14 @@ const McqOption = ({
     setOptions,
     setCorrectOptions
 }) => {
+    const dispatch = useDispatch();
+    const mcq_options = useSelector((state) => state.questionForm.mcq_options);
+
     const {
         formState: { errors }
-    } = useForm();
-
+    } = useForm({
+        defaultValues: mcq_options
+    });
 
     const deleteOption = (optionIndexToDelete) => {
         if (options.length > 2) {
@@ -25,6 +31,7 @@ const McqOption = ({
             setCorrectOptions(prevCorrectOptions =>
                 prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete)
             );
+            dispatch(removeMcqOption(optionIndexToDelete));
         }
     };
 
@@ -38,6 +45,9 @@ const McqOption = ({
                     control={control}
                     rules={{ required: "MCQ Question Text is required" }}
                     errors={errors}
+                    onChange={(e) => {
+                        dispatch(updateField({ field: "mcq_options.mcq_question_text", value: e.target.value, index: optionIndex }));
+                    }}
                 />
 
                 {options.length > 2 && optionIndex > 1 && (
@@ -51,7 +61,10 @@ const McqOption = ({
                 <Checkbox
                     id={`is_Correct_${optionIndex}`}
                     checked={isCorrect}
-                    onCheckedChange={(checked) => setIsCorrect(checked)}
+                    onCheckedChange={(checked) => {
+                        setIsCorrect(checked);
+                        dispatch(updateField({ field: "mcq_options.is_correct", value: checked, index: optionIndex }));
+                    }}
                 />
                 <label
                     htmlFor={`is_Correct_${optionIndex}`}
@@ -67,8 +80,10 @@ const McqOption = ({
                     name={`explanation${optionIndex}`}
                     label="Explanation"
                     control={control}
-                    // rules={{ required: "Explanation is required" }}
                     errors={errors}
+                    onChange={(e) => {
+                        dispatch(updateField({ field: "mcq_options.description", value: e.target.value, index: optionIndex }));
+                    }}
                 />
             )}
         </div>

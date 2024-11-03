@@ -33,7 +33,7 @@ export default function QuestionCreateForm() {
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
 
-    const [selectedType, setSelectedType] = useLocalStorage({
+    const [selectedQuesType, setSelectedQuesType] = useLocalStorage({
         key: "questionType",
         defaultValue: "mcq",
     });
@@ -43,7 +43,7 @@ export default function QuestionCreateForm() {
     });
 
     const dispatch = useDispatch();
-    const questionForm = useSelector((state) => state.questionForm);
+    const { title } = useSelector((state) => state.questionForm);
 
     const {
         register,
@@ -51,8 +51,12 @@ export default function QuestionCreateForm() {
         control,
         setValue,
         handleSubmit,
+        reset
     } = useForm({
-        defaultValues: questionForm,
+        defaultValues: {
+            title: title,
+            type: selectedQuesType
+        },
     });
 
     const [selectedSection, setSelectedSection] = useLocalStorage({
@@ -97,7 +101,7 @@ export default function QuestionCreateForm() {
     });
 
     const handleTypeChange = (val) => {
-        setSelectedType(val);
+        setSelectedQuesType(val);
         setValue("type", val);
     };
 
@@ -110,7 +114,8 @@ export default function QuestionCreateForm() {
     const [createQuestion, { isLoading }] = useCreateQuestionMutation();
 
     const handleCreate = async (formData) => {
-        console.log("data", formData);
+        console.log("formdata", formData);
+
         const mcqOptions = options.map((optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
@@ -118,8 +123,7 @@ export default function QuestionCreateForm() {
             return {
                 mcq_question_text: optionText,
                 is_correct: correctOptions[optionIndex] || false,
-                description: explanation,
-                mcq_images: null,
+                description: explanation
             };
         });
 
@@ -151,7 +155,7 @@ export default function QuestionCreateForm() {
         const payload = {
             title: formData.title,
             // description: formData.description,
-            type: formData.type,
+            type: selectedQuesType || formData.type,
             mark: formData.mark,
             // images: null,
             is_paid: isPaid,
@@ -165,6 +169,8 @@ export default function QuestionCreateForm() {
         try {
             const response = await createQuestion(payload).unwrap();
             toast.success(response?.message);
+            reset();
+            setValue("title", "");
         } catch (err) {
             toast.error(err?.data?.message || "An error occurred");
         }
@@ -189,7 +195,7 @@ export default function QuestionCreateForm() {
                     </div>
 
                     {/* mcq question */}
-                    {selectedType === "mcq" && (
+                    {selectedQuesType === "mcq" && (
                         <McqOptions
                             control={control}
                             options={options}
@@ -199,7 +205,7 @@ export default function QuestionCreateForm() {
                         />
                     )}
                     {/* creative question */}
-                    {selectedType === "creative" && (
+                    {selectedQuesType === "creative" && (
                         <CreativeQuestions
                             control={control}
                             creativeQueTypes={creativeQueTypes}
@@ -221,6 +227,7 @@ export default function QuestionCreateForm() {
                                         field.onChange(val);
                                     }}
                                     value={field.value}
+                                    defaultValue={selectedQuesType}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Type" />
