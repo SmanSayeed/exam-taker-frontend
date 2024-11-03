@@ -13,6 +13,7 @@ import {
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
@@ -31,6 +32,8 @@ export const AutoSearchSelect = ({
 }) => {
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedCatName, setSelectedCatName] = useState("");
+
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     return (
         <div className="grid gap-2">
@@ -51,7 +54,13 @@ export const AutoSearchSelect = ({
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
                                     <Command>
-                                        <CommandInput placeholder={placeholder} />
+                                        {/* <CommandInput placeholder={placeholder} /> */}
+                                        {!isMobile && (
+                                            <CommandInput
+                                                placeholder={placeholder}
+                                                readOnly={isMobile}
+                                            />
+                                        )}
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>
@@ -81,13 +90,13 @@ export const AutoSearchSelect = ({
                                     }}
                                     className="p-2 rounded-full bg-gray-200 hover:bg-red-200 text-gray-500 hover:text-red-500"
                                 >
-                            <XIcon className="w-5 h-5" aria-hidden="true" />
-                        </button>
+                                    <XIcon className="w-5 h-5" aria-hidden="true" />
+                                </button>
                             )}
-                    </div>
+                        </div>
 
-                {errors[name] && <span className="text-red-600">{errors[name]?.message}</span>}
-            </>
+                        {errors[name] && <span className="text-red-600">{errors[name]?.message}</span>}
+                    </>
                 )}
             />
         </div>

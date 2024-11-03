@@ -1,8 +1,7 @@
-import React from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useEditStudentMutation } from "@/features/studentsApi/studentsApi";
+import { useForm } from "react-hook-form";
 
 const StudentEditModal = ({ isOpen, onClose, student }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
@@ -33,7 +32,7 @@ const StudentEditModal = ({ isOpen, onClose, student }) => {
             className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 dark:bg-gray-700 dark:text-gray-200"
           />
           {errors.name && <span className="text-red-600 text-sm">{errors.name.message}</span>}
-          
+
           <input
             placeholder="Email"
             {...register("email", { required: "Email is required" })}
@@ -41,7 +40,7 @@ const StudentEditModal = ({ isOpen, onClose, student }) => {
             className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 dark:bg-gray-700 dark:text-gray-200"
           />
           {errors.email && <span className="text-red-600 text-sm">{errors.email.message}</span>}
-          
+
           <input
             placeholder="Phone"
             {...register("phone")}

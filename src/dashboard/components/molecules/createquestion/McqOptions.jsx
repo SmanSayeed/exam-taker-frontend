@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
 import McqOption from "./McqOption";
 
 export const McqOptions = ({
@@ -15,17 +14,6 @@ export const McqOptions = ({
             setOptions(prevOptions => [...prevOptions, prevOptions.length]);
         }
     };
-
-    // const deleteOption = (optionIndexToDelete) => {
-    //     if (options.length > 2) {
-    //         setOptions(prevOptions =>
-    //             prevOptions.filter(optionIndex => optionIndex !== optionIndexToDelete)
-    //         );
-    //         setCorrectOptions(prevCorrectOptions =>
-    //             prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete)
-    //         );
-    //     }
-    // };
 
     const handleCorrectChange = (index, checked) => {
         const updatedCorrectOptions = [...correctOptions];
@@ -47,11 +35,6 @@ export const McqOptions = ({
                             isCorrect={!!correctOptions[optionIndex]}
                             setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
                         />
-
-                        {/* {options.length > 2 && optionIndex > 1 && (
-                            <Trash2 onClick={() => deleteOption(optionIndex)} className="cursor-pointer" />
-
-                        )} */}
                     </div>
                 ))
             }

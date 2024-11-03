@@ -23,10 +23,6 @@ import { DataTablePagination } from "../molecules/datatable/DataTablePagination"
 import { DataTableToolbar } from "../organism/DataTableToolbar";
 
 export function DataTable({ columns, data }) {
-
-    console.log("DataTable data:", data);
-console.log("DataTable columns:", columns);
-
     const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);

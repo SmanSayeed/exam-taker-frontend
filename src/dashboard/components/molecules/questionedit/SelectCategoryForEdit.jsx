@@ -179,8 +179,6 @@ export default function SelectCategoryForEdit({ control, setValue }) {
             return null;
         }
 
-        console.log(`Rendering ${name}, visible: ${visibleFields[name]}`);
-
         return (
             visibleFields[name] && (
                 <AutoSearchSelectForEdit

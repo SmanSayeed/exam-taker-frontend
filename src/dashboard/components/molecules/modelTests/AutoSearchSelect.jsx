@@ -14,6 +14,7 @@ import {
     PopoverTrigger
 } from "@/components/ui/popover";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { Check, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -34,6 +35,8 @@ export const AutoSearchSelect = ({
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedCatName, setSelectedCatName] = useState("");
     const [selectedCatId, setSelectedCatId] = useLocalStorage({ key: name, defaultValue: "" });
+
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     useEffect(() => {
         if (selectedCatId && options.length > 0) {
@@ -71,7 +74,13 @@ export const AutoSearchSelect = ({
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
                                     <Command>
-                                        <CommandInput placeholder={placeholder} />
+                                        {/* <CommandInput placeholder={placeholder} /> */}
+                                        {!isMobile && (
+                                            <CommandInput
+                                                placeholder={placeholder}
+                                                readOnly={isMobile}
+                                            />
+                                        )}
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>
