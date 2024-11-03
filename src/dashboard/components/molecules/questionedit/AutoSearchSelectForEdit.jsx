@@ -13,6 +13,7 @@ import {
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { Check, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -34,6 +35,8 @@ export const AutoSearchSelectForEdit = ({
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedCatName, setSelectedCatName] = useState("");
     const [selectedCatId, setSelectedCatId] = useState(selectedValue);
+
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     useEffect(() => {
         if (selectedCatId && options.length > 0) {
@@ -71,7 +74,13 @@ export const AutoSearchSelectForEdit = ({
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
                                     <Command>
-                                        <CommandInput placeholder={placeholder} />
+                                        {/* <CommandInput placeholder={placeholder} /> */}
+                                        {!isMobile && (
+                                            <CommandInput
+                                                placeholder={placeholder}
+                                                readOnly={isMobile}
+                                            />
+                                        )}
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>

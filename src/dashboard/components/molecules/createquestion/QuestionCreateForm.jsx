@@ -114,8 +114,6 @@ export default function QuestionCreateForm() {
     const [createQuestion, { isLoading }] = useCreateQuestionMutation();
 
     const handleCreate = async (formData) => {
-        console.log("formdata", formData);
-
         const mcqOptions = options.map((optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
@@ -265,7 +263,7 @@ export default function QuestionCreateForm() {
 
                     <div className="flex flex-row items-center justify-between gap-4 space-y-1 pb-4">
                         {/* is_paid */}
-                        <div>
+                        <div className="flex items-center">
                             <Checkbox
                                 id="is_paid"
                                 checked={isPaid}
@@ -277,7 +275,7 @@ export default function QuestionCreateForm() {
                         </div>
 
                         {/* is_featured */}
-                        <div>
+                        <div className="flex items-center">
                             <Checkbox
                                 id="is_featured"
                                 checked={isFeatured}
@@ -288,7 +286,7 @@ export default function QuestionCreateForm() {
                             </Label>
                         </div>
                         {/* status */}
-                        <div>
+                        <div className="flex items-center">
                             <Checkbox
                                 id="status"
                                 checked={statusCheck}
