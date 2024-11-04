@@ -117,18 +117,28 @@ export default function EditQuestionForm() {
     const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleUpdate = async (formData) => {
-        const mcqOptions = options.map((option, optionIndex) => {
-            const optionText = formData[`mcq_question_text${optionIndex}`];
-            const explanation = formData[`explanation${optionIndex}`] || null;
+        const mcqOptions = options
+            .map((option, optionIndex) => {
+                let data;
 
-            return {
-                id: option?.id && option?.id,
-                mcq_question_text: optionText,
-                is_correct: correctOptions[optionIndex] || false,
-                description: explanation,
-                mcq_images: null
-            };
-        });
+                const optionText = formData[`mcq_question_text${optionIndex}`];
+                const explanation = formData[`explanation${optionIndex}`] || null;
+
+                data = option?.id ? {
+                    id: option?.id,
+                    mcq_question_text: optionText,
+                    is_correct: correctOptions[optionIndex] || false,
+                    description: explanation,
+                    mcq_images: null
+                } : {
+                    mcq_question_text: optionText,
+                    is_correct: correctOptions[optionIndex] || false,
+                    description: explanation,
+                    mcq_images: null
+                }
+
+                return data;
+            });
 
         const creativeQuestions = creativeQueTypes.map((_, queTypeIndex) => {
             const queText = formData[`creative_question_text${queTypeIndex}`];

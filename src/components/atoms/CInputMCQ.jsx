@@ -7,7 +7,7 @@ import { Controller } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 
-export default function CInputMcq({ name, label, control, rules, errors, isCorrect, setIsCorrect, optionIndex, onChange }) {
+export default function CInputMcq({ name, label, control, rules, errors, isCorrect, setIsCorrect, optionIndex }) {
     const [isRichText, setIsRichText] = useState(false);
 
     const toolbarOptions = [
@@ -60,11 +60,7 @@ export default function CInputMcq({ name, label, control, rules, errors, isCorre
                         <ReactQuill
                             theme="snow"
                             value={field.value || ""}
-                            // onChange={field.onChange}
-                            onChange={(value) => {
-                                field.onChange(value); // Update React Hook Form
-                                if (onChange) onChange({ target: { value } }); // Dispatch value to Redux
-                            }}
+                            onChange={field.onChange}
                             modules={modules}
                             placeholder={`Enter ${label.toLowerCase()}`}
                         />
@@ -74,10 +70,6 @@ export default function CInputMcq({ name, label, control, rules, errors, isCorre
                             {...field}
                             placeholder={`Enter ${label.toLowerCase()}`}
                             className="border rounded-lg px-3 py-2 w-full"
-                            onChange={(e) => {
-                                field.onChange(e); // Update React Hook Form
-                                onChange(e); // Dispatch value to Redux
-                            }}
                         />
                     )
                 )}

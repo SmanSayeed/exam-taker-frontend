@@ -40,8 +40,8 @@ export default function CInput({ name, label, control, rules, errors, onChange }
                             theme="snow"
                             value={field.value || ""}
                             onChange={(value) => {
-                                field.onChange(value); // Update React Hook Form
-                                if (onChange) onChange({ target: { value } }); // Dispatch value to Redux
+                                field.onChange(value);
+                                if (onChange) onChange({ target: { value } });
                             }}
                             modules={modules}
                         />
@@ -51,8 +51,8 @@ export default function CInput({ name, label, control, rules, errors, onChange }
                             {...field}
                             placeholder={`Enter ${label.toLowerCase()}`}
                             onChange={(e) => {
-                                field.onChange(e); // Update React Hook Form
-                                onChange(e); // Dispatch value to Redux
+                                field.onChange(e);
+                                if (onChange) onChange(e);
                             }}
                         />
                     )
