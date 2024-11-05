@@ -1,25 +1,25 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { useDeleteQuestionMutation } from "@/features/questions/questionsApi";
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
-import { Delete, DeleteIcon, Eye, FilePenIcon, SquareX, Trash2 } from "lucide-react";
+import { FilePenIcon, Loader2, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { ViewModal } from "./ViewModal";
 
-export default function QuestionCard({ data: questionData }) {
+export default function QuestionCard({ data: questionData, refetch }) {
     const { id, title, description, mcq_questions, is_paid, is_featured, type, mark } =
         questionData || {};
 
     console.log("questionData", questionData)
 
-    const [deleteQuestion, { error }] = useDeleteQuestionMutation();
+    const [deleteQuestion, { isLoading }] = useDeleteQuestionMutation();
 
     const handleDelete = async (id) => {
         if (id) {
             try {
                 const response = await deleteQuestion(id).unwrap();
                 toast.success(response?.message || "Data deleted successfully");
+                refetch();
             } catch (err) {
                 toast.error(err?.data?.message || "An error occurred");
             }
@@ -36,7 +36,7 @@ export default function QuestionCard({ data: questionData }) {
                 </p>
             </CardTitle>
 
-            
+
 
             <div>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 ">
@@ -85,11 +85,17 @@ export default function QuestionCard({ data: questionData }) {
                 {parseHtmlContent(description)}
             </div> */}
 
-            <Trash2
-                onClick={() => handleDelete(id)}
-                size={18}
-                className="cursor-pointer absolute top-3 right-3 opacity-50 group-hover:scale-105 group-hover:opacity-100 duration-300"
-            />
+            {
+                isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin absolute top-3 right-3" />
+                ) : (
+                    <Trash2
+                        onClick={() => handleDelete(id)}
+                        size={18}
+                        className="cursor-pointer absolute top-3 right-3 opacity-50 group-hover:scale-105 group-hover:opacity-100 duration-300"
+                    />
+                )
+            }
 
             <div className="absolute bottom-3 right-3 flex flex-col items-center gap-4">
                 <button>
