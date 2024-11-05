@@ -26,10 +26,10 @@ const QuestionCategoryFormWithSelect = ({
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
         setError,
-        control,
-        reset
+        control
     } = useForm();
 
     const [createQuestionsCategory, { data, isSuccess, isLoading, error }] = useCreateQuestionsCategoryMutation();
@@ -44,6 +44,7 @@ const QuestionCategoryFormWithSelect = ({
 
     const handleCreate = (formData) => {
         console.log("formData ", formData);
+
         const payload = {
             section_id: formData.sections,
             level_id: formData.levels,
@@ -78,9 +79,10 @@ const QuestionCategoryFormWithSelect = ({
         if (isSuccess) {
             toast.success(data?.message);
             refetchOnQuestionsCategoryQuery();
-            reset();
+            setValue("title", "");
+            setValue("details", "");
         }
-    }, [data, isSuccess, error, setError, refetchOnQuestionsCategoryQuery, reset]);
+    }, [data, isSuccess, error, setError, refetchOnQuestionsCategoryQuery, setValue]);
 
     return (
         <Card>

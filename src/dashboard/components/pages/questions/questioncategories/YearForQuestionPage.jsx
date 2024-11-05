@@ -1,5 +1,5 @@
 import Loading from "@/dashboard/components/atoms/Loading";
-import QuestionCategoryForm from "@/dashboard/components/molecules/QuestionCategoryForm";
+import QuestionCategoryForm from "@/dashboard/components/organism/QuestionCategoryForm";
 import { DataTable } from "@/dashboard/components/templates/DataTable";
 import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
