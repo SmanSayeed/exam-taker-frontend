@@ -29,6 +29,7 @@ export const McqOptions = ({
                         <McqOption
                             options={options}
                             setOptions={setOptions}
+                            correctOptions={correctOptions}
                             setCorrectOptions={setCorrectOptions}
                             optionIndex={optionIndex}
                             control={control}

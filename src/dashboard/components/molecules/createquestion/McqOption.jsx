@@ -1,8 +1,6 @@
 import CInputMcq from "@/components/atoms/CInputMCQ";
-import { removeMcqOption, updateField } from "@/features/questions/questionFormSlice";
 import { Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 
 const McqOption = ({
     optionIndex,
@@ -11,26 +9,43 @@ const McqOption = ({
     setIsCorrect,
     options,
     setOptions,
+    correctOptions,
     setCorrectOptions
 }) => {
-    const dispatch = useDispatch();
-    const mcq_options = useSelector((state) => state.questionForm.mcq_options);
 
     const {
         formState: { errors }
-    } = useForm({
-        defaultValues: mcq_options
-    });
+    } = useForm();
+
+    console.log("options", options)
+
+    // const deleteOption = (optionIndexToDelete) => {
+    //     if (options?.length > 2) {
+    //         setOptions(prevOptions =>
+    //             prevOptions.filter((_, idx) => idx !== optionIndexToDelete)
+    //         );
+    //         setCorrectOptions(prevCorrectOptions =>
+    //             prevCorrectOptions.filter((_, idx) => idx !== optionIndexToDelete)
+    //         );
+    //     }
+    // };
 
     const deleteOption = (optionIndexToDelete) => {
-        if (options?.length > 2) {
-            setOptions(prevOptions =>
-                prevOptions.filter((_, idx) => idx !== optionIndexToDelete)
-            );
-            setCorrectOptions(prevCorrectOptions =>
-                prevCorrectOptions.filter((_, idx) => idx !== optionIndexToDelete)
-            );
-            dispatch(removeMcqOption(optionIndexToDelete));
+        console.log("optionindex to delete", optionIndexToDelete)
+
+        if (options.length > 2) {
+            // Filter out the option at the specified index
+            const updatedOptions = options.filter((option, idx) => {
+                console.log("option", option)
+                return idx !== optionIndexToDelete
+            });
+
+            // Update correctOptions to remove the status of the deleted option
+            const updatedCorrectOptions = correctOptions.filter((_, idx) => idx !== optionIndexToDelete);
+
+            // Renumber options to maintain the sequence
+            setOptions(updatedOptions.map((_, idx) => idx));
+            setCorrectOptions(updatedCorrectOptions);
         }
     };
 
@@ -47,13 +62,6 @@ const McqOption = ({
                     isCorrect={isCorrect}
                     setIsCorrect={(checked) => setIsCorrect(checked)}
                     optionIndex={optionIndex}
-                    onChange={(e) => {
-                        dispatch(updateField({
-                            field: "mcq_options.mcq_question_text",
-                            value: e.target.value,
-                            index: optionIndex
-                        }));
-                    }}
                 />
 
                 {options?.length > 2 && optionIndex > 1 && (
@@ -71,13 +79,6 @@ const McqOption = ({
                     label="Explanation"
                     control={control}
                     errors={errors}
-                    onChange={(e) => {
-                        dispatch(updateField({
-                            field: "mcq_options.description",
-                            value: e.target.value,
-                            index: optionIndex
-                        }));
-                    }}
                 />
             )}
         </div>

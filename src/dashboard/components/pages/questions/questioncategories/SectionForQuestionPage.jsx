@@ -3,7 +3,7 @@ import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCate
 import Loading from "../../../atoms/Loading";
 import PageTitle from "../../../atoms/PageTitle";
 import ThemeSwitch from "../../../atoms/ThemeSwitch";
-import QuestionCategoryForm from "../../../molecules/QuestionCategoryForm";
+import QuestionCategoryForm from "../../../organism/QuestionCategoryForm";
 import UserNav from "../../../organism/UserNav";
 import { DataTable } from "../../../templates/DataTable";
 import { Layout } from "../../../templates/Layout";
