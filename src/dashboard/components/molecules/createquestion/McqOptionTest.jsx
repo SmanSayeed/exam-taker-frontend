@@ -2,24 +2,27 @@ import CInputMcq from "@/components/atoms/CInputMCQ";
 import { Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-const McqOption = ({
-    optionIndex,
+const McqOptionTest = ({
     optionId,
     control,
     isCorrect,
     setIsCorrect,
     options,
     setOptions,
-    setCorrectOptions
+    correctOptions,
+    setCorrectOptions,
+    optionIndex
 }) => {
     const {
         formState: { errors }
     } = useForm();
 
     const deleteOption = (optionId) => {
+
         if (options?.length > 2) {
+
             setOptions((prevOptions) =>
-                prevOptions.filter(option => option !== optionId)
+                prevOptions.filter((option) => option !== optionId)
             );
 
             setCorrectOptions((prevCorrectOptions) =>
@@ -27,17 +30,6 @@ const McqOption = ({
             );
         }
     };
-
-    // const deleteOption = (optionIndexToDelete) => {
-    //     if (options?.length > 2) {
-    //         setOptions(prevOptions =>
-    //             prevOptions.filter((_, idx) => idx !== optionIndexToDelete)
-    //         );
-    //         setCorrectOptions(prevCorrectOptions =>
-    //             prevCorrectOptions.filter((_, idx) => idx !== optionIndexToDelete)
-    //         );
-    //     }
-    // };
 
     return (
         <div className="space-y-1.5 my-2 w-full">
@@ -75,4 +67,4 @@ const McqOption = ({
     );
 };
 
-export default McqOption;
+export default McqOptionTest;
