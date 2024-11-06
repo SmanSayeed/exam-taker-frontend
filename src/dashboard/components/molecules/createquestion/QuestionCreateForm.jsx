@@ -194,6 +194,13 @@ export default function QuestionCreateForm() {
 
                     {/* mcq question */}
                     {selectedQuesType === "mcq" && (
+                        // <McqOptionsTest
+                        //     control={control}
+                        //     options={options}
+                        //     setOptions={setOptions}
+                        //     correctOptions={correctOptions}
+                        //     setCorrectOptions={setCorrectOptions}
+                        // />
                         <McqOptions
                             control={control}
                             options={options}

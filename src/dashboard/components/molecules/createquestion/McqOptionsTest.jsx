@@ -1,30 +1,25 @@
 import { Button } from "@/components/ui/button";
-import McqOption from "./McqOption";
+import McqOptionTest from "./McqOptionTest";
 
-export const McqOptions = ({
+export const McqOptionsTest = ({
     control,
     options,
     setOptions,
     correctOptions,
     setCorrectOptions
 }) => {
+
+    // Generate a unique ID using the crypto module
     const uniqueId = crypto.randomUUID();
 
     const addNewOption = () => {
         if (options.length < 8) {
-            setOptions((prevOptions) => [...prevOptions, uniqueId]);
+            setOptions((prevOptions) => [...prevOptions, uniqueId]); // Add a unique ID
         }
     };
 
-    // const addNewOption = () => {
-    //     if (options.length < 8) {
-    //         setOptions(prevOptions => [...prevOptions, prevOptions.length]);
-    //     }
-    // };
-
     const handleCorrectChange = (id, checked) => {
-        const updatedCorrectOptions = [...correctOptions];
-        updatedCorrectOptions[id] = checked;
+        const updatedCorrectOptions = { ...correctOptions, [id]: checked };
         setCorrectOptions(updatedCorrectOptions);
     };
 
@@ -33,13 +28,13 @@ export const McqOptions = ({
             {
                 options.map((optionId, optionIndex) => (
                     <div key={optionId} className="flex flex-col md:flex-row items-start md:items-center gap-2 mb-4">
-                        <McqOption
+                        <McqOptionTest
                             options={options}
                             setOptions={setOptions}
                             correctOptions={correctOptions}
                             setCorrectOptions={setCorrectOptions}
-                            optionIndex={optionIndex}
                             optionId={optionId}
+                            optionIndex={optionIndex}
                             control={control}
                             isCorrect={!!correctOptions[optionId]}
                             setIsCorrect={(checked) => handleCorrectChange(optionId, checked)}
