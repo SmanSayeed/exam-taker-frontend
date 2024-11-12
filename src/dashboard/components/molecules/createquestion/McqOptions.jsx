@@ -8,51 +8,42 @@ export const McqOptions = ({
     correctOptions,
     setCorrectOptions
 }) => {
+    const uniqueId = crypto.randomUUID();
 
     const addNewOption = () => {
         if (options.length < 8) {
-            setOptions(prevOptions => [...prevOptions, prevOptions.length]);
+            setOptions((prevOptions) => [...prevOptions, uniqueId]);
         }
     };
 
-    const deleteOption = (optionIndexToDelete) => {
-        if (options.length > 2) {
-            setOptions(prevOptions =>
-                prevOptions.filter(optionIndex => optionIndex !== optionIndexToDelete)
-            );
-            setCorrectOptions(prevCorrectOptions =>
-                prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete)
-            );
-        }
-    };
+    // const addNewOption = () => {
+    //     if (options.length < 8) {
+    //         setOptions(prevOptions => [...prevOptions, prevOptions.length]);
+    //     }
+    // };
 
-    const handleCorrectChange = (index, checked) => {
+    const handleCorrectChange = (id, checked) => {
         const updatedCorrectOptions = [...correctOptions];
-        updatedCorrectOptions[index] = checked;
+        updatedCorrectOptions[id] = checked;
         setCorrectOptions(updatedCorrectOptions);
     };
 
     return (
         <div>
             {
-                options.map((optionIndex) => (
-                    <div key={optionIndex} className="flex items-center justify-between mb-4">
+                options.map((optionId, optionIndex) => (
+                    <div key={optionId} className="flex flex-col md:flex-row items-start md:items-center gap-2 mb-4">
                         <McqOption
+                            options={options}
+                            setOptions={setOptions}
+                            correctOptions={correctOptions}
+                            setCorrectOptions={setCorrectOptions}
                             optionIndex={optionIndex}
+                            optionId={optionId}
                             control={control}
-                            isCorrect={!!correctOptions[optionIndex]}
-                            setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
+                            isCorrect={!!correctOptions[optionId]}
+                            setIsCorrect={(checked) => handleCorrectChange(optionId, checked)}
                         />
-
-                        {options.length > 2 && optionIndex > 1 && (
-                            <Button
-                                type="button"
-                                onClick={() => deleteOption(optionIndex)}
-                                className="ml-4"
-                            >
-                                Delete
-                            </Button>
-                        )}
                     </div>
                 ))
             }

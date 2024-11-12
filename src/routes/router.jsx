@@ -6,6 +6,11 @@ import StudentCreateForAdminPage from "@/dashboard/components/pages/StudentCreat
 import StudentListForAdminPage from "@/dashboard/components/pages/StudentListForAdminPage";
 import UserCreateForAdminPage from "@/dashboard/components/pages/UserCreateForAdminPage";
 import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminPage";
+import ModelTestCreatePage from "@/dashboard/components/pages/modelTests/ModelTestCreatePage";
+import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPage";
+import AllPackagesForAdminPage from "@/dashboard/components/pages/packages/AllPackagesForAdminPage";
+import PackageManagementForAdminPage from "@/dashboard/components/pages/packages/PackageCreateForAdminPage";
+import PackageEditForAdminPage from "@/dashboard/components/pages/packages/PackageEditForAdminPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
 import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
@@ -104,6 +109,26 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/question/edit/:questionId",
                         element: <QuestionEditForAdminPage />
+                    },
+                    {
+                        path: "/admin/package/create",
+                        element: <PackageManagementForAdminPage />
+                    },
+                    {
+                        path: "/admin/package/edit/:packageId",
+                        element: <PackageEditForAdminPage />
+                    },
+                    {
+                        path: "/admin/packages",
+                        element: <AllPackagesForAdminPage />
+                    },
+                    {
+                        path: "/admin/model-tests/create",
+                        element: <ModelTestCreatePage />
+                    },
+                    {
+                        path: "/admin/model-tests",
+                        element: <ModelTestsPage />
                     },
                 ]
             },

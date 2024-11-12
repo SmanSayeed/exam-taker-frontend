@@ -1,9 +1,9 @@
+import QuestionCategoryFormWithSelect from "@/dashboard/components/organism/QuestionCategoryFormWithSelect";
 import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import Loading from "../../../atoms/Loading";
 import PageTitle from "../../../atoms/PageTitle";
 import ThemeSwitch from "../../../atoms/ThemeSwitch";
-import QuestionCategoryFormWithSelect from "../../../molecules/QuestionCategoryFormWithSelect";
 import UserNav from "../../../organism/UserNav";
 import { DataTable } from "../../../templates/DataTable";
 import { Layout } from "../../../templates/Layout";

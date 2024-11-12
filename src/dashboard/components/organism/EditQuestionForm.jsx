@@ -11,15 +11,16 @@ import {
 import { useEditQuestionMutation, useGetSingleQuestionsQuery } from "@/features/questions/questionsApi";
 import { useEffect, useState } from "react";
 
+import CInput from "@/components/atoms/CInput";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { Controller, useForm } from "react-hook-form";
-import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import Loading from "../atoms/Loading";
 import { CreativeQuesForEdit } from "../molecules/questionedit/CreativeQuesForEdit";
 import { McqOptionsForEdit } from "../molecules/questionedit/McqOptionsForEdit";
 import SelectCategoryForEdit from "../molecules/questionedit/SelectCategoryForEdit";
@@ -36,7 +37,7 @@ export default function EditQuestionForm() {
     const [creativeQueTypes, setCreativeQueTypes] = useState([]);
 
     const { questionId } = useParams();
-    const { data: questionData } = useGetSingleQuestionsQuery(questionId);
+    const { data: questionData, isLoading: isQuestionLoading } = useGetSingleQuestionsQuery(questionId);
     const [question, setQuestion] = useState({});
 
     const { type } = question || {};
@@ -52,9 +53,8 @@ export default function EditQuestionForm() {
 
     useEffect(() => {
         if (questionData?.data) {
-            const question = questionData.data;
+            const question = questionData?.data;
             setQuestion(question);
-            console.log("question", question)
 
             reset({
                 title: question.title || "",
@@ -114,39 +114,31 @@ export default function EditQuestionForm() {
         }
     }, [questionData?.data, reset, dispatch, setValue]);
 
-    const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['link', 'formula'],
-        [{ 'header': 1 }, { 'header': 2 }, { 'header': 3 }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-        [{ 'script': 'sub' }, { 'script': 'super' }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
-        [{ 'align': [] }],
-        ['clean']
-    ];
-    const module = {
-        toolbar: toolbarOptions
-    }
-
-    const [editQuestion, { isLoading }] = useEditQuestionMutation();
+    const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleUpdate = async (formData) => {
-        const mcqOptions = options.map((_, optionIndex) => {
-            const optionText = formData[`mcq_question_text${optionIndex}`];
-            const explanation = formData[`explanation${optionIndex}`] || null;
+        const mcqOptions = options
+            .map((option, optionIndex) => {
+                let data;
 
-            return {
-                mcq_question_text: optionText,
-                is_correct: correctOptions[optionIndex] || false,
-                description: explanation,
-                mcq_images: null
-            };
-        });
+                const optionText = formData[`mcq_question_text${optionIndex}`];
+                const explanation = formData[`explanation${optionIndex}`] || null;
+
+                data = option?.id ? {
+                    id: option?.id,
+                    mcq_question_text: optionText,
+                    is_correct: correctOptions[optionIndex] || false,
+                    description: explanation,
+                    mcq_images: null
+                } : {
+                    mcq_question_text: optionText,
+                    is_correct: correctOptions[optionIndex] || false,
+                    description: explanation,
+                    mcq_images: null
+                }
+
+                return data;
+            });
 
         const creativeQuestions = creativeQueTypes.map((_, queTypeIndex) => {
             const queText = formData[`creative_question_text${queTypeIndex}`];
@@ -186,7 +178,6 @@ export default function EditQuestionForm() {
             "creative_options": creativeQuestions,
             "categories": categoriesPayload
         }
-        console.log("payload", payload)
 
         try {
             const response = await editQuestion({ id: questionId, data: payload }).unwrap();
@@ -196,9 +187,42 @@ export default function EditQuestionForm() {
         }
     }
 
+    if (isQuestionLoading) return <Loading />
+
     return (
         <form onSubmit={handleSubmit(handleUpdate)} id="edit-question-form">
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 ">
+                {/* title */}
+                <div className="space-y-1">
+                    <CInput
+                        name="title"
+                        label="Title"
+                        control={control}
+                        rules={{ required: "Title is required" }}
+                        errors={errors}
+                    />
+                </div>
+
+                {/* mcq question */}
+                {type === "mcq" && (
+                    <McqOptionsForEdit
+                        control={control}
+                        options={options}
+                        setOptions={setOptions}
+                        correctOptions={correctOptions}
+                        setCorrectOptions={setCorrectOptions}
+                    />
+                )}
+
+                {/* creative question */}
+                {type === "creative" && (
+                    <CreativeQuesForEdit
+                        control={control}
+                        creativeQueTypes={creativeQueTypes}
+                        setCreativeQueTypes={setCreativeQueTypes}
+                    />
+                )}
+
                 {/* Question Type */}
                 <div className="space-y-1">
                     <Label className="text-md font-bold">Question Type</Label>
@@ -222,80 +246,6 @@ export default function EditQuestionForm() {
                     {errors.type && <span className="text-red-600">{errors.type.message}</span>}
                 </div>
 
-                {/* title */}
-                <div className="space-y-1">
-                    <Label htmlFor="title" className="text-md font-bold">Title</Label>
-                    <Controller
-                        name="title"
-                        control={control}
-                        rules={{ required: "Title is required" }}
-                        render={({ field }) => (
-                            <ReactQuill
-                                theme="snow"
-                                value={field.value}
-                                onChange={field.onChange}
-                                modules={module}
-                            />
-                        )}
-                    />
-                    {errors.title && <span className="text-red-600">{errors.title.message}</span>}
-                </div>
-
-                {/* description */}
-                <div className="space-y-1">
-                    <Label htmlFor="details" className="text-md font-bold">Description</Label>
-                    <Controller
-                        name="description"
-                        control={control}
-                        rules={{ required: "Description is required" }}
-                        render={({ field }) => (
-                            <ReactQuill
-                                theme="snow"
-                                value={field.value}
-                                onChange={field.onChange}
-                                modules={module}
-                            />
-                        )}
-                    />
-                    {errors.description && <span className="text-red-600">{errors.description.message}</span>}
-                </div>
-
-                {/* images(optional) later */}
-                <div className="space-y-1">
-                    <Label htmlFor="picture" className="text-md font-bold">Picture</Label>
-                    <Input
-                        {...register("picture")}
-                        id="picture"
-                        type="file"
-                        name="picture"
-                        accept="image/jpeg, image/jpg, image/png"
-                        className="dark:bg-gray-600"
-                    />
-                    {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
-                </div>
-
-                <div className="grid grid-cols-2 gap-8 space-y-1">
-                    {/* is_paid */}
-                    <div>
-                        <Checkbox
-                            id="is_paid"
-                            checked={isPaid}
-                            onCheckedChange={(checked) => setIsPaid(checked)}
-                        />
-                        <Label htmlFor="is_paid" className="ml-2">Paid</Label>
-                    </div>
-
-                    {/* is_featured */}
-                    <div>
-                        <Checkbox
-                            id="is_featured"
-                            checked={isFeatured}
-                            onCheckedChange={(checked) => setIsFeatured(checked)}
-                        />
-                        <Label htmlFor="is_featured" className="ml-2">Featured</Label>
-                    </div>
-                </div>
-
                 {/* marks */}
                 <div className="grid gap-2">
                     <Label htmlFor="mark" className="text-md font-bold">Marks</Label>
@@ -308,35 +258,37 @@ export default function EditQuestionForm() {
                     {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
                 </div>
 
-                {/* status */}
-                <div>
-                    <Checkbox
-                        id="status"
-                        checked={statusCheck}
-                        onCheckedChange={(checked) => setStatusCheck(checked)}
-                    />
-                    <Label htmlFor="status" className="ml-2">Status</Label>
+                <div className="flex flex-row items-center justify-between gap-4 space-y-1 pb-10">
+                    {/* is_paid */}
+                    <div className="flex items-center">
+                        <Checkbox
+                            id="is_paid"
+                            checked={isPaid}
+                            onCheckedChange={(checked) => setIsPaid(checked)}
+                        />
+                        <Label htmlFor="is_paid" className="ml-2">Paid</Label>
+                    </div>
+
+                    {/* is_featured */}
+                    <div className="flex items-center">
+                        <Checkbox
+                            id="is_featured"
+                            checked={isFeatured}
+                            onCheckedChange={(checked) => setIsFeatured(checked)}
+                        />
+                        <Label htmlFor="is_featured" className="ml-2">Featured</Label>
+                    </div>
+
+                    {/* status */}
+                    <div className="flex items-center">
+                        <Checkbox
+                            id="status"
+                            checked={statusCheck}
+                            onCheckedChange={(checked) => setStatusCheck(checked)}
+                        />
+                        <Label htmlFor="status" className="ml-2">Status</Label>
+                    </div>
                 </div>
-
-                {/* mcq question */}
-                {type === "mcq" && (
-                    <McqOptionsForEdit
-                        control={control}
-                        options={options}
-                        setOptions={setOptions}
-                        correctOptions={correctOptions}
-                        setCorrectOptions={setCorrectOptions}
-                    />
-                )}
-
-                {/* creative question */}
-                {type === "creative" && (
-                    <CreativeQuesForEdit
-                        control={control}
-                        creativeQueTypes={creativeQueTypes}
-                        setCreativeQueTypes={setCreativeQueTypes}
-                    />
-                )}
 
                 {/* select category */}
                 <SelectCategoryForEdit
@@ -348,9 +300,9 @@ export default function EditQuestionForm() {
                 <Button
                     type="submit"
                     className="w-full"
-                    disabled={isLoading}
+                    disabled={isUpdating}
                 >
-                    {isLoading ? "Updating" : "Update Question"}
+                    {isUpdating ? "Updating" : "Update Question"}
                 </Button>
             </div>
         </form>

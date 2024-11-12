@@ -66,5 +66,4 @@ const Logout = () => {
         </AlertDialog>
     )
 }
-
 export default Logout;

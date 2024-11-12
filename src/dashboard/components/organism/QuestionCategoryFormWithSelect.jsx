@@ -22,12 +22,11 @@ const QuestionCategoryFormWithSelect = ({
     fromSubtopics = false,
 }) => {
     const [statusCheck, setStatusCheck] = useState(false);
-    const [image, setImage] = useState(null);
-    const [imageError, setImageError] = useState("");
 
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
         setError,
         control
@@ -43,33 +42,13 @@ const QuestionCategoryFormWithSelect = ({
     const { data: lessonsData } = useGetQuestionsCategoryQuery("lessons");
     const { data: topicsData } = useGetQuestionsCategoryQuery("topics");
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-
-        if (file) {
-            const validTypes = ["image/jpeg", "image/jpg", "image/png"];
-            const isValidType = validTypes.includes(file.type);
-            const isValidSize = file.size <= 2 * 1024 * 1024; // 2 MB
-            if (!isValidType) {
-                setImageError("Only jpg, jpeg, and png formats are allowed.");
-                setImage(null);
-                return;
-            }
-            if (!isValidSize) {
-                setImageError("File size should not exceed 2 MB.");
-                setImage(null);
-                return;
-            }
-            setImageError("");
-            setImage(file);
-        }
-    };
-
     const handleCreate = (formData) => {
+        console.log("formData ", formData);
+
         const payload = {
             section_id: formData.sections,
-            level_id: formData.level,
-            group_id: formData.group,
+            level_id: formData.levels,
+            group_id: formData.groups,
             exam_type_id: formData.exam_types,
             subject_id: formData.subjects,
             lesson_id: formData.lessons,
@@ -79,7 +58,7 @@ const QuestionCategoryFormWithSelect = ({
             title: formData.title,
             status: statusCheck,
             details: formData.details,
-            picture: image
+            // picture: image
         }
 
         createQuestionsCategory({
@@ -100,13 +79,15 @@ const QuestionCategoryFormWithSelect = ({
         if (isSuccess) {
             toast.success(data?.message);
             refetchOnQuestionsCategoryQuery();
+            setValue("title", "");
+            setValue("details", "");
         }
-    }, [data, isSuccess, error, setError, refetchOnQuestionsCategoryQuery]);
+    }, [data, isSuccess, error, setError, refetchOnQuestionsCategoryQuery, setValue]);
 
     return (
         <Card>
-            <form onSubmit={handleSubmit(handleCreate)} className="container gap-2 p-8 ">
-                <div className="space-y-4 mt-4 ">
+            <form onSubmit={handleSubmit(handleCreate)} className="p-4 md:p-8 ">
+                <div className="space-y-4">
 
                     {/* section and year select */}
                     {
@@ -157,12 +138,12 @@ const QuestionCategoryFormWithSelect = ({
                         fromLevels && (
                             <>
                                 <CustomSelect
-                                    label={"group"}
+                                    label={"groups"}
                                     categoryData={groupsData?.data?.data}
                                     control={control}
                                     errors={errors}
                                 />
-                                {errors.group && <span className="text-red-600">{errors.group.message}</span>}
+                                {errors.groups && <span className="text-red-600">{errors.groups.message}</span>}
                             </>
                         )
                     }
@@ -215,29 +196,29 @@ const QuestionCategoryFormWithSelect = ({
                     {/* select level, group and and part */}
                     {
                         fromSubjects && (
-                            <div className="flex flex-col md:flex-row gap-4">
+                            <div className="flex flex-col md:flex-row gap-4 w-full ">
                                 {/* select level */}
-                                <div>
+                                <div className="w-full">
                                     <CustomSelect
-                                        label={"level"}
+                                        label={"levels"}
                                         categoryData={levelsData?.data?.data}
                                         control={control}
                                         errors={errors}
                                     />
-                                    {errors.level && <span className="text-red-600">{errors.level.message}</span>}
+                                    {errors.levels && <span className="text-red-600">{errors.levels.message}</span>}
                                 </div>
                                 {/* select group */}
-                                <div>
+                                <div className="w-full">
                                     <CustomSelect
-                                        label={"group"}
+                                        label={"groups"}
                                         categoryData={groupsData?.data?.data}
                                         control={control}
                                         errors={errors}
                                     />
-                                    {errors.group && <span className="text-red-600">{errors.group.message}</span>}
+                                    {errors.groups && <span className="text-red-600">{errors.groups.message}</span>}
                                 </div>
                                 {/* part select */}
-                                <div>
+                                <div className="w-full">
                                     <CustomSelect
                                         label={"part"}
                                         categoryData={[
@@ -253,32 +234,16 @@ const QuestionCategoryFormWithSelect = ({
                         )
                     }
 
-                    {/* title and picture */}
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                            <Label htmlFor="title">Title</Label>
-                            <Input
-                                {...register("title", { required: "title is Required" })}
-                                id="title"
-                                name="title"
-                                placeholder="Enter title"
-                            />
-                            {errors.title && <span className="text-red-600">{errors.title.message}</span>}
-                        </div>
-                        <div className="space-y-1">
-                            <Label htmlFor="picture">Picture</Label>
-                            <Input
-                                {...register("picture")}
-                                id="picture"
-                                type="file"
-                                name="picture"
-                                accept="image/jpeg, image/jpg, image/png"
-                                onChange={handleImageChange}
-                                className="dark:bg-gray-600"
-                            />
-                            {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
-                            {imageError && <span className="text-red-600">{imageError}</span>}
-                        </div>
+                    {/* title */}
+                    <div className="space-y-1">
+                        <Label htmlFor="title">Title</Label>
+                        <Input
+                            {...register("title", { required: "title is Required" })}
+                            id="title"
+                            name="title"
+                            placeholder="Enter title"
+                        />
+                        {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                     </div>
 
                     {/* details */}

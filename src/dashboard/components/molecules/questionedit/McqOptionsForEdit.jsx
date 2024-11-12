@@ -1,6 +1,6 @@
 // McqOptions Component
 import { Button } from "@/components/ui/button";
-import McqOption from "../createquestion/McqOption";
+import McqOptionForEdit from "./McqOptionForEdit";
 
 export const McqOptionsForEdit = ({
     control,
@@ -16,13 +16,6 @@ export const McqOptionsForEdit = ({
         }
     };
 
-    const deleteOption = (optionIndexToDelete) => {
-        if (options.length > 2) {
-            setOptions(prevOptions => prevOptions.filter((_, index) => index !== optionIndexToDelete));
-            setCorrectOptions(prevCorrectOptions => prevCorrectOptions.filter((_, index) => index !== optionIndexToDelete));
-        }
-    };
-
     const handleCorrectChange = (index, checked) => {
         const updatedCorrectOptions = [...correctOptions];
         updatedCorrectOptions[index] = checked;
@@ -31,23 +24,29 @@ export const McqOptionsForEdit = ({
 
     return (
         <div>
-            {options.map((_, optionIndex) => (
-                <div key={optionIndex} className="flex items-center justify-between mb-4">
-                    <McqOption
-                        optionIndex={optionIndex}
-                        control={control}
-                        isCorrect={correctOptions[optionIndex]}
-                        setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
-                    />
-                    {options.length > 2 && optionIndex > 1 && (
-                        <Button type="button" onClick={() => deleteOption(optionIndex)} className="ml-4">Delete</Button>
-                    )}
-                </div>
-            ))}
+            {
+                options.map((option, optionIndex) => (
+                    <div key={optionIndex} className="flex flex-col md:flex-row items-start md:items-center gap-2 mb-4">
+                        <McqOptionForEdit
+                            optionIndex={optionIndex}
+                            control={control}
+                            isCorrect={correctOptions[optionIndex]}
+                            setIsCorrect={(checked) => handleCorrectChange(optionIndex, checked)}
+                            options={options}
+                            setOptions={setOptions}
+                            option={option}
+                            setCorrectOptions={setCorrectOptions}
+                        />
+                    </div>
+                ))
+            }
+
             <div className="flex justify-end mt-4">
-                {options.length < 8 && (
-                    <Button type="button" onClick={addNewOption} className="ml-4">New Option</Button>
-                )}
+                {
+                    options.length < 8 && (
+                        <Button type="button" onClick={addNewOption} className="ml-4">New Option</Button>
+                    )
+                }
             </div>
         </div>
     );

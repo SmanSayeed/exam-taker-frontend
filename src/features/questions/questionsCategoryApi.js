@@ -6,6 +6,10 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
             query: (type) => `/questions/${type}`,
             providesTags: ["Questions"],
         }),
+        getSingleCategory: builder.query({
+            query: ({type, id}) => `/questions/${type}/${id}`,
+            providesTags: ["Questions"],
+        }),
         createQuestionsCategory: builder.mutation({
             query: ({ type, data }) => ({
                 url: `/questions/${type}`,
@@ -21,7 +25,21 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["Questions"]
         }),
+        editQuestionsCategory: builder.mutation({
+            query: ({ type, data, id }) => ({
+                url: `/questions/${type}/${id}`,
+                method: "PUT",
+                body: data,
+            }),
+            invalidatesTags: ["Questions"],
+        }),
     }),
 });
 
-export const { useCreateQuestionsCategoryMutation, useGetQuestionsCategoryQuery, useDeleteQuestionsCategoryMutation, } = questionsCategoryApi;
+export const { 
+    useCreateQuestionsCategoryMutation, 
+    useGetQuestionsCategoryQuery, 
+    useGetSingleCategoryQuery,
+    useDeleteQuestionsCategoryMutation,
+    useEditQuestionsCategoryMutation 
+} = questionsCategoryApi;

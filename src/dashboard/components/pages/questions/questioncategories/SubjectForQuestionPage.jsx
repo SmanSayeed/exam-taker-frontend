@@ -1,5 +1,5 @@
 import Loading from "@/dashboard/components/atoms/Loading";
-import QuestionCategoryFormWithSelect from "@/dashboard/components/molecules/QuestionCategoryFormWithSelect";
+import QuestionCategoryFormWithSelect from "@/dashboard/components/organism/QuestionCategoryFormWithSelect";
 import { DataTable } from "@/dashboard/components/templates/DataTable";
 import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
@@ -29,7 +29,7 @@ const SubjectForQuestionPage = () => {
                     fromSubjects={true}
                 />
 
-                <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
+                <div className='mt-8 mb-2 flex items-center justify-between space-y-2 '>
                     <div>
                         <h2 className='text-2xl font-bold tracking-tight'>Welcome back!</h2>
                         <p className='text-muted-foreground'>

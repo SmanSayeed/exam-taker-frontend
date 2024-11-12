@@ -12,8 +12,11 @@ import { Layout } from "../../templates/Layout";
 const QuestionListForAdminPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
-    const { data: paginationData, isError, isLoading, isSuccess } = useGetQuestionsQuery(currentPage)
+    const { data: paginationData, isLoading, isSuccess, refetch } = useGetQuestionsQuery(currentPage);
 
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <Layout>
@@ -33,7 +36,7 @@ const QuestionListForAdminPage = () => {
                 <div>
                     {isLoading ? <Loading /> : isSuccess && paginationData?.data?.data ? <div>
                         {/* {paginationData?.data?.total > 10 && */}
-                        <PaginationSCN />
+                        <PaginationSCN refetch={refetch} />
                         {/* // } */}
                     </div> : <h1 className="text-5xl text-black">
                         no data found

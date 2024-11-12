@@ -1,4 +1,5 @@
 import {
+    BookHeart,
     BookOpenCheck,
     CalendarFold,
     FileQuestion,
@@ -56,8 +57,9 @@ export const sidelinks = [
             }
         ]
     },
+    // categories
     {
-        title: "Questions",
+        title: "Categories",
         label: "",
         href: "/admin/questions",
         icon: <FileQuestion size={18} />,
@@ -121,7 +123,16 @@ export const sidelinks = [
                 label: "",
                 href: "/admin/questions/sub-topics",
                 icon: <Group size={18} />
-            },
+            }
+        ]
+    },
+    // questions
+    {
+        title: "Questions",
+        label: "",
+        href: "/admin/questions",
+        icon: <FileQuestion size={18} />,
+        sub: [
             {
                 title: "Create Question",
                 label: "",
@@ -136,18 +147,60 @@ export const sidelinks = [
             },
         ]
     },
+    // model tests
     {
-        title: "Exam",
+        title: "Model Tests",
         label: "",
-        href: "/admin/exam/type",
-        icon: <BookOpenCheck size={18} />,
+        href: "/admin/model-tests",
+        icon: <BookHeart size={18} />,
         sub: [
             {
-                title: "Exam Type Create",
+                title: "Create Model Test",
                 label: "",
-                href: "/admin/exam/type",
+                href: "/admin/model-tests/create",
+                icon: <BookOpenCheck size={18} />
+            },
+            {
+                title: "Model Tests List",
+                label: "",
+                href: "/admin/model-tests",
                 icon: <BookOpenCheck size={18} />
             },
         ]
-    }
+    },
+    // {
+    //     title: "Exam",
+    //     label: "",
+    //     href: "/admin/exam/type",
+    //     icon: <BookOpenCheck size={18} />,
+    //     sub: [
+    //         {
+    //             title: "Exam Type Create",
+    //             label: "",
+    //             href: "/admin/exam/type",
+    //             icon: <BookOpenCheck size={18} />
+    //         },
+    //     ]
+    // },
+    // packages
+    {
+        title: "Packages",
+        label: "",
+        href: "/admin/package-management",
+        icon: <LayoutDashboard size={18} />,
+        sub: [
+            {
+                title: "Create a Package",
+                label: "",
+                href: "/admin/package/create",
+                icon: <BookOpenCheck size={18} />
+            },
+            {
+                title: "All Packages",
+                label: "",
+                href: "/admin/packages",
+                icon: <BookOpenCheck size={18} />
+            },
+        ]
+    },
 ]

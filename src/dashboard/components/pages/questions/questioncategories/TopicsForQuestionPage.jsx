@@ -1,4 +1,4 @@
-import QuestionCategoryFormWithSelect from "@/dashboard/components/molecules/QuestionCategoryFormWithSelect";
+import QuestionCategoryFormWithSelect from "@/dashboard/components/organism/QuestionCategoryFormWithSelect";
 import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import Loading from "../../../atoms/Loading";

@@ -8,7 +8,7 @@ import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
 import { useState } from "react";
 import QuestionCard from "./QuestionCard";
 
-export default function PaginationSCN() {
+export default function PaginationSCN({ refetch }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch data using the current page
@@ -42,11 +42,11 @@ export default function PaginationSCN() {
   if (isError) return <div>Error loading questions.</div>;
 
   return (
-    <div>
+    <div className="space-y-5">
       {/* Render your list of questions */}
-      <div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
         {paginationData?.map((question) => (
-          <QuestionCard key={question.id} data={question} />
+          <QuestionCard key={question.id} data={question} refetch={refetch} />
         ))}
       </div>
 

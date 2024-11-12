@@ -16,21 +16,20 @@ const QuestionEditForAdminPage = () => {
             </Layout.Header>
 
             <Layout.Body>
-                <div className="body w-full">
+                <div className="w-full">
                     <div>
-                        <Card className="container ">
+                        <Card>
                             <CardHeader>
                                 <CardTitle className="text-xl">
                                     Question Edit
                                 </CardTitle>
                                 <CardDescription>
-                                    Enter proper information to create an question
+                                    Enter proper information to create a question
                                 </CardDescription>
                             </CardHeader>
 
                             <CardContent className="flex flex-col gap-10">
                                 <EditQuestionForm />
-                                {/* <QuestionEdit /> */}
                             </CardContent>
                         </Card>
                     </div>

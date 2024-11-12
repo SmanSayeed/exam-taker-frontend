@@ -1,11 +1,11 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCategoryData } from "../createquestion/useCategoryData";
-import SelectFieldForEdit from "./SelectFieldForEdit";
+import { AutoSearchSelectForEdit } from "./AutoSearchSelectForEdit";
+import { useCategoryDataForEdit } from "./useCategoryDataForEdit";
 
 export default function SelectCategoryForEdit({ control, setValue }) {
-
     const dispatch = useDispatch();
     const selectedCategories = useSelector((state) => state.selectedCategories);
 
@@ -22,16 +22,16 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         year: true,
     });
 
-    const { data: sections, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
-    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
-    // const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "selectedExamSubType");
-    const { data: groups, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups", "selectedGroup");
-    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels", "selectedLevel");
-    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects", "selectedSubject");
-    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons", "selectedLesson");
-    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics", "selectedTopic");
-    // const { selected: selectedSubTopic } = useCategoryData("sub-topics", "selectedSubTopic");
-    const { data: years } = useCategoryData("years", "selectedYear");
+    const { data: sections, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryDataForEdit("sections", "selectedSection");
+    const { data: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryDataForEdit("exam-types", "selectedExamType");
+    const { selected: selectedExamSubType } = useCategoryDataForEdit("exam-sub-types", "selectedExamSubType");
+    const { data: groups, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryDataForEdit("groups", "selectedGroup");
+    const { data: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryDataForEdit("levels", "selectedLevel");
+    const { data: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryDataForEdit("subjects", "selectedSubject");
+    const { data: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryDataForEdit("lessons", "selectedLesson");
+    const { data: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryDataForEdit("topics", "selectedTopic");
+    const { selected: selectedSubTopic } = useCategoryDataForEdit("sub-topics", "selectedSubTopic");
+    const { data: years, isLoading: isYearLoading } = useCategoryDataForEdit("years", "selectedYear");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
@@ -88,8 +88,9 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         if (sections) {
             const foundData = sections.find(item => item.id == id);
             setSectionData(foundData || null);
-            dispatch(setSelectedSection({ selectedSection: id }))
-            setValue("section", id)
+            dispatch(setSelectedSection({ selectedSection: id }));
+            setValue("section", id);
+            setVisibleFields((prev) => ({ ...prev, exam_type: true }));
         }
     }
 
@@ -97,22 +98,24 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         if (examTypes) {
             const foundData = examTypes.find(item => item.id == id);
             setExamTypeData(foundData || null);
-            dispatch(setSelectedExamType({ selectedExamType: id }))
-            setValue("exam_type", id)
+            dispatch(setSelectedExamType({ selectedExamType: id }));
+            setValue("exam_type", id);
+            setVisibleFields((prev) => ({ ...prev, exam_sub_type: true }));
         }
     }
 
     const handleExamSubTypeChange = (id) => {
-        dispatch(setSelectedExamSubType({ selectedExamSubType: id }))
-        setValue("exam_sub_type", id)
+        dispatch(setSelectedExamSubType({ selectedExamSubType: id }));
+        setValue("exam_sub_type", id);
     };
 
     const handleGroupChange = (id) => {
         if (groups) {
             const foundData = groups.find(item => item.id == id);
             setGroupData(foundData || null);
-            dispatch(setSelectedGroup({ selectedGroup: id }))
-            setValue("group", id)
+            dispatch(setSelectedGroup({ selectedGroup: id }));
+            setValue("group", id);
+            setVisibleFields((prev) => ({ ...prev, level: true }));
         }
     }
 
@@ -120,17 +123,9 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         if (levels) {
             const foundData = levels.find(item => item.id == id);
             setLevelData(foundData || null);
-            dispatch(setSelectedLevel({ selectedLevel: id }))
-            setValue("level", id)
-        }
-    }
-
-    const handleLessonChange = (id) => {
-        if (lessons) {
-            const foundData = lessons.find(item => item.id == id);
-            setLessonData(foundData || null);
-            dispatch(setSelectedLesson({ selectedLesson: id }))
-            setValue("lesson", id)
+            dispatch(setSelectedLevel({ selectedLevel: id }));
+            setValue("level", id);
+            setVisibleFields((prev) => ({ ...prev, subject: true }));
         }
     }
 
@@ -138,8 +133,19 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         if (subjects) {
             const foundData = subjects.find(item => item.id == id);
             setSubjectData(foundData || null);
-            dispatch(setSelectedSubject({ selectedSubject: id }))
-            setValue("subject", id)
+            dispatch(setSelectedSubject({ selectedSubject: id }));
+            setValue("subject", id);
+            setVisibleFields((prev) => ({ ...prev, lesson: true }));
+        }
+    }
+
+    const handleLessonChange = (id) => {
+        if (lessons) {
+            const foundData = lessons.find(item => item.id == id);
+            setLessonData(foundData || null);
+            dispatch(setSelectedLesson({ selectedLesson: id }));
+            setValue("lesson", id);
+            setVisibleFields((prev) => ({ ...prev, topic: true }));
         }
     }
 
@@ -147,8 +153,9 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         if (topics) {
             const foundData = topics.find(item => item.id == id);
             setTopicData(foundData || null);
-            dispatch(setSelectedTopic({ selectedTopic: id }))
-            setValue("topic", id)
+            dispatch(setSelectedTopic({ selectedTopic: id }));
+            setValue("topic", id);
+            setVisibleFields((prev) => ({ ...prev, sub_topic: true }));
         }
     }
 
@@ -162,35 +169,47 @@ export default function SelectCategoryForEdit({ control, setValue }) {
         setValue("year", id)
     };
 
-    if (isLoading) {
-        return <div>Loading sections...</div>;
-    }
-
     if (error) {
         return <div>Error loading sections: {error.message}</div>;
     }
 
-    const renderSelectField = ({ label, name, options, onChange, selectedValue, rules, disabled }) => (
-        visibleFields[name] && (
-            <SelectFieldForEdit
-                label={label}
-                name={name}
-                control={control}
-                options={options}
-                placeholder={`Select ${label}`}
-                onChange={onChange}
-                selectedValue={selectedValue}
-                rules={rules}
-                disabled={disabled}
-                onRemove={() => handleRemoveField(name)}
-            />
+    const renderSelectField = ({ label, name, options, onChange, selectedValue, rules, disabled }) => {
+        // If no options are available, don't render the selector
+        if (!selectedValue) {
+            return null;
+        }
+
+        return (
+            visibleFields[name] && (
+                <AutoSearchSelectForEdit
+                    label={label}
+                    name={name}
+                    control={control}
+                    options={options}
+                    placeholder={`Select ${label}`}
+                    onChange={onChange}
+                    selectedValue={selectedValue}
+                    rules={rules}
+                    disabled={disabled}
+                    onRemove={() => handleRemoveField(name)}
+                />
+            )
         )
-    );
+    };
 
     return (
         <div className="space-y-4 mt-4">
             {/* Section → Exam Type → Exam Sub Type */}
             <div className="flex flex-col md:flex-row gap-4 mb-6">
+                {
+                    isSectionLoading && (
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[150px]" />
+                            <Skeleton className="h-4 w-[250px]" />
+                        </div>
+                    )
+                }
+
                 {renderSelectField({
                     label: "Section",
                     name: "section",
@@ -220,6 +239,15 @@ export default function SelectCategoryForEdit({ control, setValue }) {
 
             {/* Group → Level → Subject → Lesson → Topic → Sub Topic */}
             <div className="grid md:grid-cols-3 gap-2">
+                {
+                    isGroupLoading && (
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[150px]" />
+                            <Skeleton className="h-4 w-[250px]" />
+                        </div>
+                    )
+                }
+
                 {renderSelectField({
                     label: "Group",
                     name: "group",
@@ -276,6 +304,15 @@ export default function SelectCategoryForEdit({ control, setValue }) {
 
             {/* Year */}
             <div className="pt-4">
+                {
+                    isYearLoading && (
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-[150px]" />
+                            <Skeleton className="h-4 w-[250px]" />
+                        </div>
+                    )
+                }
+
                 {renderSelectField({
                     label: "Year",
                     name: "year",
