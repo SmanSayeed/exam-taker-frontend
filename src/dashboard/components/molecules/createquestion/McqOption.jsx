@@ -17,7 +17,7 @@ const McqOption = ({
     } = useForm();
 
     const deleteOption = (optionId) => {
-        if (options?.length > 2) {
+        if (options?.length > 4) {
             setOptions((prevOptions) =>
                 prevOptions.filter(option => option !== optionId)
             );
@@ -54,7 +54,7 @@ const McqOption = ({
                     optionIndex={optionId}
                 />
 
-                {options?.length > 2 && optionIndex > 1 && (
+                {options?.length > 4 && optionIndex > 3 && (
                     <Trash2
                         onClick={() => deleteOption(optionId)}
                         className="cursor-pointer mt-8"

@@ -177,6 +177,16 @@ export default function QuestionCreateForm() {
     return (
         <>
             <form onSubmit={handleSubmit(handleCreate)} id="question-form">
+            <Button disabled={isLoading} type="submit" className="w-full">
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Please wait
+                            </>
+                        ) : (
+                            "Create Question"
+                        )}
+                    </Button>
                 <div className="space-y-4 mt-4">
                     {/* title */}
                     <div className="space-y-1">
