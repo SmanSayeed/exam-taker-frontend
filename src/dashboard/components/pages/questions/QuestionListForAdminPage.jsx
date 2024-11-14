@@ -11,18 +11,22 @@ import { Layout } from "../../templates/Layout";
 
 const QuestionListForAdminPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [perPage, setPerPage] = useState(20);
 
-    const { data: paginationData, isLoading, isSuccess, refetch } = useGetQuestionsQuery(currentPage);
+    // Fetch data based on the current page and per-page value
+    const { data: paginationData, isLoading, isSuccess, refetch } = useGetQuestionsQuery({
+        page: currentPage,
+        per_page: perPage,
+    });
 
-    if (isLoading) {
-        return <Loading />
-    }
+    if (isLoading) return <Loading />;
+    if (!isSuccess || !paginationData) return <h1 className="text-5xl text-black">No data found</h1>;
 
     return (
         <Layout>
             <Layout.Header sticky>
-                <PageTitle title={"Questions List"} />
-                <div className='ml-auto flex items-center space-x-4'>
+                <PageTitle title="Questions List" />
+                <div className="ml-auto flex items-center space-x-4">
                     <ThemeSwitch />
                     <UserNav />
                 </div>
@@ -34,16 +38,19 @@ const QuestionListForAdminPage = () => {
                 </Card>
 
                 <div>
-                    {isLoading ? <Loading /> : isSuccess && paginationData?.data?.data ? <div>
-                        {/* {paginationData?.data?.total > 10 && */}
-                        <PaginationSCN refetch={refetch} />
-                        {/* // } */}
-                    </div> : <h1 className="text-5xl text-black">
-                        no data found
-                    </h1>}
+                    <PaginationSCN
+                        data={paginationData.data.data}
+                        totalRecords={paginationData.data.total}
+                        currentPage={currentPage}
+                        perPage={perPage}
+                        onPageChange={setCurrentPage}
+                        onPerPageChange={setPerPage}
+                        refetch={refetch}
+                    />
                 </div>
             </Layout.Body>
         </Layout>
-    )
-}
+    );
+};
+
 export default QuestionListForAdminPage;

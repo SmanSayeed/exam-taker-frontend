@@ -3,8 +3,9 @@ import { apiSlice } from "@/features/api/apiSlice";
 export const questionsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getQuestions: builder.query({
-            query: (page) => `que/all?page=${page}`,
+            query: ({ page, per_page }) => `que/all?page=${page}&per_page=${per_page}`,
         }),
+        
         getSingleQuestions: builder.query({
             query: (id) => `/que/single/${id}`,
         }),
