@@ -5,7 +5,6 @@ export const questionsApi = apiSlice.injectEndpoints({
         getQuestions: builder.query({
             query: ({ page, per_page }) => `que/all?page=${page}&per_page=${per_page}`,
         }),
-        
         getSingleQuestions: builder.query({
             query: (id) => `/que/single/${id}`,
         }),
@@ -36,12 +35,18 @@ export const questionsApi = apiSlice.injectEndpoints({
             }),
         }),
         questionSearch: builder.query({
-            query: (data) => ({
-                url: "/que/search",
-                method: "GET",
-                params: data
+            query: ({keyword, type, section_id, exam_type_id, exam_sub_type_id,group_id,  level_id, subject_id, lesson_id, topic_id, sub_topic_id, perPage}) => ({
+                url: `/que/all?keyword=${keyword}&type[]=${type}&section_id[]=${section_id}&exam_type_id[]=${exam_type_id}&exam_sub_type_id[]=${exam_sub_type_id}&group_id[]=${group_id}&level_id[]=${level_id}&subject_id[]=${subject_id}&lesson_id[]=${lesson_id}&topic_id[]=${topic_id}&sub_topic_id[]=${sub_topic_id}&perPage=${perPage}`,
+                method: "GET"
             })
         }),
+        // questionSearch: builder.query({
+        //     query: (data) => ({
+        //         url: "/que/search",
+        //         method: "GET",
+        //         params: data
+        //     })
+        // }),
     }),
 });
 

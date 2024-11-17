@@ -4,7 +4,7 @@ import { useState } from "react";
 import Loading from "../../atoms/Loading";
 import PageTitle from "../../atoms/PageTitle";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import PaginationSCN from "../../molecules/PaginationSCN";
+import PaginationSCN from "../../molecules/questionList/PaginationSCN";
 import FilteringQuestions from "../../organism/FilteringQuestions";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
@@ -18,6 +18,23 @@ const QuestionListForAdminPage = () => {
         page: currentPage,
         per_page: perPage,
     });
+
+    // const { data: filteredQuestion } = useQuestionSearchQuery({
+    //     keyword,
+    //     type,
+    //     section_id,
+    //     exam_type_id,
+    //     exam_sub_type_id,
+    //     group_id,
+    //     level_id,
+    //     subject_id,
+    //     lesson_id,
+    //     topic_id,
+    //     sub_topic_id,
+    //     perPage: perPage
+    // });
+
+    // console.log("filteredQuestion", filteredQuestion)
 
     if (isLoading) return <Loading />;
     if (!isSuccess || !paginationData) return <h1 className="text-5xl text-black">No data found</h1>;
