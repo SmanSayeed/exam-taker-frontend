@@ -5,8 +5,8 @@ import {
   PaginationItem
 } from "@/components/ui/pagination";
 import { useState } from "react";
+import Loading from "../../atoms/Loading";
 import QuestionCard from "./QuestionCard";
-import Loading from "../atoms/Loading";
 
 export default function PaginationSCN({
   data,
@@ -78,13 +78,15 @@ export default function PaginationSCN({
     <div className="space-y-5">
       {/* Display list of questions or loader */}
       <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
-        {loadingPage ? (
-          <Loading />
-        ) : (
-          data.map((question) => (
-            <QuestionCard key={question.id} data={question} refetch={refetch} />
-          ))
-        )}
+        {
+          loadingPage ? (
+            <Loading />
+          ) : (
+            data.map((question) => (
+              <QuestionCard key={question.id} data={question} refetch={refetch} />
+            ))
+          )
+        }
       </div>
 
       <div className="space-y-4">
@@ -108,9 +110,8 @@ export default function PaginationSCN({
                   <span className="px-3 text-gray-500">...</span>
                 ) : (
                   <button
-                    className={`px-3 py-[.06rem] rounded-sm text-white duration-500 ${
-                      page === currentPage ? "bg-gray-800" : "bg-gray-500 hover:bg-gray-800"
-                    }`}
+                    className={`px-3 py-[.06rem] rounded-sm text-white duration-500 ${page === currentPage ? "bg-gray-800" : "bg-gray-500 hover:bg-gray-800"
+                      }`}
                     onClick={() => handlePageClick(page)}
                   >
                     {page}

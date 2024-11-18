@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input";
-import { Check, RefreshCcw, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useQuestionSearchQuery } from "@/features/questions/questionsApi";
+import { Search } from "lucide-react";
 import { useState } from "react";
 
 export default function FilterQuestionsBySearch() {
@@ -40,23 +39,6 @@ export default function FilterQuestionsBySearch() {
           <Search size={18} className="opacity-70" />
         </button>
       </form>
-
-      <div className="flex flex-wrap items-center justify-around gap-2 ">
-        <div className="border border-white flex items-center gap-2 pl-2 rounded-lg bg-black cursor-pointer">
-          <Check size={20} className="text-white" />
-          <Button>Answer</Button>
-        </div>
-
-        <div className="border border-white flex items-center gap-2 pl-2 rounded-lg bg-black cursor-pointer">
-          <Check size={20} className="text-white" />
-          <Button>Describe</Button>
-        </div>
-
-        <div className="border border-white flex items-center gap-2 pl-2 rounded-lg bg-black cursor-pointer">
-          <RefreshCcw size={20} className="text-white" />
-          <Button>Refresh</Button>
-        </div>
-      </div>
 
       {/* Search Results */}
       <div className="mt-4 w-full">

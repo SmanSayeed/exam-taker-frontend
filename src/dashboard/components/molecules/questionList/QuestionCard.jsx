@@ -10,8 +10,6 @@ export default function QuestionCard({ data: questionData, refetch }) {
     const { id, title, description, mcq_questions, is_paid, is_featured, type, mark } =
         questionData || {};
 
-    console.log("questionData", questionData)
-
     const [deleteQuestion, { isLoading }] = useDeleteQuestionMutation();
 
     const handleDelete = async (id) => {
@@ -31,11 +29,11 @@ export default function QuestionCard({ data: questionData, refetch }) {
     return (
         <Card className="p-4 pr-10 relative group shadow-md my3 hover:shadow-lg duration-500">
             <span className="text-xs font-semibold absolute top-0 left-0 px-2 py-0 rounded-br bg-gray-400 text-primary-foreground ">
-            #{id}
+                #{id}
             </span>
             <CardTitle>
                 <p className="mb-4 text-lg dark:text-white ">
-                  {parseHtmlContent(title)}
+                    {parseHtmlContent(title)}
                 </p>
             </CardTitle>
 
