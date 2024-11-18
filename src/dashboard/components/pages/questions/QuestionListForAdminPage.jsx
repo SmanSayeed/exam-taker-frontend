@@ -14,7 +14,7 @@ import { Layout } from "../../templates/Layout";
 const QuestionListForAdminPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(20);
-    const [filters, setFilters] = useState({}); // State for filters
+    const [filters, setFilters] = useState({});
 
     // Fetch data based on the current page, per-page value, and filters
     const {
@@ -25,7 +25,7 @@ const QuestionListForAdminPage = () => {
     } = useGetQuestionsQuery({
         page: currentPage,
         per_page: perPage,
-        ...filters, // Spread filters into the query
+        ...filters,
     });
 
     const {
@@ -55,17 +55,14 @@ const QuestionListForAdminPage = () => {
             topic_id: formData.topic || [],
             sub_topic_id: formData.sub_topic || [],
         };
-
         const payload = cleanPayload(rawPayload); // Remove empty values
 
         try {
-            console.log("Filters applied:", payload);
-
-            setFilters(payload); // Update filter state with cleaned payload
+            setFilters(payload);
             refetch({
                 page: currentPage,
                 perPage: perPage,
-                ...payload, // Pass cleaned payload
+                ...payload,
             });
         } catch (err) {
             toast.error(
@@ -119,7 +116,7 @@ const QuestionListForAdminPage = () => {
                             refetch({
                                 page: newPage,
                                 per_page: perPage,
-                                ...filters, // Ensure filters are passed
+                                ...filters,
                             });
                         }}
                         onPerPageChange={(newPerPage) => {
@@ -127,7 +124,7 @@ const QuestionListForAdminPage = () => {
                             refetch({
                                 page: currentPage,
                                 per_page: newPerPage,
-                                ...filters, // Ensure filters are passed
+                                ...filters,
                             });
                         }}
                     />
