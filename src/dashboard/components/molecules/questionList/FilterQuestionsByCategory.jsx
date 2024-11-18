@@ -1,14 +1,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { useForm } from "react-hook-form";
 import { MultipleSelector } from "./MultipleSelector";
 import { useCategoryData } from "./useCategoryData";
 
-export default function FilterQuestionsByCategory() {
-    const {
-        control,
-        setValue
-    } = useForm();
-
+export default function FilterQuestionsByCategory({ control, setValue }) {
     const { categories: sections, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections");
     const { categories: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types");
     const { categories: groups, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups");
