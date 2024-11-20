@@ -43,7 +43,6 @@ const QuestionCategoryFormWithSelect = ({
     const { data: topicsData } = useGetQuestionsCategoryQuery("topics");
 
     const handleCreate = (formData) => {
-        console.log("formData ", formData);
 
         const payload = {
             section_id: formData.sections,
