@@ -16,7 +16,7 @@ const CustomSelect = ({ label, categoryData, control }) => {
                 render={({ field }) => (
                     <Select
                         onValueChange={field.onChange}
-                        value={field.value}
+                        value={field.value || ""}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder={label} />
@@ -37,4 +37,4 @@ const CustomSelect = ({ label, categoryData, control }) => {
     )
 }
 
-export default CustomSelect
+export default CustomSelect;

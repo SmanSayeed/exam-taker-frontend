@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomSelect from "../../atoms/CustomSelect";
 
-const TableRowEditForm = ({ rowData, open, type }) => {
+const TableRowEditForm = ({ rowData, open, type, setOpen }) => {
 
     const [statusCheck, setStatusCheck] = useState(false);
     const [image, setImage] = useState(null);
@@ -53,29 +53,6 @@ const TableRowEditForm = ({ rowData, open, type }) => {
         }
     }, [open, rowData, setValue]);
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-
-        if (file) {
-            const validTypes = ["image/jpeg", "image/jpg", "image/png"];
-            const isValidType = validTypes.includes(file.type);
-            const isValidSize = file.size <= 2 * 1024 * 1024; // 2 MB
-
-            if (!isValidType) {
-                setImageError("Only jpg, jpeg, and png formats are allowed.");
-                setImage(null);
-                return;
-            }
-            if (!isValidSize) {
-                setImageError("File size should not exceed 2 MB.");
-                setImage(null);
-                return;
-            }
-            setImageError("");
-            setImage(file);
-        }
-    };
-
     const [editQuestionsCategory, { isLoading }] = useEditQuestionsCategoryMutation();
 
     const handleCreate = async (formData) => {
@@ -92,7 +69,7 @@ const TableRowEditForm = ({ rowData, open, type }) => {
             title: formData.title,
             status: statusCheck,
             details: formData.details,
-            picture: image,
+            // picture: image,
         }
 
         try {
@@ -103,6 +80,9 @@ const TableRowEditForm = ({ rowData, open, type }) => {
             }).unwrap();
 
             toast.success(response?.message);
+            setOpen(false);
+            // Refresh the entire page
+            window.location.reload();
         } catch (err) {
             toast.error(err?.data?.message || "An error occurred");
         }
@@ -269,7 +249,9 @@ const TableRowEditForm = ({ rowData, open, type }) => {
                         />
                         {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                     </div>
-                    <div className="space-y-1">
+
+                    {/* image */}
+                    {/* <div className="space-y-1">
                         <Label htmlFor="picture">Picture</Label>
                         <Input
                             {...register("picture")}
@@ -282,7 +264,7 @@ const TableRowEditForm = ({ rowData, open, type }) => {
                         />
                         {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
                         {imageError && <span className="text-red-600">{imageError}</span>}
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* category details */}

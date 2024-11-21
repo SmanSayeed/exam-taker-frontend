@@ -46,6 +46,7 @@ const TableRowEditBtn = ({ row, type }) => {
                     open={open}
                     rowData={row.original}
                     type={type}
+                    setOpen={setOpen}
                 />
 
             </DialogContent>
