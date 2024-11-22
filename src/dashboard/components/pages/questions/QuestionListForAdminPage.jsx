@@ -49,6 +49,7 @@ const QuestionListForAdminPage = () => {
             exam_sub_type_id: formData.exam_sub_type || [],
             group_id: formData.group || [],
             level_id: formData.level || [],
+            subject_id: formData.subject || [],
             lesson_id: formData.lesson || [],
             topic_id: formData.topic || [],
             sub_topic_id: formData.sub_topic || [],
