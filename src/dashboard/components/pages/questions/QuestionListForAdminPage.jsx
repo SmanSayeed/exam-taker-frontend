@@ -20,6 +20,7 @@ const QuestionListForAdminPage = () => {
     const {
         data: paginationData,
         isLoading: isLoadingGetQuestions,
+        isFetching: isFetchingGetQuestions,
         isSuccess,
         refetch,
     } = useGetQuestionsQuery({
@@ -27,6 +28,7 @@ const QuestionListForAdminPage = () => {
         per_page: perPage,
         ...filters,
     });
+console.log(isFetchingGetQuestions);
 
     const {
         register,
@@ -101,7 +103,7 @@ const QuestionListForAdminPage = () => {
                         handleSubmit={handleSubmit}
                         errors={errors}
                         refetch={refetch}
-                        isLoadingGetQuestions={isLoadingGetQuestions}
+                        isFetchingGetQuestions={isFetchingGetQuestions}
                     />
                 </Card>
 
