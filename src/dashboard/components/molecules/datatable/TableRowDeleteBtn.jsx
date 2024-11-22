@@ -25,14 +25,56 @@ const TableRowDeleteBtn = ({ row, type }) => {
 
     const [deleteQuestionsCategory] = useDeleteQuestionsCategoryMutation();
 
+    const typeToKeyMap = {
+        "sections": "section",
+        "exam-types": "exam_type",
+        "exam-sub-types": "exam_sub_type",
+        "groups": "group",
+        "levels": "level",
+        "subjects": "subject",
+        "lessons": "lesson",
+        "topics": "topic",
+        "sub-topics": "sub_topic"
+    };
+
+    const relatedTypeMap = {
+        "sections": ["exam_type"],
+        "exam-types": ["exam_sub_type"],
+        "groups": ["level", "subject"],
+        "levels": ["subject"],
+        "subjects": ["lesson"],
+        "lessons": ["topic"],
+        "topics": ["sub_topic"]
+    };
+
     const handleDelete = async () => {
-        const id = row.original.id;
+        const id = row.original.id.toString();
 
         if (id) {
             try {
                 const response = await deleteQuestionsCategory({ type, id }).unwrap();
                 toast.success(response?.message || "Data deleted successfully");
                 setOpen(false);
+
+                // Get the localStorage key for the current category type
+                const localStorageKey = typeToKeyMap[type];
+
+                if (localStorageKey) {
+                    const storedValue = localStorage.getItem(localStorageKey);
+
+                    // If the stored value matches the category id, remove it from localStorage
+                    if (JSON.parse(storedValue) === id) {
+                        localStorage.removeItem(localStorageKey);
+
+                        // Handle related categories that need to be deleted as well
+                        const relatedKeys = relatedTypeMap[type] || [];
+                        relatedKeys.forEach((key) => {
+                            localStorage.removeItem(key);
+                        });
+                    } else {
+                        console.log("No match found. Skipping removal.");
+                    }
+                }
             } catch (err) {
                 toast.error(err?.data?.message || "An error occurred");
             }
