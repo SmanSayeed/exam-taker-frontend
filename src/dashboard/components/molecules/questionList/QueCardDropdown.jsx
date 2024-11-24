@@ -39,7 +39,6 @@ const QueCardDropdown = ({ refetch, questionData }) => {
             <ResponsiveDialog
                 isOpen={isViewOpen}
                 setIsOpen={setIsViewOpen}
-                title=""
             >
                 <QuestionView
                     data={questionData}
