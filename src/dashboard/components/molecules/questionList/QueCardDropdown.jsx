@@ -39,7 +39,6 @@ const QueCardDropdown = ({ refetch, questionData }) => {
             <ResponsiveDialog
                 isOpen={isViewOpen}
                 setIsOpen={setIsViewOpen}
-                title=""
             >
                 <QuestionView
                     data={questionData}
@@ -76,8 +75,12 @@ const QueCardDropdown = ({ refetch, questionData }) => {
                     </DropdownMenuItem>
 
                     {/* Edit Action */}
-                    <DropdownMenuItem asChild>
-                        <Link state={questionData} className="flex gap-1 cursor-pointer" to={`/admin/question/edit/${questionData?.id}`}>
+                    <DropdownMenuItem>
+                        <Link
+                            state={questionData}
+                            className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                            to={`/admin/question/edit/${questionData?.id}`}
+                        >
                             <IconMenu
                                 text="Edit"
                                 icon={<FilePenIcon className="h-4 w-4" />}
@@ -93,10 +96,12 @@ const QueCardDropdown = ({ refetch, questionData }) => {
                         {isLoading ? (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         ) : (
-                            <IconMenu
-                                text="Delete"
-                                icon={<Trash2 className="h-4 w-4" />}
-                            />
+                            <button className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100">
+                                <IconMenu
+                                    text="Delete"
+                                    icon={<Trash2 className="h-4 w-4" />}
+                                />
+                            </button>
                         )}
                     </DropdownMenuItem>
 

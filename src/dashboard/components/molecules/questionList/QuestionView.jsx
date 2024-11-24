@@ -10,7 +10,7 @@ const parseHtmlContent = (htmlContent) => {
     );
 };
 
-const QuestionView = ({ data }) => {
+const QuestionView = ({ data, setIsViewOpen }) => {
     const { id, title, description, attachable, is_paid, is_featured, type, mark, mcq_questions } = data || {};
 
     return (

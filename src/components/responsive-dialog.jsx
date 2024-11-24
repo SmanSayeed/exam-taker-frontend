@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -15,7 +14,7 @@ import {
   DrawerHeader,
   DrawerTitle
 } from '@/components/ui/drawer';
-import { useMediaQueryForDialogue } from './use-media-query';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 export function ResponsiveDialog({
   children,
@@ -24,7 +23,7 @@ export function ResponsiveDialog({
   title,
   description,
 }) {
-  const isDesktop = useMediaQueryForDialogue('(min-width: 768px)');
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
