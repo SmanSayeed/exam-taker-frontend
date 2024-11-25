@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { CreativeQuestions } from "./CreativeQuestions";
 import { McqOptions } from "./McqOptions";
 import SelectCategory from "./SelectCategory";
+import TagsField from "./TagsField";
 
 export default function QuestionCreateForm() {
     const [statusCheck, setStatusCheck] = useState(true);
@@ -32,6 +33,7 @@ export default function QuestionCreateForm() {
     const [options, setOptions] = useState([0, 1, 2, 3]);
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
+    const [tags, setTags] = useState([]);
 
     const [selectedQuesType, setSelectedQuesType] = useLocalStorage({
         key: "questionType",
@@ -161,7 +163,7 @@ export default function QuestionCreateForm() {
             status: statusCheck,
             mcq_options: mcqOptions,
             creative_options: creativeQuestions,
-            categories: categoriesPayload,
+            categories: categoriesPayload
         };
 
         try {
@@ -169,6 +171,7 @@ export default function QuestionCreateForm() {
             toast.success(response?.message);
             reset();
             setValue("title", "");
+            setTags([]);
         } catch (err) {
             toast.error(err?.data?.message || "An error occurred");
         }
@@ -178,6 +181,17 @@ export default function QuestionCreateForm() {
         <>
             <form onSubmit={handleSubmit(handleCreate)} id="question-form">
                 <div className="space-y-4 mt-4">
+                    <Button disabled={isLoading} type="submit" className="w-full">
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Please wait
+                            </>
+                        ) : (
+                            "Create Question"
+                        )}
+                    </Button>
+
                     {/* title */}
                     <div className="space-y-1">
                         <CInput
@@ -319,6 +333,12 @@ export default function QuestionCreateForm() {
                         setSelectedTopic={setSelectedTopic}
                         setSelectedSubTopic={setSelectedSubTopic}
                         setSelectedYear={setSelectedYear}
+                    />
+
+                    {/* Tags Input Field */}
+                    <TagsField
+                        tags={tags}
+                        setTags={setTags}
                     />
 
                     <Button disabled={isLoading} type="submit" className="w-full">

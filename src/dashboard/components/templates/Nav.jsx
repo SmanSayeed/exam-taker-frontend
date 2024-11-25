@@ -21,7 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import useCheckActiveNav from "@/hooks/useCheckActiveNav";
-import { IconChevronDown } from "@tabler/icons-react";
+import { ChevronDownCircleIcon, ChevronDownIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Nav({ links, isCollapsed, className, closeNav }) {
@@ -125,7 +125,7 @@ function NavLinkDropdown({ title, icon, label, sub, closeNav }) {
                         'ml-auto transition-all group-data-[state="open"]:-rotate-180'
                     )}
                 >
-                    <IconChevronDown stroke={1} />
+                    <ChevronDownIcon size={18} />
                 </span>
             </CollapsibleTrigger>
             <CollapsibleContent className="collapsibleDropdown" asChild>
@@ -199,7 +199,7 @@ function NavLinkIconDropdown({ title, icon, label, sub }) {
                     {label && (
                         <span className="ml-auto text-muted-foreground">{label}</span>
                     )}
-                    <IconChevronDown
+                    <ChevronDownCircleIcon
                         size={18}
                         className="-rotate-90 text-muted-foreground"
                     />

@@ -43,12 +43,17 @@ export function QueViewDialogue({ data }) {
                     <div>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 ">
                             {
-                                mcq_questions?.map((option, index) => <li key={option.id} className="flex items-center gap-3 border rounded-sm p-2 " >
-                                    <p className="h-8 w-8 flex items-center justify-center border rounded-full" >{index + 1}</p>
-                                    <p>
-                                        {parseHtmlContent(option.mcq_question_text)}
-                                    </p>
-                                </li>)
+                                mcq_questions?.map((option, index) => (
+                                    <li
+                                        key={option.id}
+                                        className="flex items-center gap-3 border rounded-sm p-2"
+                                    >
+                                        <p className="h-8 w-8 flex items-center justify-center border rounded-full" >{index + 1}</p>
+                                        <p>
+                                            {parseHtmlContent(option.mcq_question_text)}
+                                        </p>
+                                    </li>
+                                ))
                             }
                         </ul>
                     </div>
