@@ -1,8 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-    DialogFooter
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,11 +9,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomSelect from "../../atoms/CustomSelect";
 
-const TableRowEditForm = ({ rowData, open, type, setOpen }) => {
-
+export function TableRowEditForm({ rowData, open, type, setOpen }) {
     const [statusCheck, setStatusCheck] = useState(false);
-    const [image, setImage] = useState(null);
-    const [imageError, setImageError] = useState("");
 
     const { data: sectionsData } = useGetQuestionsCategoryQuery("sections");
     const { data: yearsData } = useGetQuestionsCategoryQuery("years");
@@ -81,8 +75,6 @@ const TableRowEditForm = ({ rowData, open, type, setOpen }) => {
 
             toast.success(response?.message);
             setOpen(false);
-            // Refresh the entire page
-            window.location.reload();
         } catch (err) {
             toast.error(err?.data?.message || "An error occurred");
         }
@@ -238,33 +230,15 @@ const TableRowEditForm = ({ rowData, open, type, setOpen }) => {
                 }
 
                 {/* category title */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                        <Label htmlFor="title">Title</Label>
-                        <Input
-                            {...register("title", { required: "title is Required" })}
-                            id="title"
-                            name="title"
-                            placeholder="Enter title"
-                        />
-                        {errors.title && <span className="text-red-600">{errors.title.message}</span>}
-                    </div>
-
-                    {/* image */}
-                    {/* <div className="space-y-1">
-                        <Label htmlFor="picture">Picture</Label>
-                        <Input
-                            {...register("picture")}
-                            id="picture"
-                            type="file"
-                            name="picture"
-                            accept="image/jpeg, image/jpg, image/png"
-                            onChange={handleImageChange}
-                            className="dark:bg-gray-600"
-                        />
-                        {errors.picture && <span className="text-red-600">{errors.picture.message}</span>}
-                        {imageError && <span className="text-red-600">{imageError}</span>}
-                    </div> */}
+                <div className="space-y-1">
+                    <Label htmlFor="title">Title</Label>
+                    <Input
+                        {...register("title", { required: "title is Required" })}
+                        id="title"
+                        name="title"
+                        placeholder="Enter title"
+                    />
+                    {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                 </div>
 
                 {/* category details */}
@@ -289,14 +263,10 @@ const TableRowEditForm = ({ rowData, open, type, setOpen }) => {
                     <Label htmlFor="status" className="ml-2">Status</Label>
                 </div>
 
-                <DialogFooter>
-                    <Button disabled={isLoading} type="submit">
-                        {isLoading ? "Updating" : "Save changes"}
-                    </Button>
-                </DialogFooter>
+                <Button disabled={isLoading} type="submit">
+                    {isLoading ? "Updating" : "Save changes"}
+                </Button>
             </div>
         </form>
     )
 }
-
-export default TableRowEditForm

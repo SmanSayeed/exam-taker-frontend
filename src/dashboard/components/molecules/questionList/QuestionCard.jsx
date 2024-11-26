@@ -1,6 +1,7 @@
 import { Card, CardTitle } from "@/components/ui/card";
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
 
+import { CircleCheck } from "lucide-react";
 import { QueCardActions } from "./QueCardActions";
 
 export default function QuestionCard({ data: questionData, refetch }) {
@@ -21,9 +22,15 @@ export default function QuestionCard({ data: questionData, refetch }) {
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {mcq_questions?.map((option, index) => (
                         <li key={option.id} className="flex items-center gap-3 border rounded-sm p-2">
-                            <p className="h-8 w-8 flex items-center justify-center border rounded-full">
-                                {index + 1}
-                            </p>
+                            {
+                                option?.is_correct ? (
+                                    <CircleCheck className="text-green-600" />
+                                ) : (
+                                    <p className="h-8 w-8 flex items-center justify-center border rounded-full">
+                                        {index + 1}
+                                    </p>
+                                )
+                            }
                             <p>{parseHtmlContent(option.mcq_question_text)}</p>
                         </li>
                     ))}
