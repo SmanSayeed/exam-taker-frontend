@@ -339,6 +339,7 @@ export default function QuestionCreateForm() {
                     <TagsField
                         tags={tags}
                         setTags={setTags}
+                        control={control}
                     />
 
                     <Button disabled={isLoading} type="submit" className="w-full">
