@@ -5,6 +5,7 @@ import {
     FileQuestion,
     Group,
     LayoutDashboard,
+    Tags,
     User,
     UserPlus,
     Users
@@ -123,6 +124,12 @@ export const sidelinks = [
                 label: "",
                 href: "/admin/category/sub-topics",
                 icon: <Group size={18} />
+            },
+            {
+                title: "Tags",
+                label: "",
+                href: "/admin/category/tags",
+                icon: <Tags size={18} />
             }
         ]
     },

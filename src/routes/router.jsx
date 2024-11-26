@@ -27,6 +27,7 @@ import LevelPage from "@/dashboard/components/pages/questioncategories/LevelPage
 import SectionPage from "@/dashboard/components/pages/questioncategories/SectionPage";
 import SubTopicsPage from "@/dashboard/components/pages/questioncategories/SubTopicsPage";
 import SubjectPage from "@/dashboard/components/pages/questioncategories/SubjectPage";
+import TagsPage from "@/dashboard/components/pages/questioncategories/TagsPage";
 import TopicsPage from "@/dashboard/components/pages/questioncategories/TopicsPage";
 import YearPage from "@/dashboard/components/pages/questioncategories/YearPage";
 
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/category/sub-topics",
                         element: <SubTopicsPage />
+                    },
+                    {
+                        path: "/admin/category/tags",
+                        element: <TagsPage />
                     },
                     {
                         path: "/admin/question/create",
