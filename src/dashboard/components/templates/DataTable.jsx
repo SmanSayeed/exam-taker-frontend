@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/table";
 
 import { useState } from "react";
-import { DataTablePagination } from "../molecules/datatable/DataTablePagination";
-import { DataTableToolbar } from "../organism/DataTableToolbar";
+import { DataTablePagination } from "../organism/datatable/DataTablePagination";
+import { DataTableToolbar } from "../organism/datatable/DataTableToolbar";
 
 export function DataTable({ columns, data }) {
     const [rowSelection, setRowSelection] = useState({});

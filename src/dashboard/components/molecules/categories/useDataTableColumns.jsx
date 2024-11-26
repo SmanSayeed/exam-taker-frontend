@@ -1,10 +1,10 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { DataTableColumnHeader } from "@/dashboard/components/molecules/datatable/DataTableColumnHeader";
+import { DataTableColumnHeader } from "@/dashboard/components/organism/datatable/DataTableColumnHeader";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import { useEffect, useState } from "react";
-import { DataTableRowActions } from "../components/organism/DataTableRowActions";
+import { CatTableRowActions } from "./CatTableRowActions";
 
-const useDataTableColumns = (type) => {
+export default function useDataTableColumns(type) {
     const [includeSectionId, setIncludeSectionId] = useState(false);
     const [includeYearId, setIncludeYearId] = useState(false);
     const [includeExamTypeId, setIncludeExamTypeId] = useState(false);
@@ -290,9 +290,7 @@ const useDataTableColumns = (type) => {
         }] : []),
         {
             id: "actions",
-            cell: ({ row }) => <DataTableRowActions row={row} type={type} />
+            cell: ({ row }) => <CatTableRowActions row={row} type={type} />
         }
     ];
 }
-
-export default useDataTableColumns;

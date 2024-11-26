@@ -13,10 +13,10 @@ import { CustomDialog } from "@/components/custom-dialog";
 import IconMenu from "@/components/icon-menu";
 import { FilePenIcon } from "lucide-react";
 import { useState } from "react";
-import TableRowDeleteBtn from "../molecules/datatable/TableRowDeleteBtn";
-import { TableRowEditForm } from "../molecules/datatable/TableRowEditForm";
+import { CategoryDelete } from "./CategoryDelete";
+import { CategoryEditForm } from "./CategoryEditForm";
 
-export function DataTableRowActions({ row, type }) {
+export function CatTableRowActions({ row, type }) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -28,7 +28,7 @@ export function DataTableRowActions({ row, type }) {
                 title="Edit question's category"
                 description="Make changes to your categories here. Click save when you&apos;re done."
             >
-                <TableRowEditForm
+                <CategoryEditForm
                     open={isOpen}
                     rowData={row.original}
                     type={type}
@@ -65,7 +65,7 @@ export function DataTableRowActions({ row, type }) {
 
                     {/* Delete action */}
                     <DropdownMenuItem className="cursor-pointer">
-                        <TableRowDeleteBtn row={row} type={type} />
+                        <CategoryDelete row={row} type={type} />
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

@@ -1,15 +1,14 @@
-import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
+import useDataTableColumns from "@/dashboard/components/molecules/categories/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
-import Loading from "../../../atoms/Loading";
-import PageTitle from "../../../atoms/PageTitle";
-import ThemeSwitch from "../../../atoms/ThemeSwitch";
-import QuestionCategoryForm from "../../../organism/QuestionCategoryForm";
-import UserNav from "../../../organism/UserNav";
-import { DataTable } from "../../../templates/DataTable";
-import { Layout } from "../../../templates/Layout";
+import Loading from "../../atoms/Loading";
+import PageTitle from "../../atoms/PageTitle";
+import ThemeSwitch from "../../atoms/ThemeSwitch";
+import QuestionCategoryForm from "../../organism/QuestionCategoryForm";
+import UserNav from "../../organism/UserNav";
+import { DataTable } from "../../templates/DataTable";
+import { Layout } from "../../templates/Layout";
 
-
-const SectionForQuestionPage = () => {
+export default function SectionPage() {
     const { data: sectionData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("sections");
     const columns = useDataTableColumns("sections");
 
@@ -41,4 +40,3 @@ const SectionForQuestionPage = () => {
         </Layout>
     )
 }
-export default SectionForQuestionPage

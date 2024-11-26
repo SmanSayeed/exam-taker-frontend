@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomSelect from "../../atoms/CustomSelect";
 
-export function TableRowEditForm({ rowData, open, type, setOpen }) {
+export function CategoryEditForm({ rowData, open, type, setOpen }) {
     const [statusCheck, setStatusCheck] = useState(false);
 
     const { data: sectionsData } = useGetQuestionsCategoryQuery("sections");
