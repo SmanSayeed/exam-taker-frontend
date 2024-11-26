@@ -1,21 +1,21 @@
+import useDataTableColumns from "@/dashboard/components/molecules/categories/useDataTableColumns";
 import QuestionCategoryFormWithSelect from "@/dashboard/components/organism/QuestionCategoryFormWithSelect";
-import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
-import Loading from "../../../atoms/Loading";
-import PageTitle from "../../../atoms/PageTitle";
-import ThemeSwitch from "../../../atoms/ThemeSwitch";
-import UserNav from "../../../organism/UserNav";
-import { DataTable } from "../../../templates/DataTable";
-import { Layout } from "../../../templates/Layout";
+import Loading from "../../atoms/Loading";
+import PageTitle from "../../atoms/PageTitle";
+import ThemeSwitch from "../../atoms/ThemeSwitch";
+import UserNav from "../../organism/UserNav";
+import { DataTable } from "../../templates/DataTable";
+import { Layout } from "../../templates/Layout";
 
-const SubTopicsForQuestionPage = () => {
-    const { data: subtopicsData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("sub-topics");
-    const columns = useDataTableColumns("sub-topics");
+export default function TopicsPage() {
+    const { data: topicsData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("topics");
+    const columns = useDataTableColumns("topics");
 
     return (
         <Layout>
             <Layout.Header>
-                <PageTitle title={"Sub Topics"} />
+                <PageTitle title={"Topics"} />
                 <div className='ml-auto flex items-center space-x-4'>
                     <ThemeSwitch />
                     <UserNav />
@@ -24,9 +24,9 @@ const SubTopicsForQuestionPage = () => {
 
             <Layout.Body>
                 <QuestionCategoryFormWithSelect
-                    type={"sub-topics"}
+                    type={"topics"}
                     refetchOnQuestionsCategoryQuery={refetch}
-                    fromSubtopics={true}
+                    fromTopics={true}
                 />
 
                 <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
@@ -40,7 +40,7 @@ const SubTopicsForQuestionPage = () => {
                 <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
                     {
                         isLoading ? <Loading /> : (
-                            isSuccess && subtopicsData?.data?.data && <DataTable data={subtopicsData?.data?.data} columns={columns} />
+                            isSuccess && topicsData?.data?.data && <DataTable data={topicsData?.data?.data} columns={columns} />
                         )
                     }
                 </div>
@@ -48,5 +48,3 @@ const SubTopicsForQuestionPage = () => {
         </Layout>
     )
 }
-
-export default SubTopicsForQuestionPage

@@ -5,6 +5,7 @@ import {
     FileQuestion,
     Group,
     LayoutDashboard,
+    Tags,
     User,
     UserPlus,
     Users
@@ -61,68 +62,74 @@ export const sidelinks = [
     {
         title: "Categories",
         label: "",
-        href: "/admin/questions",
+        href: "/admin/category",
         icon: <FileQuestion size={18} />,
         sub: [
             {
                 title: "Section",
                 label: "",
-                href: "/admin/questions/section",
+                href: "/admin/category/section",
                 icon: <FileQuestion size={18} />
             },
             {
                 title: "Exam Type",
                 label: "",
-                href: "/admin/questions/exam-type",
+                href: "/admin/category/exam-type",
                 icon: <FileQuestion size={18} />
             },
             {
                 title: "Exam Sub-Type",
                 label: "",
-                href: "/admin/questions/exam-sub-type",
+                href: "/admin/category/exam-sub-type",
                 icon: <Group size={18} />
             },
             {
                 title: "Year",
                 label: "",
-                href: "/admin/questions/year",
+                href: "/admin/category/year",
                 icon: <CalendarFold size={18} />
             },
             {
                 title: "Group",
                 label: "",
-                href: "/admin/questions/group",
+                href: "/admin/category/group",
                 icon: <Group size={18} />
             },
             {
                 title: "Level",
                 label: "",
-                href: "/admin/questions/level",
+                href: "/admin/category/level",
                 icon: <Group size={18} />
             },
             {
                 title: "Subject",
                 label: "",
-                href: "/admin/questions/subject",
+                href: "/admin/category/subject",
                 icon: <Group size={18} />
             },
             {
                 title: "Lesson",
                 label: "",
-                href: "/admin/questions/lesson",
+                href: "/admin/category/lesson",
                 icon: <Group size={18} />
             },
             {
                 title: "Topics",
                 label: "",
-                href: "/admin/questions/topics",
+                href: "/admin/category/topics",
                 icon: <Group size={18} />
             },
             {
                 title: "Sub Topics",
                 label: "",
-                href: "/admin/questions/sub-topics",
+                href: "/admin/category/sub-topics",
                 icon: <Group size={18} />
+            },
+            {
+                title: "Tags",
+                label: "",
+                href: "/admin/category/tags",
+                icon: <Tags size={18} />
             }
         ]
     },

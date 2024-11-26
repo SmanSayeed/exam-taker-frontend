@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Nav from "@/dashboard/components/templates/Nav";
 import { sidelinks } from "@/dashboard/data/sidelinks";
 import { cn } from "@/lib/utils";
-import { IconChevronsLeft, IconMenu2, IconX } from "@tabler/icons-react";
+import { ChevronLeft, MenuIcon, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Layout } from "./Layout";
 
@@ -56,7 +56,7 @@ const Sidebar = ({ className, isCollapsed, setIsCollapsed }) => {
                         aria-expanded={navOpened}
                         onClick={() => setNavOpened((prev) => !prev)}
                     >
-                        {navOpened ? <IconX /> : <IconMenu2 />}
+                        {navOpened ? <X /> : <MenuIcon />}
                     </Button>
                 </Layout.Header>
 
@@ -76,8 +76,7 @@ const Sidebar = ({ className, isCollapsed, setIsCollapsed }) => {
                     variant='outline'
                     className='absolute -right-5 top-1/2 z-50 hidden rounded-full md:inline-flex'
                 >
-                    <IconChevronsLeft
-                        stroke={1.5}
+                    <ChevronLeft
                         className={`h-5 w-5 ${isCollapsed ? 'rotate-180' : ''}`}
                     />
                 </Button>

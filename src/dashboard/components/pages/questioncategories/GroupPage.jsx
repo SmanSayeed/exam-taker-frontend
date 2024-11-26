@@ -1,14 +1,14 @@
+import useDataTableColumns from "@/dashboard/components/molecules/categories/useDataTableColumns";
 import QuestionCategoryForm from "@/dashboard/components/organism/QuestionCategoryForm";
-import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
-import Loading from "../../../atoms/Loading";
-import PageTitle from "../../../atoms/PageTitle";
-import ThemeSwitch from "../../../atoms/ThemeSwitch";
-import UserNav from "../../../organism/UserNav";
-import { DataTable } from "../../../templates/DataTable";
-import { Layout } from "../../../templates/Layout";
+import Loading from "../../atoms/Loading";
+import PageTitle from "../../atoms/PageTitle";
+import ThemeSwitch from "../../atoms/ThemeSwitch";
+import UserNav from "../../organism/UserNav";
+import { DataTable } from "../../templates/DataTable";
+import { Layout } from "../../templates/Layout";
 
-const GroupForQuestionPage = () => {
+export default function GroupPage() {
     const { data: groupData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("groups");
     const columns = useDataTableColumns("groups");
 
@@ -47,4 +47,3 @@ const GroupForQuestionPage = () => {
         </Layout>
     )
 }
-export default GroupForQuestionPage

@@ -15,7 +15,7 @@ import { Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const TableRowDeleteBtn = ({ row, type }) => {
+export function CategoryDelete({ row, type }) {
     const [open, setOpen] = useState(false);
 
     const handleOpen = (event) => {
@@ -107,6 +107,4 @@ const TableRowDeleteBtn = ({ row, type }) => {
             </AlertDialogContent>
         </AlertDialog>
     );
-};
-
-export default TableRowDeleteBtn;
+}

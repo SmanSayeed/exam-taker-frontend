@@ -1,5 +1,5 @@
+import { CustomDialog } from '@/components/custom-dialog';
 import IconMenu from '@/components/icon-menu';
-import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -7,45 +7,27 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-
-import { useDeleteQuestionMutation } from "@/features/questions/questionsApi";
-import { EllipsisVertical, Eye, FilePenIcon, Loader2, Trash2 } from "lucide-react";
+import { EllipsisVertical, Eye, FilePenIcon } from "lucide-react";
 import { useState } from 'react';
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
+import { QueDeleteAction } from './QueDeleteAction';
 import QuestionView from './QuestionView';
 
-const QueCardDropdown = ({ refetch, questionData }) => {
+export function QueCardActions({ refetch, questionData }) {
     const [isViewOpen, setIsViewOpen] = useState(false);
-
-    const [deleteQuestion, { isLoading }] = useDeleteQuestionMutation();
-
-    const handleDelete = async (id) => {
-        if (id) {
-            try {
-                const response = await deleteQuestion(id).unwrap();
-                toast.success(response?.message || "Data deleted successfully");
-                refetch();
-            } catch (err) {
-                toast.error(err?.data?.message || "An error occurred");
-            }
-        } else {
-            toast.error("Cannot delete the data");
-        }
-    };
 
     return (
         <>
-            <ResponsiveDialog
+            {/* View Question Dialog */}
+            <CustomDialog
                 isOpen={isViewOpen}
                 setIsOpen={setIsViewOpen}
+                title="View Question"
             >
-                <QuestionView
-                    data={questionData}
-                    setIsViewOpen={setIsViewOpen}
-                />
-            </ResponsiveDialog>
+                <QuestionView data={questionData} />
+            </CustomDialog>
 
+            {/* Actions Dropdown */}
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
@@ -58,13 +40,10 @@ const QueCardDropdown = ({ refetch, questionData }) => {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    {/* Quetsion View Action */}
+                    {/* View Question */}
                     <DropdownMenuItem>
-                        {/* <QueViewDialogue data={questionData} /> */}
                         <button
-                            onClick={() => {
-                                setIsViewOpen(true);
-                            }}
+                            onClick={() => setIsViewOpen(true)}
                             className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
                         >
                             <IconMenu
@@ -74,7 +53,7 @@ const QueCardDropdown = ({ refetch, questionData }) => {
                         </button>
                     </DropdownMenuItem>
 
-                    {/* Edit Action */}
+                    {/* Edit Question */}
                     <DropdownMenuItem>
                         <Link
                             state={questionData}
@@ -88,27 +67,12 @@ const QueCardDropdown = ({ refetch, questionData }) => {
                         </Link>
                     </DropdownMenuItem>
 
-                    {/* Delete Action */}
-                    <DropdownMenuItem
-                        onSelect={() => handleDelete(questionData?.id)}
-                        className="text-red-500 flex gap-1 cursor-pointer"
-                    >
-                        {isLoading ? (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : (
-                            <button className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100">
-                                <IconMenu
-                                    text="Delete"
-                                    icon={<Trash2 className="h-4 w-4" />}
-                                />
-                            </button>
-                        )}
+                    {/* Delete Question */}
+                    <DropdownMenuItem>
+                        <QueDeleteAction questionId={questionData?.id} refetch={refetch} />
                     </DropdownMenuItem>
-
                 </DropdownMenuContent>
             </DropdownMenu>
         </>
-    )
+    );
 }
-
-export default QueCardDropdown;

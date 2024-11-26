@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DataTableColumnHeader } from "@/dashboard/components/molecules/datatable/DataTableColumnHeader";
-import { DataTableRowActions } from "@/dashboard/components/organism/DataTableRowActions";
+import { DataTableRowActions } from "@/dashboard/components/molecules/categories/CatTableRowActions";
+import { DataTableColumnHeader } from "@/dashboard/components/organism/datatable/DataTableColumnHeader";
 import { labels, statuses } from "../data";
 
 export const questionsColumns = [

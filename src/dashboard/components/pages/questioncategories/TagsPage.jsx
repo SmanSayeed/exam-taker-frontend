@@ -1,22 +1,21 @@
-import useDataTableColumns from "@/dashboard/hooks/useDataTableColumns";
+import useDataTableColumns from "@/dashboard/components/molecules/categories/useDataTableColumns";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
-import Loading from "../../../atoms/Loading";
-import PageTitle from "../../../atoms/PageTitle";
-import ThemeSwitch from "../../../atoms/ThemeSwitch";
-import QuestionCategoryForm from "../../../organism/QuestionCategoryForm";
-import UserNav from "../../../organism/UserNav";
-import { DataTable } from "../../../templates/DataTable";
-import { Layout } from "../../../templates/Layout";
+import Loading from "../../atoms/Loading";
+import PageTitle from "../../atoms/PageTitle";
+import ThemeSwitch from "../../atoms/ThemeSwitch";
+import QuestionCategoryForm from "../../organism/QuestionCategoryForm";
+import UserNav from "../../organism/UserNav";
+import { DataTable } from "../../templates/DataTable";
+import { Layout } from "../../templates/Layout";
 
-
-const SectionForQuestionPage = () => {
+export default function TagsPage() {
     const { data: sectionData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("sections");
     const columns = useDataTableColumns("sections");
 
     return (
         <Layout>
             <Layout.Header>
-                <PageTitle title={"Section"} />
+                <PageTitle title={"Tags"} />
                 <div className='ml-auto flex items-center space-x-4'>
                     <ThemeSwitch />
                     <UserNav />
@@ -24,13 +23,16 @@ const SectionForQuestionPage = () => {
             </Layout.Header>
 
             <Layout.Body>
-                <QuestionCategoryForm type={"sections"} refetchOnQuestionsCategoryQuery={refetch} />
+                <QuestionCategoryForm
+                    type={"sections"}
+                    refetchOnQuestionsCategoryQuery={refetch}
+                />
 
                 <div className='mt-8 mb-2 flex items-center justify-between space-y-2'>
                     <div>
                         <h2 className='text-2xl font-bold tracking-tight'>Welcome back!</h2>
                         <p className='text-muted-foreground'>
-                            Here&apos;s a list of exam section!
+                            Here&apos;s a list of exam tags!
                         </p>
                     </div>
                 </div>
@@ -41,4 +43,3 @@ const SectionForQuestionPage = () => {
         </Layout>
     )
 }
-export default SectionForQuestionPage
