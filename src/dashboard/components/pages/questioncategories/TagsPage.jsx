@@ -9,8 +9,8 @@ import { DataTable } from "../../templates/DataTable";
 import { Layout } from "../../templates/Layout";
 
 export default function TagsPage() {
-    const { data: sectionData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("sections");
-    const columns = useDataTableColumns("sections");
+    const { data: tagsData, isLoading, isSuccess, refetch } = useGetQuestionsCategoryQuery("tags");
+    const columns = useDataTableColumns("tags");
 
     return (
         <Layout>
@@ -24,7 +24,7 @@ export default function TagsPage() {
 
             <Layout.Body>
                 <QuestionCategoryForm
-                    type={"sections"}
+                    type={"tags"}
                     refetchOnQuestionsCategoryQuery={refetch}
                 />
 
@@ -37,7 +37,16 @@ export default function TagsPage() {
                     </div>
                 </div>
                 <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-                    {isLoading ? <Loading /> : isSuccess && sectionData?.data?.data && <DataTable data={sectionData?.data?.data} columns={columns} />}
+                    {
+                        isLoading ? (
+                            <Loading />
+                        ) : isSuccess && tagsData?.data?.data && (
+                            <DataTable
+                                data={tagsData?.data?.data}
+                                columns={columns}
+                            />
+                        )
+                    }
                 </div>
             </Layout.Body>
         </Layout>

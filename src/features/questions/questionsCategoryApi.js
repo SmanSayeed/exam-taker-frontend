@@ -3,34 +3,75 @@ import { apiSlice } from "@/features/api/apiSlice";
 export const questionsCategoryApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getQuestionsCategory: builder.query({
-            query: (type) => `/questions/${type}`,
+            query: (type) => {
+                if (type === "tags") {
+                    return `/tags`;
+                } else {
+                    return `/questions/${type}`;
+                }
+            },
             providesTags: ["Questions"],
         }),
         getSingleCategory: builder.query({
-            query: ({type, id}) => `/questions/${type}/${id}`,
+            query: ({ type, id }) => {
+                if (type === "tags") {
+                    return `/tags/${id}`;
+                } else {
+                    return `/questions/${type}/${id}`;
+                }
+            },
             providesTags: ["Questions"],
         }),
         createQuestionsCategory: builder.mutation({
-            query: ({ type, data }) => ({
-                url: `/questions/${type}`,
-                method: "POST",
-                body: data,
-            }),
+            query: ({ type, data }) => {
+                if (type === "tags") {
+                    return {
+                        url: `/tags`,
+                        method: "POST",
+                        body: data,
+                    };
+                } else {
+                    return {
+                        url: `/questions/${type}`,
+                        method: "POST",
+                        body: data,
+                    };
+                }
+            },
             invalidatesTags: ["Questions"],
         }),
         deleteQuestionsCategory: builder.mutation({
-            query: ({ type, id }) => ({
-                url: `/questions/${type}/${id}`,
-                method: "DELETE",
-            }),
-            invalidatesTags: ["Questions"]
+            query: ({ type, id }) => {
+                if (type === "tags") {
+                    return {
+                        url: `/tags/${id}`,
+                        method: "DELETE",
+                    };
+                } else {
+                    return {
+                        url: `/questions/${type}/${id}`,
+                        method: "DELETE",
+                    };
+                }
+            },
+            invalidatesTags: ["Questions"],
         }),
         editQuestionsCategory: builder.mutation({
-            query: ({ type, data, id }) => ({
-                url: `/questions/${type}/${id}`,
-                method: "PUT",
-                body: data,
-            }),
+            query: ({ type, data, id }) => {
+                if (type === "tags") {
+                    return {
+                        url: `/tags/${id}`,
+                        method: "PUT",
+                        body: data,
+                    };
+                } else {
+                    return {
+                        url: `/questions/${type}/${id}`,
+                        method: "PUT",
+                        body: data,
+                    };
+                }
+            },
             invalidatesTags: ["Questions"],
         }),
     }),

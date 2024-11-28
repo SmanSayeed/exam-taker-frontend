@@ -2,7 +2,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, CircleX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,19 +18,21 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import { cn } from "@/lib/utils";
 
 const TagsField = ({ control, tags, setTags }) => {
     const [popoverOpen, setPopoverOpen] = useState(false);
+    const { data: tagsData } = useGetQuestionsCategoryQuery("tags");
 
     const handleAddTag = (tag) => {
-        if (tag.trim() && !tags.includes(tag.trim())) {
-            setTags([...tags, tag.trim()]);
+        if (!tags.find((t) => t.id === tag.id)) {
+            setTags([...tags, tag]);
         }
     };
 
-    const handleRemoveTag = (tagToRemove) => {
-        setTags(tags.filter((tag) => tag !== tagToRemove));
+    const handleRemoveTag = (tagIdToRemove) => {
+        setTags(tags.filter((tag) => tag.id !== tagIdToRemove));
     };
 
     return (
@@ -40,7 +42,7 @@ const TagsField = ({ control, tags, setTags }) => {
             </Label>
 
             <Controller
-                name="tagSelect"
+                name="tag"
                 control={control}
                 defaultValue=""
                 render={({ field, formState: { errors } }) => (
@@ -54,7 +56,9 @@ const TagsField = ({ control, tags, setTags }) => {
                                         aria-expanded={popoverOpen}
                                         className="w-1/2 justify-between"
                                     >
-                                        Select Tags
+                                        {tags.length > 0
+                                            ? `Selected Tags (${tags.length})`
+                                            : "Select Tags"}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
@@ -64,29 +68,28 @@ const TagsField = ({ control, tags, setTags }) => {
                                         <CommandList>
                                             <CommandEmpty>No tags found.</CommandEmpty>
                                             <CommandGroup>
-                                                {["JavaScript", "React", "Next.js", "CSS", "HTML"].map(
-                                                    (tag) => (
+                                                {tagsData?.data?.data &&
+                                                    tagsData?.data?.data.map((tag) => (
                                                         <CommandItem
-                                                            key={tag}
-                                                            value={tag}
+                                                            key={tag?.id}
+                                                            value={tag?.id}
                                                             onSelect={() => {
-                                                                field.onChange(tag);
-                                                                handleAddTag(tag);
+                                                                field.onChange(tag?.id);
+                                                                handleAddTag({ id: tag.id, title: tag.title });
                                                                 setPopoverOpen(false);
                                                             }}
                                                         >
-                                                            {tag}
+                                                            {tag.title}
                                                             <Check
                                                                 className={cn(
                                                                     "ml-auto",
-                                                                    tags.includes(tag)
+                                                                    tags.find((t) => t.id === tag.id)
                                                                         ? "opacity-100"
                                                                         : "opacity-0"
                                                                 )}
                                                             />
                                                         </CommandItem>
-                                                    )
-                                                )}
+                                                    ))}
                                             </CommandGroup>
                                         </CommandList>
                                     </Command>
@@ -94,31 +97,34 @@ const TagsField = ({ control, tags, setTags }) => {
                             </Popover>
                         </div>
 
-                        {errors.tagSelect && <span className="text-red-600">{errors.tagSelect.message}</span>}
+                        {errors.tag && <span className="text-red-600">{errors.tag.message}</span>}
                     </>
                 )}
             />
 
             {/* Display Added Tags */}
-            <div className="flex flex-wrap gap-2 mt-4">
-                {tags && tags.map((tag, index) => (
-                    <span
-                        key={index}
-                        className="flex items-center space-x-2 bg-gray-200 text-gray-800 px-3 py-1 rounded-full"
-                    >
-                        <span className="text-sm">{tag}</span>
-                        <button
-                            type="button"
-                            className="text-red-500"
-                            onClick={() => handleRemoveTag(tag)}
+            <div className="flex flex-wrap gap-2 pt-2">
+                {tags &&
+                    tags.map((tag, index) => (
+                        <span
+                            key={index}
+                            className="flex items-center space-x-2 bg-gray-200 text-gray-800 px-3 py-1 rounded-full"
                         >
-                            ×
-                        </button>
-                    </span>
-                ))}
+                            <span className="text-sm">{tag.title}</span>
+                            <button
+                                type="button"
+                                className="text-red-500"
+                                onClick={() => handleRemoveTag(tag.id)}
+                            >
+                                <CircleX size={18} />
+                            </button>
+                        </span>
+                    ))}
             </div>
         </div>
     );
 };
 
 export default TagsField;
+
+
