@@ -34,6 +34,7 @@ export default function QuestionCreateForm() {
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
     const [tags, setTags] = useState([]);
+    console.log("tags", tags)
 
     const [selectedQuesType, setSelectedQuesType] = useLocalStorage({
         key: "questionType",
@@ -154,10 +155,8 @@ export default function QuestionCreateForm() {
 
         const payload = {
             title: formData.title,
-            // description: formData.description,
             type: selectedQuesType || formData.type,
             mark: formData.mark,
-            // images: null,
             is_paid: isPaid,
             is_featured: isFeatured,
             status: statusCheck,
@@ -336,11 +335,13 @@ export default function QuestionCreateForm() {
                     />
 
                     {/* Tags Input Field */}
-                    <TagsField
-                        tags={tags}
-                        setTags={setTags}
-                        control={control}
-                    />
+                    <div className="pb-4">
+                        <TagsField
+                            tags={tags}
+                            setTags={setTags}
+                            control={control}
+                        />
+                    </div>
 
                     <Button disabled={isLoading} type="submit" className="w-full">
                         {isLoading ? (
