@@ -266,7 +266,7 @@ export default function ModelTestCreateForm() {
                 </div>
 
                 {/* is active */}
-                <div>
+                <div className="flex items-center">
                     <Checkbox
                         id="status"
                         checked={modelTestForm?.is_active}

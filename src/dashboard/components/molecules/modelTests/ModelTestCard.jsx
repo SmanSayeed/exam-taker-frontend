@@ -1,16 +1,16 @@
 import {
     Card,
-    CardContent,
     CardDescription,
     CardHeader,
     CardTitle
 } from "@/components/ui/card";
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
+import { ModeltestCardActions } from "./ModeltestCardActions";
 
 const ModelTestCard = ({ modelTest }) => {
 
     return (
-        <Card className="container">
+        <Card className="py-4 relative group shadow-md hover:shadow-lg duration-500">
             <CardHeader>
                 <CardTitle className="text-xl font-semibold">
                     {parseHtmlContent(modelTest?.title)}
@@ -20,9 +20,7 @@ const ModelTestCard = ({ modelTest }) => {
                 </CardDescription>
             </CardHeader>
 
-            <CardContent className="flex flex-col gap-10">
-
-            </CardContent>
+            <ModeltestCardActions />
         </Card>
     )
 }

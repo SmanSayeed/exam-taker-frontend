@@ -33,8 +33,10 @@ export default function QuestionCreateForm() {
     const [options, setOptions] = useState([0, 1, 2, 3]);
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
+
     const [tags, setTags] = useState([]);
-    console.log("tags", tags)
+    const selectedTagIds = tags && tags.map(tag => tag.id);
+    console.log("selectedtagsids", selectedTagIds);
 
     const [selectedQuesType, setSelectedQuesType] = useLocalStorage({
         key: "questionType",
@@ -162,7 +164,8 @@ export default function QuestionCreateForm() {
             status: statusCheck,
             mcq_options: mcqOptions,
             creative_options: creativeQuestions,
-            categories: categoriesPayload
+            categories: categoriesPayload,
+            tags: selectedTagIds
         };
 
         try {
