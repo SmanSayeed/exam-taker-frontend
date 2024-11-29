@@ -36,7 +36,6 @@ export default function QuestionCreateForm() {
 
     const [tags, setTags] = useState([]);
     const selectedTagIds = tags && tags.map(tag => tag.id);
-    console.log("selectedtagsids", selectedTagIds);
 
     const [selectedQuesType, setSelectedQuesType] = useLocalStorage({
         key: "questionType",
@@ -337,7 +336,7 @@ export default function QuestionCreateForm() {
                         setSelectedYear={setSelectedYear}
                     />
 
-                    {/* Tags Input Field */}
+                    {/* select tags*/}
                     <div className="pb-4">
                         <TagsField
                             tags={tags}

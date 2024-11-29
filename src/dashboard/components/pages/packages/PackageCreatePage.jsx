@@ -4,7 +4,8 @@ import PackageCreateForm from "../../molecules/package/PackageCreateForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
-function PackageCreateForAdminPage() {
+function PackageCreatePage() {
+
     return (
         <Layout>
             <Layout.Header>
@@ -36,4 +37,4 @@ function PackageCreateForAdminPage() {
     )
 }
 
-export default PackageCreateForAdminPage
+export default PackageCreatePage;

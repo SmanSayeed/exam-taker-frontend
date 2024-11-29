@@ -1,5 +1,5 @@
+import { AutoSearchSelect } from "@/components/autosearch-select";
 import { useState } from "react";
-import { AutoSearchSelect } from "../AutoSearchSelect";
 import { useCategoryData } from "../createquestion/useCategoryData";
 
 export default function SelectCategoryForPackage({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType }) {
@@ -72,22 +72,29 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
         return <div>Failed to sections load: {error.message}</div>;
     }
 
-    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => (
-        visibleFields[name] && (
-            <AutoSearchSelect
-                label={label}
-                name={name}
-                control={control}
-                options={options}
-                placeholder={`Select ${label}`}
-                onChange={onChange}
-                defaultValue={defaultValue}
-                rules={rules}
-                disabled={disabled}
-                onRemove={() => handleRemoveField(name)}
-            />
+    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => {
+        // If no options are available, don't render the selector
+        if (!options || options.length === 0) {
+            return null;
+        }
+
+        return (
+            visibleFields[name] && (
+                <AutoSearchSelect
+                    label={label}
+                    name={name}
+                    control={control}
+                    options={options}
+                    placeholder={`Select ${label}`}
+                    onChange={onChange}
+                    defaultValue={defaultValue}
+                    rules={rules}
+                    disabled={disabled}
+                    onRemove={() => handleRemoveField(name)}
+                />
+            )
         )
-    );
+    };
 
     {/* Section → Exam Type → Exam Sub Type */ }
     return (

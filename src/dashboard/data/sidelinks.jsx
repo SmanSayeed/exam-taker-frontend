@@ -175,20 +175,6 @@ export const sidelinks = [
             },
         ]
     },
-    // {
-    //     title: "Exam",
-    //     label: "",
-    //     href: "/admin/exam/type",
-    //     icon: <BookOpenCheck size={18} />,
-    //     sub: [
-    //         {
-    //             title: "Exam Type Create",
-    //             label: "",
-    //             href: "/admin/exam/type",
-    //             icon: <BookOpenCheck size={18} />
-    //         },
-    //     ]
-    // },
     // packages
     {
         title: "Packages",

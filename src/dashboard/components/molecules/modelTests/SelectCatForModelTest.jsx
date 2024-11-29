@@ -1,6 +1,6 @@
+import { AutoSearchSelect } from "@/components/autosearch-select";
 import { useState } from "react";
 import { useCategoryData } from "../createquestion/useCategoryData";
-import { AutoSearchSelect } from "./AutoSearchSelect";
 
 export default function SelectCatForModelTest({ control, setValue, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
 

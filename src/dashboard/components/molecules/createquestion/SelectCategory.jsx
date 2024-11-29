@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
-import { AutoSearchSelect } from "../modelTests/AutoSearchSelect";
+import { AutoSearchSelect } from "../../../../components/autosearch-select";
 import { useCategoryData } from "./useCategoryData";
 
 export default function SelectCategory({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType, setSelectedGroup = null, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
