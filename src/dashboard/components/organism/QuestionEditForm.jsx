@@ -21,11 +21,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import Loading from "../atoms/Loading";
+import TagsField from "../molecules/createquestion/TagsField";
 import { CreativeQuesForEdit } from "../molecules/questionedit/CreativeQuesForEdit";
 import { McqOptionsForEdit } from "../molecules/questionedit/McqOptionsForEdit";
 import SelectCategoryForEdit from "../molecules/questionedit/SelectCategoryForEdit";
 
-export default function EditQuestionForm() {
+export default function QuestionEditForm() {
     const dispatch = useDispatch();
     const selectedCategories = useSelector((state) => state.selectedCategories);
 
@@ -36,8 +37,11 @@ export default function EditQuestionForm() {
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([]);
 
+    const [tags, setTags] = useState([]);
+    const selectedTagIds = tags && tags.map(tag => tag.id);
+
     const { questionId } = useParams();
-    const { data: questionData, isLoading: isQuestionLoading } = useGetSingleQuestionsQuery(questionId);
+    const { data: questionData, isLoading: isQuestionLoading, refetch: refetchQuestion } = useGetSingleQuestionsQuery(questionId);
     const [question, setQuestion] = useState({});
 
     const { type } = question || {};
@@ -176,12 +180,14 @@ export default function EditQuestionForm() {
             "status": statusCheck,
             "mcq_options": mcqOptions,
             "creative_options": creativeQuestions,
-            "categories": categoriesPayload
+            "categories": categoriesPayload,
+            "tags": selectedTagIds
         }
 
         try {
             const response = await editQuestion({ id: questionId, data: payload }).unwrap();
             toast.success(response?.message);
+            refetchQuestion();
         } catch (err) {
             toast.error(err?.data?.message || "An error occurred");
         }
@@ -295,6 +301,16 @@ export default function EditQuestionForm() {
                     setValue={setValue}
                     control={control}
                 />
+
+                {/* select tags */}
+                <div className="pb-4">
+                    <TagsField
+                        control={control}
+                        tags={tags}
+                        setTags={setTags}
+                        existingTags={questionData?.data?.tags}
+                    />
+                </div>
 
                 {/* Submit Button */}
                 <Button

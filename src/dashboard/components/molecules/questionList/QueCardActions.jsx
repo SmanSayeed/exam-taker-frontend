@@ -1,4 +1,5 @@
 import { CustomDialog } from '@/components/custom-dialog';
+import { DeleteAction } from '@/components/delete-action';
 import IconMenu from '@/components/icon-menu';
 import { Button } from "@/components/ui/button";
 import {
@@ -7,14 +8,15 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useDeleteQuestionMutation } from '@/features/questions/questionsApi';
 import { EllipsisVertical, Eye, FilePenIcon } from "lucide-react";
 import { useState } from 'react';
 import { Link } from "react-router-dom";
-import { QueDeleteAction } from './QueDeleteAction';
 import QuestionView from './QuestionView';
 
 export function QueCardActions({ refetch, questionData }) {
     const [isViewOpen, setIsViewOpen] = useState(false);
+    const [deleteQuestion] = useDeleteQuestionMutation();
 
     return (
         <>
@@ -69,7 +71,12 @@ export function QueCardActions({ refetch, questionData }) {
 
                     {/* Delete Question */}
                     <DropdownMenuItem>
-                        <QueDeleteAction questionId={questionData?.id} refetch={refetch} />
+                        <DeleteAction
+                            entityId={questionData?.id}
+                            refetch={refetch}
+                            entityName="Question"
+                            deleteFunction={deleteQuestion}
+                        />
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

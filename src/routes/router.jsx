@@ -12,13 +12,12 @@ import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminP
 
 import ModelTestCreatePage from "@/dashboard/components/pages/modelTests/ModelTestCreatePage";
 import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPage";
-import AllPackagesForAdminPage from "@/dashboard/components/pages/packages/AllPackagesForAdminPage";
-import PackageManagementForAdminPage from "@/dashboard/components/pages/packages/PackageCreateForAdminPage";
 import PackageEditForAdminPage from "@/dashboard/components/pages/packages/PackageEditForAdminPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
-import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
 
+import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
+import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
 import ExamSubTypePage from "@/dashboard/components/pages/questioncategories/ExamSubTypePage";
 import ExamTypePage from "@/dashboard/components/pages/questioncategories/ExamTypePage";
 import GroupPage from "@/dashboard/components/pages/questioncategories/GroupPage";
@@ -30,6 +29,7 @@ import SubjectPage from "@/dashboard/components/pages/questioncategories/Subject
 import TagsPage from "@/dashboard/components/pages/questioncategories/TagsPage";
 import TopicsPage from "@/dashboard/components/pages/questioncategories/TopicsPage";
 import YearPage from "@/dashboard/components/pages/questioncategories/YearPage";
+import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
 
 const router = createBrowserRouter([
     {
@@ -116,11 +116,11 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/admin/question/edit/:questionId",
-                        element: <QuestionEditForAdminPage />
+                        element: <QuestionEditPage />
                     },
                     {
                         path: "/admin/package/create",
-                        element: <PackageManagementForAdminPage />
+                        element: <PackageCreatePage />
                     },
                     {
                         path: "/admin/package/edit/:packageId",
@@ -128,7 +128,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/admin/packages",
-                        element: <AllPackagesForAdminPage />
+                        element: <PackagesPage />
                     },
                     {
                         path: "/admin/model-tests/create",

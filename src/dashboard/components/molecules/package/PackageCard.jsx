@@ -1,21 +1,18 @@
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useDeletePackageMutation } from "@/features/packages/packagesApi";
 import DOMPurify from "dompurify";
 import { useState } from "react";
 import { toast } from "sonner";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
-} from "@/components/ui/alert-dialog";
-import { Link } from "react-router-dom";
+import { PackageCardActions } from "./PackageCardActions";
 
 // Helper function to parse HTML string and convert to JSX with Tailwind classes
 const parseHtmlContent = (htmlContent) => {
@@ -28,8 +25,8 @@ const parseHtmlContent = (htmlContent) => {
     );
 };
 
-const PackageCardAndDetails = ({ aPackage }) => {
-    const { id, name, description, price, duration_days, is_active } = aPackage || {};
+const PackageCard = ({ singlePackage, refetch }) => {
+    const { id, name, description, price, duration_days, is_active } = singlePackage || {};
 
     const [open, setOpen] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
@@ -82,10 +79,10 @@ const PackageCardAndDetails = ({ aPackage }) => {
     };
 
     return (
-        <Card className="hover:shadow-md transform transition-transform hover:-translate-y-1.5 duration-300 relative">
+        <Card className="hover:shadow-md duration-300 relative">
 
             <div onClick={handleOpenDetails} className="cursor-pointer p-4 pb-20 ">
-                <p className="absolute top-2 right-3 text-sm font-semibold ">{is_active === 1 ? "Activated" : "Inactive"} </p>
+                {/* <p className="absolute top-2 right-3 text-sm font-semibold ">{is_active === 1 ? "Activated" : "Inactive"} </p> */}
                 <h1 className="text-4xl mt-6 font-semibold ">
                     ${price}
                     {validity && <span className="text-base">/{validity}</span>}
@@ -95,31 +92,10 @@ const PackageCardAndDetails = ({ aPackage }) => {
                 <p className="mt-2 mb-5 text-sm">{parseHtmlContent(description)}</p>
             </div>
 
-            
-            <Link to={`/admin/package/edit/${id}`} state={{aPackage}} >
-                <Button className="absolute bottom-4 right-4">Edit</Button>
-            </Link>
-
-            {/* Delete confirmation dialog */}
-            <AlertDialog open={open} onOpenChange={setOpen}>
-                <AlertDialogTrigger onClick={handleOpen}>
-                    <Button className="absolute bottom-4 left-4">Delete</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Are you sure to delete this package? <br />This action will remove the package and its benefits from your account.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>
-                            <Button onClick={() => handleDelete(id)}>Yes</Button>
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            <PackageCardActions
+                singlePackage={singlePackage}
+                refetch={refetch}
+            />
 
             {/* Package details dialog */}
             <AlertDialog open={openDetails} onOpenChange={setOpenDetails}>
@@ -134,7 +110,7 @@ const PackageCardAndDetails = ({ aPackage }) => {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                            <Button onClick={() => setOpenDetails(false)} >  Close </Button>
+                        <Button onClick={() => setOpenDetails(false)} >  Close </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
@@ -142,4 +118,4 @@ const PackageCardAndDetails = ({ aPackage }) => {
     );
 };
 
-export default PackageCardAndDetails;
+export default PackageCard;

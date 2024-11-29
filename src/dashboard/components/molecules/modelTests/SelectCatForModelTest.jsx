@@ -1,6 +1,6 @@
+import { AutoSearchSelect } from "@/components/autosearch-select";
 import { useState } from "react";
 import { useCategoryData } from "../createquestion/useCategoryData";
-import { AutoSearchSelect } from "./AutoSearchSelect";
 
 export default function SelectCatForModelTest({ control, setValue, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSubject, setSelectedTopic, setSelectedSubTopic, setSelectedYear }) {
 
@@ -111,25 +111,32 @@ export default function SelectCatForModelTest({ control, setValue, setSelectedGr
         setValue("sub_topic", id)
     };
 
-    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => (
-        visibleFields[name] && (
-            <AutoSearchSelect
-                label={label}
-                name={name}
-                control={control}
-                options={options}
-                placeholder={`Select ${label}`}
-                onChange={onChange}
-                defaultValue={defaultValue}
-                rules={rules}
-                disabled={disabled}
-                onRemove={() => handleRemoveField(name)}
-            />
+    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => {
+        // If no options are available, don't render the selector
+        if (!options || options.length === 0) {
+            return null;
+        }
+
+        return (
+            visibleFields[name] && (
+                <AutoSearchSelect
+                    label={label}
+                    name={name}
+                    control={control}
+                    options={options}
+                    placeholder={`Select ${label}`}
+                    onChange={onChange}
+                    defaultValue={defaultValue}
+                    rules={rules}
+                    disabled={disabled}
+                    onRemove={() => handleRemoveField(name)}
+                />
+            )
         )
-    );
+    };
 
     return (
-        <div className="space-y-4 mt-4">
+        <div className="space-y-4 pt-4">
             {/* Group → Level → Subject → Lesson → Topic → Sub Topic */}
             <div className="grid md:grid-cols-3 gap-2">
                 {renderSelectField({
