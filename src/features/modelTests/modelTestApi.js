@@ -26,10 +26,18 @@ export const modelTestApi = apiSlice.injectEndpoints({
       }
     },
     }),
+    changeModelTestStatus: builder.mutation({
+      query: ({id, data}) => ({
+        url: `/model-tests/${id}/status`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
   }),
 });
 
 export const {
     useCreateModelTestMutation,
-    useGetAllModelTestsQuery
+    useGetAllModelTestsQuery,
+    useChangeModelTestStatusMutation
 } = modelTestApi;

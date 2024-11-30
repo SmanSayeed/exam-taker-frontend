@@ -58,7 +58,7 @@ const PackageCard = ({ singlePackage, refetch }) => {
 
             const response = await changePackageStatus({
                 id: packageId,
-                data: { "is_active": updatedStatus },
+                data: { "is_active": updatedStatus ? 1 : 0 },
             }).unwrap();
 
             setIsActive(updatedStatus);
