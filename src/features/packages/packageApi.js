@@ -65,6 +65,13 @@ export const packageApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    changePackageStatus: builder.mutation({
+      query: ({id, data}) => ({
+        url: `/packages/${id}/status`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -73,5 +80,6 @@ export const {
     useGetSinglePackageQuery,
     useCreatePackageMutation,
     useDeletePackageMutation,
-    useEditPackageMutation
+    useEditPackageMutation,
+    useChangePackageStatusMutation
 } = packageApi;
