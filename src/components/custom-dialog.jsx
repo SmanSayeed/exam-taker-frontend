@@ -2,12 +2,11 @@ export function CustomDialog({ children, isOpen, setIsOpen, title, description }
 
     return (
         <div
-            className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 ${isOpen ? "visible" : "hidden"
-                }`}
+            className={`fixed inset-0 z-50 flex items-center justify-center bg-black/60 ${isOpen ? "visible" : "hidden"}`}
             onClick={() => setIsOpen(false)}
         >
             <div
-                className="bg-white max-w-md w-[95%] rounded-md shadow-lg p-4 relative"
+                className="bg-white max-w-3xl w-[95%] rounded-md shadow-lg p-8 relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button

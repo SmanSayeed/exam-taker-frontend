@@ -54,6 +54,7 @@ export default function QuestionCard({ data: questionData, refetch }) {
             <QueCardActions
                 refetch={refetch}
                 questionData={questionData}
+                tagIds={tagIds}
             />
         </Card>
     );

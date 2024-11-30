@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { Link } from "react-router-dom";
 import QuestionView from './QuestionView';
 
-export function QueCardActions({ refetch, questionData }) {
+export function QueCardActions({ refetch, questionData, tagIds }) {
     const [isViewOpen, setIsViewOpen] = useState(false);
     const [deleteQuestion] = useDeleteQuestionMutation();
 
@@ -26,7 +26,7 @@ export function QueCardActions({ refetch, questionData }) {
                 setIsOpen={setIsViewOpen}
                 title="View Question"
             >
-                <QuestionView data={questionData} />
+                <QuestionView data={questionData} tagIds={tagIds} />
             </CustomDialog>
 
             {/* Actions Dropdown */}
