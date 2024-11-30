@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
 import PackageCreateForm from "../../molecules/package/PackageCreateForm";
 import UserNav from "../../organism/UserNav";
@@ -18,18 +18,13 @@ function PackageCreatePage() {
             <Layout.Body>
                 <div className="w-full">
                     <Card className="container ">
-                        <CardHeader>
-                            <CardTitle className="text-xl font-semibold">
-                                Package Creation
-                            </CardTitle>
-                            <CardDescription>
-                                Enter proper information to create a Package
-                            </CardDescription>
-                        </CardHeader>
+                        <div className="my-4">
+                            <h1 className="text-xl font-semibold">Package Creation</h1>
+                            <p>Enter proper information to create a Package</p>
+                        </div>
 
-                        <CardContent className="flex flex-col gap-10">
-                            <PackageCreateForm />
-                        </CardContent>
+                        {/* package craete form */}
+                        <PackageCreateForm />
                     </Card>
                 </div>
             </Layout.Body>

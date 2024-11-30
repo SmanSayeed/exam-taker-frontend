@@ -12,8 +12,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { ModeltestCardActions } from "./ModeltestCardActions";
 
-const ModelTestCard = ({ modelTest }) => {
-    console.log("modeltest", modelTest)
+const ModelTestCard = ({ modelTest, refetch }) => {
     const [isActive, setIsActive] = useState(modelTest?.is_active);
     const [changeModelTestStatus, { isLoading }] = useChangeModelTestStatusMutation();
 
@@ -49,7 +48,10 @@ const ModelTestCard = ({ modelTest }) => {
                 </CardDescription>
             </CardHeader>
 
-            <ModeltestCardActions />
+            <ModeltestCardActions
+                modelTestId={modelTest?.id}
+                refetch={refetch}
+            />
 
             <div className="flex items-center justify-end space-x-2 mt-4 p-4">
                 <Label htmlFor={`status-switch-${modelTest?.id}`}>Change Status</Label>

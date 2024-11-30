@@ -26,6 +26,37 @@ export const modelTestApi = apiSlice.injectEndpoints({
       }
     },
     }),
+    deleteModelTest: builder.mutation({
+      query: (id) => ({
+        url: `/model-tests/${id}`,
+        method: "DELETE",
+      }),
+    }),
+    // editModelTest: builder.mutation({
+    //   query: ({ id, data }) => ({
+    //     url: `/packages/${id}`,
+    //     method: "PUT",
+    //     body: data,
+    //   }),
+
+    //   async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+    //     try {
+    //       const result = await queryFulfilled;
+
+    //       dispatch(
+    //         savePackage({
+    //           id: result.data.data.id,
+    //           name: result.data.data.name,
+    //           description: result.data.data.description,
+    //           duration_days: result.data.data.duration_days,
+    //           is_active: result.data.data.is_active,
+    //         })
+    //       );
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   },
+    // }),
     changeModelTestStatus: builder.mutation({
       query: ({id, data}) => ({
         url: `/model-tests/${id}/status`,
@@ -39,5 +70,6 @@ export const modelTestApi = apiSlice.injectEndpoints({
 export const {
     useCreateModelTestMutation,
     useGetAllModelTestsQuery,
+    useDeleteModelTestMutation,
     useChangeModelTestStatusMutation
 } = modelTestApi;
