@@ -1,5 +1,6 @@
 import DOMPurify from "dompurify";
 import { CircleCheck } from "lucide-react";
+import TagsTitle from "./TagsTitle";
 
 const parseHtmlContent = (htmlContent) => {
     return (
@@ -11,14 +12,26 @@ const parseHtmlContent = (htmlContent) => {
     );
 };
 
-const QuestionView = ({ data }) => {
-    const { id, title, description, attachable, is_paid, is_featured, type, mark, mcq_questions } = data || {};
+const QuestionView = ({ data, tagIds }) => {
+    const { id, title, is_paid, is_featured, type, mark, mcq_questions } = data || {};
 
     return (
         <>
-            <p className="text-2xl mb-3 " >
-                {parseHtmlContent(title)}
-            </p>
+            <div className="mb-4">
+                <p className="my-4 text-lg dark:text-white">
+                    {parseHtmlContent(title)}
+                </p>
+
+                {/* Display Tag Names */}
+                <div className="flex flex-wrap gap-2 justify-end">
+                    {tagIds.map((tagId) => (
+                        <TagsTitle
+                            key={tagId}
+                            tagId={tagId}
+                        />
+                    ))}
+                </div>
+            </div>
 
             <div>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 ">

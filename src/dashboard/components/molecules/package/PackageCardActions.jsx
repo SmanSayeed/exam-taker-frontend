@@ -7,7 +7,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { useDeletePackageMutation } from '@/features/packages/packagesApi';
+import { useDeletePackageMutation } from '@/features/packages/packageApi';
 import { EllipsisVertical, FilePenIcon } from "lucide-react";
 import { Link } from 'react-router-dom';
 

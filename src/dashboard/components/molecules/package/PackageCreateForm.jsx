@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreatePackageMutation } from "@/features/packages/packagesApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -10,6 +9,7 @@ import ReactQuill from "react-quill";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import SelectCategoryForPackage from "./SelectCategoryForPackage";
+import { useCreatePackageMutation } from "@/features/packages/packageApi";
 
 function PackageCreateForm() {
     const [isActive, setIsActive] = useState(false);
@@ -131,8 +131,8 @@ function PackageCreateForm() {
                     </div>
 
                     {/* duration and price */}
-                    <div className="grid grid-cols-2 gap-8">
-                        <div className="space-y-1">
+                    <div className="flex flex-col md:flex-row gap-8">
+                        <div className="space-y-1 md:w-1/2">
                             <Label htmlFor="duration" className="text-md font-semibold">Duration (in day) </Label>
                             <Input
                                 {...register("duration")}
@@ -143,7 +143,7 @@ function PackageCreateForm() {
                             />
                             {errors.duration && <span className="text-red-600">{errors.duration.message}</span>}
                         </div>
-                        <div className="space-y-1">
+                        <div className="space-y-1 md:w-1/2">
                             <Label htmlFor="price" className="text-md font-semibold">Price</Label>
                             <Input
                                 {...register("price")}

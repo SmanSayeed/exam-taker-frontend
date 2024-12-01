@@ -12,11 +12,11 @@ import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminP
 
 import ModelTestCreatePage from "@/dashboard/components/pages/modelTests/ModelTestCreatePage";
 import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPage";
-import PackageEditForAdminPage from "@/dashboard/components/pages/packages/PackageEditForAdminPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
 
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
+import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
 import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
 import ExamSubTypePage from "@/dashboard/components/pages/questioncategories/ExamSubTypePage";
 import ExamTypePage from "@/dashboard/components/pages/questioncategories/ExamTypePage";
@@ -124,7 +124,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/admin/package/edit/:packageId",
-                        element: <PackageEditForAdminPage />
+                        element: <PackageEditPage />
                     },
                     {
                         path: "/admin/packages",

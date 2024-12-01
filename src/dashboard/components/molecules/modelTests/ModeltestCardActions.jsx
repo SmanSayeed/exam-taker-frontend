@@ -7,9 +7,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useDeleteModelTestMutation } from '@/features/modelTests/modelTestApi';
 import { EllipsisVertical, FilePenIcon } from "lucide-react";
 
-export function ModeltestCardActions() {
+export function ModeltestCardActions({ modelTestId, refetch }) {
+    const [deleteModelTest] = useDeleteModelTestMutation();
 
     return (
         <DropdownMenu>
@@ -39,10 +41,10 @@ export function ModeltestCardActions() {
                 {/* Delete model test */}
                 <DropdownMenuItem>
                     <DeleteAction
-                        // entityId={modelTestId}
+                        entityId={modelTestId}
                         entityName="Model Test"
-                    // deleteFunction={deleteModelTest}
-                    // refetch={refetch}
+                        deleteFunction={deleteModelTest}
+                        refetch={refetch}
                     />
                 </DropdownMenuItem>
             </DropdownMenuContent>
