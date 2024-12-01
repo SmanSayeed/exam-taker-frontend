@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreatePackageMutation } from "@/features/packages/packagesApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -10,6 +9,7 @@ import ReactQuill from "react-quill";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import SelectCategoryForPackage from "./SelectCategoryForPackage";
+import { useCreatePackageMutation } from "@/features/packages/packageApi";
 
 function PackageCreateForm() {
     const [isActive, setIsActive] = useState(false);

@@ -46,24 +46,6 @@ export const packageApi = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-
-          dispatch(
-            savePackage({
-              id: result.data.data.id,
-              name: result.data.data.name,
-              description: result.data.data.description,
-              duration_days: result.data.data.duration_days,
-              is_active: result.data.data.is_active,
-            })
-          );
-        } catch (err) {
-          console.log(err);
-        }
-      },
     }),
     changePackageStatus: builder.mutation({
       query: ({id, data}) => ({

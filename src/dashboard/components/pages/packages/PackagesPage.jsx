@@ -1,4 +1,4 @@
-import { useGetPackagesQuery } from "@/features/packages/packagesApi";
+import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import Loading from "../../atoms/Loading";
 import PageTitle from "../../atoms/PageTitle";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
