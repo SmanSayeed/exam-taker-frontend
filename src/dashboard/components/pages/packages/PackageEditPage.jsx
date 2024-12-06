@@ -8,7 +8,6 @@ import { Layout } from "../../templates/Layout";
 const PackageEditPage = () => {
     const location = useLocation();
     const singlePackage = location.state?.singlePackage;
-    console.log("singlePackage", singlePackage)
 
     return (
         <Layout>

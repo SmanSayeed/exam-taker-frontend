@@ -1,11 +1,10 @@
 import { Card } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import PackageCreateForm from "../../molecules/package/PackageCreateForm";
+import CreateExamFormForModelTest from "../../molecules/modelTests/CreateExamFormForModelTest";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
-function PackageCreatePage() {
-
+export default function CreateExamForModelTestPage() {
     return (
         <Layout>
             <Layout.Header>
@@ -17,18 +16,11 @@ function PackageCreatePage() {
 
             <Layout.Body>
                 <div className="w-full">
-                    <Card className="container ">
-                        <div className="my-4">
-                            <h1 className="text-xl font-semibold">Package Creation</h1>
-                            <p>Enter proper information to create a Package</p>
-                        </div>
-
-                        <PackageCreateForm />
+                    <Card className="container py-4">
+                        <CreateExamFormForModelTest />
                     </Card>
                 </div>
             </Layout.Body>
         </Layout>
     )
 }
-
-export default PackageCreatePage;

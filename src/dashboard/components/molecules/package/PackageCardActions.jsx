@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useDeletePackageMutation } from '@/features/packages/packageApi';
-import { EllipsisVertical, FilePenIcon } from "lucide-react";
+import { EllipsisVertical, Eye, FilePenIcon } from "lucide-react";
 import { Link } from 'react-router-dom';
 
 export function PackageCardActions({ refetch, singlePackage }) {
@@ -50,6 +50,20 @@ export function PackageCardActions({ refetch, singlePackage }) {
                         refetch={refetch}
                     />
                 </DropdownMenuItem>
+
+                {/* Edit Model test */}
+                <DropdownMenuItem>
+                    <Link
+                        to={`/admin/package/${singlePackage?.id}/model-tests`}
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                    >
+                        <IconMenu
+                            text="View model tests"
+                            icon={<Eye className="h-4 w-4" />}
+                        />
+                    </Link>
+                </DropdownMenuItem>
+
             </DropdownMenuContent>
         </DropdownMenu>
     );

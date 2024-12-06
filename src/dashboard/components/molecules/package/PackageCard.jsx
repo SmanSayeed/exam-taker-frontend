@@ -118,7 +118,10 @@ const PackageCard = ({ singlePackage, refetch }) => {
                     <p className="mt-2 mb-5 text-sm">{parseHtmlContent(description)}</p>
                 </div>
 
-                <PackageCardActions singlePackage={singlePackage} refetch={refetch} />
+                <PackageCardActions
+                    singlePackage={singlePackage}
+                    refetch={refetch}
+                />
 
                 <div className="flex items-center space-x-2 text-end p-4">
                     <Label htmlFor={`status-switch-${packageId}`}>Change Status</Label>
