@@ -1,15 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useGetSingleModelTestQuery } from "@/features/modelTests/modelTestApi";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 
 export default function CreateExamFormForModelTest() {
+    const { modelTestId } = useParams();
+    console.log(modelTestId)
+    const { data: singleModelTest } = useGetSingleModelTestQuery(modelTestId);
+    console.log(singleModelTest)
+
     const form = useForm({
         defaultValues: {
             exam_title: "",
-            is_optional: false, // Changed to a boolean for optional exams
+            is_optional: false,
             time_limit: "",
-            start_time: "",
+            start_time: singleModelTest?.start_time || "",
         },
         mode: "onChange",
     });
@@ -111,6 +118,9 @@ export default function CreateExamFormForModelTest() {
                         </FormItem>
                     )}
                 />
+
+                {/* category filtering */}
+                {/* <MultipleSelector /> */}
 
                 {/* Action Buttons */}
                 <div className="flex justify-center space-x-4">
