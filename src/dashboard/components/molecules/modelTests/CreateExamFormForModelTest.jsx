@@ -1,39 +1,49 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useGetSingleModelTestQuery } from "@/features/modelTests/modelTestApi";
+import { convertToDateTimeLocal } from "@/utils/convertToDateTimeLocal";
 import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { DataTable } from "../../templates/DataTable";
+import { fakeQuestions } from "./questionData";
+import { questionsColumns } from "./questionsColumns";
 
 export default function CreateExamFormForModelTest() {
     const { modelTestId } = useParams();
-    console.log(modelTestId)
     const { data: singleModelTest } = useGetSingleModelTestQuery(modelTestId);
-    console.log(singleModelTest)
+
+    const [selectedRowIds, setSelectedRowIds] = useState([]);
 
     const form = useForm({
         defaultValues: {
             exam_title: "",
             is_optional: false,
             time_limit: "",
-            start_time: singleModelTest?.start_time || "",
+            start_time: "",
         },
         mode: "onChange",
     });
 
-    const onSubmit = async (data) => {
-        console.log("Submitting exam data:", data);
+    // Update the form's values after the data is fetched
+    useEffect(() => {
+        if (singleModelTest?.data?.start_time) {
+            const formattedStartTime = convertToDateTimeLocal(singleModelTest.data.start_time);
 
-        // Uncomment and implement the API call if needed
-        // try {
-        //     const response = await someApiCall(data);
-        //     console.log(response);
-        //     toast.success("Exam created successfully!");
-        //     form.reset();
-        // } catch (error) {
-        //     console.error(error);
-        //     toast.error("Failed to create exam");
-        // }
+            form.reset({
+                ...form.getValues(),
+                start_time: formattedStartTime,
+            });
+        }
+    }, [singleModelTest, form]);
+
+    const onSubmit = async (data) => {
+        const payload = {
+            ...data,
+            selected_question_ids: [...selectedRowIds],
+        };
+        console.log("Submitting exam data:", payload);
     };
 
     return (
@@ -112,6 +122,7 @@ export default function CreateExamFormForModelTest() {
                                     {...field}
                                     type="datetime-local"
                                     className="w-full px-4 py-2 border rounded-md"
+                                    disabled
                                 />
                             </FormControl>
                             <FormMessage />
@@ -119,8 +130,15 @@ export default function CreateExamFormForModelTest() {
                     )}
                 />
 
-                {/* category filtering */}
-                {/* <MultipleSelector /> */}
+                {/* filtering catgeory */}
+                {/* <FilterQuestionsByCategory /> */}
+
+                {/* question list table */}
+                <DataTable
+                    data={fakeQuestions}
+                    columns={questionsColumns}
+                    onRowSelectionChange={setSelectedRowIds}
+                />
 
                 {/* Action Buttons */}
                 <div className="flex justify-center space-x-4">
@@ -135,7 +153,9 @@ export default function CreateExamFormForModelTest() {
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                     Submitting...
                                 </>
-                            ) : "Create Exam"
+                            ) : (
+                                "Create Exam"
+                            )
                         }
                     </Button>
                 </div>

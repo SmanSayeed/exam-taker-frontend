@@ -22,7 +22,7 @@ import { useState } from "react";
 import { DataTablePagination } from "../organism/datatable/DataTablePagination";
 import { DataTableToolbar } from "../organism/datatable/DataTableToolbar";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, onRowSelectionChange }) {
     const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
@@ -38,7 +38,13 @@ export function DataTable({ columns, data }) {
             columnFilters
         },
         enableRowSelection: true,
-        onRowSelectionChange: setRowSelection,
+        // onRowSelectionChange: setRowSelection,
+        onRowSelectionChange: (newSelection) => {
+            setRowSelection(newSelection);
+            const selectedRows = table.getSelectedRowModel().rows;
+            const selectedIds = selectedRows.map((row) => row.original.id);
+            onRowSelectionChange(selectedIds);
+        },
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
