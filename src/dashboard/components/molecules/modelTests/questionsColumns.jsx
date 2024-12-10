@@ -1,5 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/dashboard/components/organism/datatable/DataTableColumnHeader";
+import { parseHtmlContent } from "@/utils/parseHtmlContent";
 
 export const questionsColumns = [
     {
@@ -26,20 +27,21 @@ export const questionsColumns = [
         enableSorting: false,
         enableHiding: false
     },
-    {
-        accessorKey: "id",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Serial No" />
-        ),
-        cell: ({ row }) => {
-            const index = row.index + 1;
-            return (
-                <div className="w-[80px]">{index}</div>
-            )
-        },
-        enableSorting: false,
-        enableHiding: false
-    },
+    // {
+    //     accessorKey: "id",
+    //     header: ({ column }) => (
+    //         <DataTableColumnHeader column={column} title="Serial No" />
+    //     ),
+    //     cell: ({ row }) => {
+    //         console.log("row", row)
+    //         const index = row.index + 1;
+    //         return (
+    //             <div className="w-[80px]">{index}</div>
+    //         )
+    //     },
+    //     enableSorting: false,
+    //     enableHiding: false
+    // },
     {
         accessorKey: "title",
         header: ({ column }) => (
@@ -50,7 +52,7 @@ export const questionsColumns = [
             return (
                 <div className="flex space-x-2">
                     <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
-                        {row.getValue("title")}
+                        {parseHtmlContent(row.getValue("title"))}
                     </span>
                 </div>
             )

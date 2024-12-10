@@ -12,7 +12,19 @@ import {
 } from "@radix-ui/react-icons";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export function PaginationForQuesTable({ table, onPageSizeChange, onPageChange }) {
+export function PaginationForQuesTable({ table, onPageSizeChange, onPageChange, currentPage, perPage, totalPages }) {
+    const handlePreviousClick = () => {
+        if (currentPage > 1) {
+            onPageChange(currentPage - 1);
+        }
+    };
+
+    const handleNextClick = () => {
+        if (currentPage < totalPages) {
+            onPageChange(currentPage + 1);
+        }
+    };
+
     return (
         <div className="flex items-center justify-between overflow-auto px-2">
             <div className="hidden flex-1 text-sm text-muted-foreground sm:block">
@@ -50,37 +62,40 @@ export function PaginationForQuesTable({ table, onPageSizeChange, onPageChange }
                     <Button
                         variant="outline"
                         className="hidden h-8 w-8 p-0 lg:flex"
-                        onClick={() => table.setPageIndex(0)}
-                        disabled={!table.getCanPreviousPage()}
+                        onClick={() => onPageChange(0)}
+                        disabled={currentPage === 1}
                     >
                         <span className="sr-only">Go to first page</span>
                         <DoubleArrowLeftIcon className="h-4 w-4" />
                     </Button>
+
+                    {/* previous page button */}
                     <Button
                         variant="outline"
                         className="h-8 w-8 p-0"
-                        // onClick={() => table.previousPage()}
-                        onClick={() => onPageChange(table.previousPage())}
-                        disabled={!table.getCanPreviousPage()}
+                        onClick={handlePreviousClick}
+                        disabled={currentPage === 1}
                     >
                         <span className="sr-only">Go to previous page</span>
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
+
+                    {/* next page button */}
                     <Button
                         variant="outline"
                         className="h-8 w-8 p-0"
-                        // onClick={() => table.nextPage()}
-                        onClick={() => onPageChange(table.nextPage())}
-                        disabled={!table.getCanNextPage()}
+                        onClick={handleNextClick}
+                        disabled={currentPage === totalPages}
                     >
                         <span className="sr-only">Go to next page</span>
                         <ChevronRight className="h-4 w-4" />
                     </Button>
+
                     <Button
                         variant="outline"
                         className="hidden h-8 w-8 p-0 lg:flex"
-                        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                        disabled={!table.getCanNextPage()}
+                        onClick={() => onPageChange(totalPages - 1)}
+                        disabled={currentPage === totalPages}
                     >
                         <span className="sr-only">Go to last page</span>
                         <DoubleArrowRightIcon className="h-4 w-4" />

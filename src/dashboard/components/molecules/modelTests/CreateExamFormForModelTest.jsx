@@ -45,17 +45,16 @@ export default function CreateExamFormForModelTest() {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(20);
-    const [filters, setFilters] = useState({});
 
     const {
         data: questionsData,
         refetch,
-        isFetching
     } = useGetQuestionsQuery({
         page: currentPage,
         per_page: perPage,
-        ...filters,
     });
+
+    console.log("question data", questionsData)
 
     const onSubmit = async (data) => {
         const payload = {
@@ -156,10 +155,14 @@ export default function CreateExamFormForModelTest() {
                 <DataTableForExamCreate
                     // data={fakeQuestions}
                     data={questionsData?.data?.data}
+                    currentPage={currentPage}
+                    perPage={perPage}
                     setCurrentPage={setCurrentPage}
                     setPerPage={setPerPage}
                     columns={questionsColumns}
                     onRowSelectionChange={setSelectedRowIds}
+                    refetch={refetch}
+                    totalPages={questionsData?.data?.last_page}
                 />
 
                 {/* Action Buttons */}

@@ -22,7 +22,18 @@ import { useState } from "react";
 import { DataTableToolbar } from "../../organism/datatable/DataTableToolbar";
 import { PaginationForQuesTable } from "./PaginationForQuesTable";
 
-export function DataTableForExamCreate({ columns, data, onRowSelectionChange, setPerPage, setCurrentPage }) {
+export function DataTableForExamCreate({
+    columns,
+    data,
+    currentPage,
+    perPage,
+    onRowSelectionChange,
+    setPerPage,
+    setCurrentPage,
+    refetch,
+    totalPages
+}) {
+
     const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
@@ -58,7 +69,7 @@ export function DataTableForExamCreate({ columns, data, onRowSelectionChange, se
     });
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 py-4">
             <DataTableToolbar
                 table={table}
             />
@@ -121,13 +132,27 @@ export function DataTableForExamCreate({ columns, data, onRowSelectionChange, se
                     </TableBody>
                 </Table>
             </div>
+
             <PaginationForQuesTable
                 table={table}
-                onPageChange={(newPage) => setCurrentPage(newPage)}
+                currentPage={currentPage}
+                perPage={perPage}
+                refetch={refetch}
+                onPageChange={(newPage) => {
+                    setCurrentPage(newPage + 1);
+                    refetch({
+                        page: newPage,
+                        per_page: perPage
+                    });
+                }}
                 onPageSizeChange={(newPageSize) => {
                     setPerPage(newPageSize);
-                    setCurrentPage(1);
+                    refetch({
+                        page: currentPage,
+                        per_page: newPageSize,
+                    });
                 }}
+                totalPages={totalPages}
             />
         </div>
     )
