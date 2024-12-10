@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useGetSingleModelTestQuery } from "@/features/modelTests/modelTestApi";
+import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
 import { convertToDateTimeLocal } from "@/utils/convertToDateTimeLocal";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { DataTable } from "../../templates/DataTable";
-import { fakeQuestions } from "./questionData";
+import { DataTableForExamCreate } from "./DataTableForExamCreate";
 import { questionsColumns } from "./questionsColumns";
 
 export default function CreateExamFormForModelTest() {
@@ -38,10 +38,29 @@ export default function CreateExamFormForModelTest() {
         }
     }, [singleModelTest, form]);
 
+    // Watch for changes in selectedRowIds
+    useEffect(() => {
+        console.log("Selected IDs in Form:", selectedRowIds);
+    }, [selectedRowIds]);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage, setPerPage] = useState(20);
+    const [filters, setFilters] = useState({});
+
+    const {
+        data: questionsData,
+        refetch,
+        isFetching
+    } = useGetQuestionsQuery({
+        page: currentPage,
+        per_page: perPage,
+        ...filters,
+    });
+
     const onSubmit = async (data) => {
         const payload = {
             ...data,
-            selected_question_ids: [...selectedRowIds],
+            question_ids: [...selectedRowIds],
         };
         console.log("Submitting exam data:", payload);
     };
@@ -134,8 +153,11 @@ export default function CreateExamFormForModelTest() {
                 {/* <FilterQuestionsByCategory /> */}
 
                 {/* question list table */}
-                <DataTable
-                    data={fakeQuestions}
+                <DataTableForExamCreate
+                    // data={fakeQuestions}
+                    data={questionsData?.data?.data}
+                    setCurrentPage={setCurrentPage}
+                    setPerPage={setPerPage}
                     columns={questionsColumns}
                     onRowSelectionChange={setSelectedRowIds}
                 />

@@ -19,18 +19,18 @@ import {
 } from "@/components/ui/table";
 
 import { useState } from "react";
-import { DataTablePagination } from "../organism/datatable/DataTablePagination";
-import { DataTableToolbar } from "../organism/datatable/DataTableToolbar";
+import { DataTableToolbar } from "../../organism/datatable/DataTableToolbar";
+import { PaginationForQuesTable } from "./PaginationForQuesTable";
 
-export function DataTable({ columns, data }) {
+export function DataTableForExamCreate({ columns, data, onRowSelectionChange, setPerPage, setCurrentPage }) {
     const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
 
     const table = useReactTable({
-        data,
-        columns,
+        data: data || [],
+        columns: columns || [],
         state: {
             sorting,
             columnVisibility,
@@ -38,7 +38,14 @@ export function DataTable({ columns, data }) {
             columnFilters
         },
         enableRowSelection: true,
-        onRowSelectionChange: setRowSelection,
+        onRowSelectionChange: (newSelection) => {
+            setRowSelection(newSelection);
+            const selectedRows = table.getSelectedRowModel().rows;
+            const selectedIds = selectedRows.map((row) => row.original.id);
+            console.log("Selected IDs:", selectedIds);
+
+            onRowSelectionChange(selectedIds);
+        },
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
@@ -52,7 +59,10 @@ export function DataTable({ columns, data }) {
 
     return (
         <div className="space-y-4">
-            <DataTableToolbar table={table} />
+            <DataTableToolbar
+                table={table}
+            />
+
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -111,7 +121,14 @@ export function DataTable({ columns, data }) {
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} />
+            <PaginationForQuesTable
+                table={table}
+                onPageChange={(newPage) => setCurrentPage(newPage)}
+                onPageSizeChange={(newPageSize) => {
+                    setPerPage(newPageSize);
+                    setCurrentPage(1);
+                }}
+            />
         </div>
     )
 }
