@@ -1,18 +1,11 @@
 import { Button } from "@/components/ui/button";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
-import {
     DoubleArrowLeftIcon,
     DoubleArrowRightIcon
 } from "@radix-ui/react-icons";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export function PaginationForQuesTable({ table, onPageSizeChange, onPageChange, currentPage, perPage, totalPages }) {
+export function PaginationForQuesTable({ table, onPerPageChange, onPageChange, currentPage, perPage, totalPages }) {
     const handlePreviousClick = () => {
         if (currentPage > 1) {
             onPageChange(currentPage - 1);
@@ -25,6 +18,13 @@ export function PaginationForQuesTable({ table, onPageSizeChange, onPageChange, 
         }
     };
 
+    const handlePerPageChange = (e) => {
+        const newPerPage = parseInt(e.target.value, 10);
+        onPerPageChange(newPerPage);
+        onPageChange(1); // Reset to page 1
+    };
+
+
     return (
         <div className="flex items-center justify-between overflow-auto px-2">
             <div className="hidden flex-1 text-sm text-muted-foreground sm:block">
@@ -32,25 +32,37 @@ export function PaginationForQuesTable({ table, onPageSizeChange, onPageChange, 
                 {table.getFilteredRowModel().rows.length} row(s) selected.
             </div>
             <div className="flex items-center sm:space-x-6 lg:space-x-8">
-                <div className="flex items-center space-x-2">
-                    <p className="hidden text-sm font-medium sm:block">Rows per page</p>
-                    <Select
-                        value={`${table.getState().pagination.pageSize}`}
-                        onValueChange={value => {
-                            table.setPageSize(Number(value))
-                        }}
-                    >
-                        <SelectTrigger className="h-8 w-[70px]">
-                            <SelectValue placeholder={table.getState().pagination.pageSize} />
-                        </SelectTrigger>
-                        <SelectContent side="top">
-                            {[10, 20, 30, 40, 50].map(pageSize => (
-                                <SelectItem key={pageSize} value={`${pageSize}`}>
-                                    {pageSize}
-                                </SelectItem>
+                {/* Options for "per page" and "jump to page" */}
+                <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    <div>
+                        <label className="mr-2 text-gray-700 dark:text-gray-300">Items per page:</label>
+                        <select
+                            value={perPage}
+                            onChange={handlePerPageChange}
+                            className="border p-1 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                        >
+                            {[10, 20, 50, 100].map((num) => (
+                                <option key={num} value={num}>
+                                    {num}
+                                </option>
                             ))}
-                        </SelectContent>
-                    </Select>
+                        </select>
+                    </div>
+
+                    {/* <div className="flex items-center space-x-2">
+                        <input
+                            type="number"
+                            min="1"
+                            max={totalPages}
+                            placeholder="Jump to page"
+                            value={jumpToPage}
+                            onChange={(e) => setJumpToPage(e.target.value)}
+                            className="border p-1 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 w-24"
+                        />
+                        <Button onClick={handleJumpToPage} disabled={!jumpToPage}>
+                            Go
+                        </Button>
+                    </div> */}
                 </div>
 
                 <div className="flex w-[100px] items-center justify-center text-sm font-medium">

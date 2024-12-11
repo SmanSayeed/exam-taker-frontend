@@ -128,7 +128,10 @@ export default function PaginationSCN({
             ))}
 
             <PaginationItem>
-              <Button onClick={handleNextClick} disabled={currentPage === totalPages}>
+              <Button
+                onClick={handleNextClick}
+                disabled={currentPage === totalPages}
+              >
                 Next
               </Button>
             </PaginationItem>

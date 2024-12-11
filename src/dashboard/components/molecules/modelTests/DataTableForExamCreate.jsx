@@ -139,13 +139,13 @@ export function DataTableForExamCreate({
                 perPage={perPage}
                 refetch={refetch}
                 onPageChange={(newPage) => {
-                    setCurrentPage(newPage + 1);
+                    setCurrentPage(newPage);
                     refetch({
                         page: newPage,
                         per_page: perPage
                     });
                 }}
-                onPageSizeChange={(newPageSize) => {
+                onPerPageChange={(newPageSize) => {
                     setPerPage(newPageSize);
                     refetch({
                         page: currentPage,

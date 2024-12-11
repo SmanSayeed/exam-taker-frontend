@@ -30,10 +30,12 @@ export default function CreateExamFormForModelTest() {
     useEffect(() => {
         if (singleModelTest?.data?.start_time) {
             const formattedStartTime = convertToDateTimeLocal(singleModelTest.data.start_time);
+            const formattedEndTime = convertToDateTimeLocal(singleModelTest.data.end_time);
 
             form.reset({
                 ...form.getValues(),
                 start_time: formattedStartTime,
+                end_time: formattedEndTime
             });
         }
     }, [singleModelTest, form]);
@@ -135,6 +137,26 @@ export default function CreateExamFormForModelTest() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Start Time</FormLabel>
+                            <FormControl>
+                                <input
+                                    {...field}
+                                    type="datetime-local"
+                                    className="w-full px-4 py-2 border rounded-md"
+                                    disabled
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                {/* End Time Field */}
+                <FormField
+                    name="end_time"
+                    control={form.control}
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>End Time</FormLabel>
                             <FormControl>
                                 <input
                                     {...field}
