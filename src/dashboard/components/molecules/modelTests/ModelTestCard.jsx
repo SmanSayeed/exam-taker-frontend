@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardDescription,
@@ -9,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { useChangeModelTestStatusMutation } from "@/features/modelTests/modelTestApi";
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { ModeltestCardActions } from "./ModeltestCardActions";
 
@@ -53,14 +55,27 @@ const ModelTestCard = ({ modelTest, refetch }) => {
                 refetch={refetch}
             />
 
-            <div className="flex items-center justify-end space-x-2 mt-4 p-4">
-                <Label htmlFor={`status-switch-${modelTest?.id}`}>Change Status</Label>
-                <Switch
-                    id={`status-switch-${modelTest?.id}`}
-                    checked={isActive}
-                    onCheckedChange={handleChangeStatus}
-                    disabled={isLoading}
-                />
+            <div className="flex justify-between">
+                {/* create exam button */}
+                <Link
+                    to={`/admin/model-tests/${modelTest?.id}/create-exam`}
+                    className="flex items-center justify-start space-x-2 mt-4 p-4"
+                >
+                    <Button variant="outline">
+                        Create Exam
+                    </Button>
+                </Link>
+
+                {/* change status */}
+                <div className="flex items-center justify-end space-x-2 mt-4 p-4">
+                    <Label htmlFor={`status-switch-${modelTest?.id}`}>Change Status</Label>
+                    <Switch
+                        id={`status-switch-${modelTest?.id}`}
+                        checked={isActive}
+                        onCheckedChange={handleChangeStatus}
+                        disabled={isLoading}
+                    />
+                </div>
             </div>
         </Card>
     )

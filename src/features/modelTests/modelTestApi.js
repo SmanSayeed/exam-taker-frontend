@@ -6,6 +6,9 @@ export const modelTestApi = apiSlice.injectEndpoints({
       query: () => "/model-tests",
       providesTags: ["ModelTests"],
     }),
+    getSingleModelTest: builder.query({
+      query: (id) => `/model-tests/${id}`,
+    }),
     createModelTest: builder.mutation({
       query: (data) => ({
         url: "/model-tests",
@@ -69,6 +72,7 @@ export const modelTestApi = apiSlice.injectEndpoints({
 
 export const {
     useCreateModelTestMutation,
+    useGetSingleModelTestQuery,
     useGetAllModelTestsQuery,
     useDeleteModelTestMutation,
     useChangeModelTestStatusMutation

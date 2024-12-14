@@ -10,7 +10,7 @@ import { Layout } from "../../templates/Layout";
 const ModelTestsPage = () => {
     const { data: allModelTests, isLoading, isSuccess, refetch } = useGetAllModelTestsQuery();
 
-    if (isLoading) return <Loading />
+    if (isLoading) return <Loading />;
 
     return (
         <Layout>
