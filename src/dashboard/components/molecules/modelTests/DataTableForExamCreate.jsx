@@ -20,7 +20,7 @@ import {
 
 import { useState } from "react";
 import { DataTableToolbar } from "../../organism/datatable/DataTableToolbar";
-import { PaginationForQuesTable } from "./PaginationForQuesTable";
+import PaginationForQuesTable from "./PaginationForQuesTable";
 
 export function DataTableForExamCreate({
     columns,
@@ -31,7 +31,7 @@ export function DataTableForExamCreate({
     setPerPage,
     setCurrentPage,
     refetch,
-    totalPages
+    totalRecords
 }) {
 
     const [rowSelection, setRowSelection] = useState({});
@@ -135,6 +135,7 @@ export function DataTableForExamCreate({
 
             <PaginationForQuesTable
                 table={table}
+                data={data}
                 currentPage={currentPage}
                 perPage={perPage}
                 refetch={refetch}
@@ -152,7 +153,7 @@ export function DataTableForExamCreate({
                         per_page: newPageSize,
                     });
                 }}
-                totalPages={totalPages}
+                totalRecords={totalRecords}
             />
         </div>
     )

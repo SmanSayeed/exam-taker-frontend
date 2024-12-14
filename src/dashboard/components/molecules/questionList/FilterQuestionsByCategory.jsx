@@ -148,7 +148,7 @@ export default function FilterQuestionsByCategory({ control, setValue }) {
     };
 
     return (
-        <div className="flex flex-col md:flex-row items-start gap-4 my-6 border rounded-md ">
+        <div className="flex flex-col md:flex-row items-start gap-4 my-4">
             {/* Section → Exam Type → Exam Sub Type */}
             <div className="grid grid-cols-1 gap-4 p-4 w-full">
                 {
@@ -185,7 +185,7 @@ export default function FilterQuestionsByCategory({ control, setValue }) {
             </div>
 
             {/* Group → Level → Subject → Lesson → Topic → Sub Topic */}
-            <div className="grid gap-4  md:border-l md:border-r  py-4 px-4 md:px-8 w-full ">
+            <div className="grid gap-4 py-4 px-4 md:px-8 w-full ">
                 {
                     isGroupLoading && (
                         <div className="space-y-2">
