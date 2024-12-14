@@ -174,9 +174,9 @@ export default function SelectCategoryForEdit({ control, setValue }) {
     }
 
     const renderSelectField = ({ label, name, options, onChange, selectedValue, rules, disabled }) => {
-        // If no options are available, don't render the selector
-        if (!selectedValue) {
-            return null;
+
+        if (!options || options.length === 0) {
+            return null; // Do not render the field if options are not available
         }
 
         return (
