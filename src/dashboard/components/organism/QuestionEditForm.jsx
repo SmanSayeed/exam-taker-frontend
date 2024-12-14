@@ -15,6 +15,7 @@ import CInput from "@/components/atoms/CInput";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
+import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
 import { Controller, useForm } from "react-hook-form";
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from "react-redux";
@@ -37,13 +38,25 @@ export default function QuestionEditForm() {
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([]);
 
+    const [image, setImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState("");
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            setImage(file);
+            setPreviewImage(URL.createObjectURL(file)); // Show preview of the uploaded image
+        }
+    };
+
     const [tags, setTags] = useState([]);
     const selectedTagIds = tags && tags.map(tag => tag.id);
 
     const { questionId } = useParams();
     const { data: questionData, isLoading: isQuestionLoading, refetch: refetchQuestion } = useGetSingleQuestionsQuery(questionId);
-    const [question, setQuestion] = useState({});
 
+    const [question, setQuestion] = useState({});
     const { type } = question || {};
 
     const {
@@ -61,11 +74,14 @@ export default function QuestionEditForm() {
             setQuestion(question);
 
             reset({
-                title: question.title || "",
-                description: question.description || "",
+                title: getPlainTextFromHtml(question.title) || "",
+                description: getPlainTextFromHtml(question.description) || "",
                 type: question.type || "",
                 mark: question.mark || ""
             });
+
+            setPreviewImage(question.image || "");
+            setImage(null);
 
             dispatch(setSelectedSection({ selectedSection: question.attachable?.section_id || "" }));
             dispatch(setSelectedExamType({ selectedExamType: question.attachable?.exam_type_id || "" }));
@@ -86,16 +102,16 @@ export default function QuestionEditForm() {
             if (question?.mcq_questions) {
                 setOptions(question?.mcq_questions.map(option => ({
                     id: option?.id,
-                    mcq_question_text: option?.mcq_question_text,
+                    mcq_question_text: getPlainTextFromHtml(option?.mcq_question_text),
                     is_correct: !!option.is_correct,
-                    description: option?.description,
+                    description: getPlainTextFromHtml(option?.description),
                 })));
                 setCorrectOptions(question?.mcq_questions.map(option => !!option.is_correct));
 
                 // Set initial values for each MCQ question text in React Hook Form
                 question?.mcq_questions.forEach((option, index) => {
-                    setValue(`mcq_question_text${index}`, option?.mcq_question_text);
-                    setValue(`explanation${index}`, option?.description);
+                    setValue(`mcq_question_text${index}`, getPlainTextFromHtml(option?.mcq_question_text));
+                    setValue(`explanation${index}`, getPlainTextFromHtml(option?.description));
                 });
             }
 
@@ -181,7 +197,8 @@ export default function QuestionEditForm() {
             "mcq_options": mcqOptions,
             "creative_options": creativeQuestions,
             "categories": categoriesPayload,
-            "tags": selectedTagIds
+            "tags": selectedTagIds,
+            "image": image && image
         }
 
         try {
@@ -264,7 +281,7 @@ export default function QuestionEditForm() {
                     {errors.mark && <span className="text-red-600">{errors.mark.message}</span>}
                 </div>
 
-                <div className="flex flex-row items-center justify-between gap-4 space-y-1 pb-10">
+                <div className="flex flex-row items-center justify-between gap-4 space-y-1">
                     {/* is_paid */}
                     <div className="flex items-center">
                         <Checkbox
@@ -294,6 +311,25 @@ export default function QuestionEditForm() {
                         />
                         <Label htmlFor="status" className="ml-2">Status</Label>
                     </div>
+                </div>
+
+                {/* Image Upload */}
+                <div className="space-y-1 pb-10">
+                    <Label className="text-md font-bold">Image</Label>
+                    {previewImage && (
+                        <div className="mb-4">
+                            <img
+                                src={previewImage}
+                                alt="Preview"
+                                className="w-full max-w-xs object-contain rounded-lg border"
+                            />
+                        </div>
+                    )}
+                    <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                    />
                 </div>
 
                 {/* select category */}
