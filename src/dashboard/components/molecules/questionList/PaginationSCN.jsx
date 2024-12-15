@@ -16,6 +16,7 @@ export default function PaginationSCN({
   onPageChange,
   onPerPageChange,
   refetch,
+  isLoadingQuestions
 }) {
   const [jumpToPage, setJumpToPage] = useState("");
   const [loadingPage, setLoadingPage] = useState(false);
@@ -74,6 +75,12 @@ export default function PaginationSCN({
     return pages;
   };
 
+  if (isLoadingQuestions) return <Loading />;
+
+  if (!data) {
+    return <h1 className="text-5xl text-black">No data found</h1>;
+  }
+
   return (
     <div className="space-y-5">
       {/* Display list of questions or loader */}
@@ -121,7 +128,10 @@ export default function PaginationSCN({
             ))}
 
             <PaginationItem>
-              <Button onClick={handleNextClick} disabled={currentPage === totalPages}>
+              <Button
+                onClick={handleNextClick}
+                disabled={currentPage === totalPages}
+              >
                 Next
               </Button>
             </PaginationItem>

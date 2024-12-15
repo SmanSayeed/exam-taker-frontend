@@ -24,14 +24,34 @@ import { toast } from "sonner";
 import { CreativeQuestions } from "./CreativeQuestions";
 import { McqOptions } from "./McqOptions";
 import SelectCategory from "./SelectCategory";
+import TagsField from "./TagsField";
 
 export default function QuestionCreateForm() {
     const [statusCheck, setStatusCheck] = useState(true);
-    const [isPaid, setIsPaid] = useState(false);
+    // const [isPaid, setIsPaid] = useState(false);
     const [isFeatured, setIsFeatured] = useState(false);
     const [options, setOptions] = useState([0, 1, 2, 3]);
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
+
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState("");
+
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            setImage(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const [tags, setTags] = useState([]);
+    const selectedTagIds = tags && tags.map(tag => tag.id);
 
     const [selectedQuesType, setSelectedQuesType] = useLocalStorage({
         key: "questionType",
@@ -40,6 +60,10 @@ export default function QuestionCreateForm() {
     const [mark, setMark] = useLocalStorage({
         key: "questionMark",
         defaultValue: "1",
+    });
+    const [isPaid, setIsPaid] = useLocalStorage({
+        key: "isPaid",
+        defaultValue: false,
     });
 
     const dispatch = useDispatch();
@@ -152,16 +176,16 @@ export default function QuestionCreateForm() {
 
         const payload = {
             title: formData.title,
-            // description: formData.description,
             type: selectedQuesType || formData.type,
             mark: formData.mark,
-            // images: null,
             is_paid: isPaid,
             is_featured: isFeatured,
             status: statusCheck,
             mcq_options: mcqOptions,
             creative_options: creativeQuestions,
             categories: categoriesPayload,
+            tags: selectedTagIds,
+            image: image && image
         };
 
         try {
@@ -169,6 +193,9 @@ export default function QuestionCreateForm() {
             toast.success(response?.message);
             reset();
             setValue("title", "");
+            setTags([]);
+            setImage(null);
+            setImagePreview("");
         } catch (err) {
             toast.error(err?.data?.message || "An error occurred");
         }
@@ -177,7 +204,8 @@ export default function QuestionCreateForm() {
     return (
         <>
             <form onSubmit={handleSubmit(handleCreate)} id="question-form">
-            <Button disabled={isLoading} type="submit" className="w-full">
+                <div className="space-y-4 mt-4">
+                    <Button disabled={isLoading} type="submit" className="w-full">
                         {isLoading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -187,7 +215,7 @@ export default function QuestionCreateForm() {
                             "Create Question"
                         )}
                     </Button>
-                <div className="space-y-4 mt-4">
+
                     {/* title */}
                     <div className="space-y-1">
                         <CInput
@@ -278,7 +306,8 @@ export default function QuestionCreateForm() {
                         )}
                     </div>
 
-                    <div className="flex flex-row items-center justify-between gap-4 space-y-1 pb-10">
+                    {/* paid, featured and status field */}
+                    <div className="flex flex-row items-center justify-between gap-4 space-y-1">
                         {/* is_paid */}
                         <div className="flex items-center">
                             <Checkbox
@@ -302,6 +331,7 @@ export default function QuestionCreateForm() {
                                 Featured
                             </Label>
                         </div>
+
                         {/* status */}
                         <div className="flex items-center">
                             <Checkbox
@@ -313,6 +343,28 @@ export default function QuestionCreateForm() {
                                 Status
                             </Label>
                         </div>
+                    </div>
+
+                    {/* Image Upload */}
+                    <div className="pb-10">
+                        <Label htmlFor="image-upload" className="text-md font-bold">
+                            Upload Image
+                        </Label>
+                        <Input
+                            type="file"
+                            id="image-upload"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                        />
+                        {imagePreview && (
+                            <div className="mt-2">
+                                <img
+                                    src={imagePreview}
+                                    alt="Selected"
+                                    className="w-32 h-32 object-cover rounded"
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {/* select category */}
@@ -330,6 +382,15 @@ export default function QuestionCreateForm() {
                         setSelectedSubTopic={setSelectedSubTopic}
                         setSelectedYear={setSelectedYear}
                     />
+
+                    {/* select tags*/}
+                    <div className="pb-4">
+                        <TagsField
+                            tags={tags}
+                            setTags={setTags}
+                            control={control}
+                        />
+                    </div>
 
                     <Button disabled={isLoading} type="submit" className="w-full">
                         {isLoading ? (

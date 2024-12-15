@@ -1,18 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import FilterQuestionsByCategory from "../molecules/questionList/FilterQuestionsByCategory";
 
-export default function FilteringQuestions({
-  control,
-  setValue,
-  refetch,
-  handleFilterQuestions,
-  register,
-  handleSubmit,
-  errors,
-  isFetchingGetQuestions,
-}) {
+export default function FilteringQuestions({ control, setValue, handleFilterQuestions, register, handleSubmit, errors, isLoadingQuestions }) {
+
   return (
     <form
       onSubmit={handleSubmit(handleFilterQuestions)}
@@ -35,15 +27,9 @@ export default function FilteringQuestions({
         </button>
       </div>
 
-      <div className="mb-4 text-end">
-        <Button type="submit" disabled={isFetchingGetQuestions}>
-          {isFetchingGetQuestions ? (
-            <span className="flex items-center justify-center gap-2">
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            </span>
-          ) : (
-            "Search"
-          )}
+      <div className="text-end">
+        <Button type="submit" disabled={isLoadingQuestions}>
+          Filtered
         </Button>
       </div>
     </form>

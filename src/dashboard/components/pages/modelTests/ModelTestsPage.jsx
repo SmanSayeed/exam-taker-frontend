@@ -3,14 +3,14 @@ import { useGetAllModelTestsQuery } from "@/features/modelTests/modelTestApi";
 import { Link } from "react-router-dom";
 import Loading from "../../atoms/Loading";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import ModelTestList from "../../organism/modelTests/ModelTestList";
+import ModelTestCard from "../../molecules/modelTests/ModelTestCard";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
 const ModelTestsPage = () => {
-    const { data: allModelTests, isLoading, isSuccess } = useGetAllModelTestsQuery();
+    const { data: allModelTests, isLoading, isSuccess, refetch } = useGetAllModelTestsQuery();
 
-    if (isLoading) return <Loading />
+    if (isLoading) return <Loading />;
 
     return (
         <Layout>
@@ -32,9 +32,13 @@ const ModelTestsPage = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {
-                        isSuccess && (
-                            <ModelTestList allModelTests={allModelTests} />
-                        )
+                        isSuccess && allModelTests?.data && allModelTests?.data.map((item) => (
+                            <ModelTestCard
+                                key={item?.id}
+                                modelTest={item}
+                                refetch={refetch}
+                            />
+                        ))
                     }
                 </div>
             </Layout.Body>

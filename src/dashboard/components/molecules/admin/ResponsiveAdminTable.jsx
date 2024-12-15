@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 
 const ResponsiveAdminTable = ({ admins, onEdit, onDelete, onToggleStatus }) => (
@@ -20,9 +19,8 @@ const ResponsiveAdminTable = ({ admins, onEdit, onDelete, onToggleStatus }) => (
                         <td className="px-4 py-2">
                             <button
                                 onClick={() => onToggleStatus(admin.id, !admin.active_status)}
-                                className={`px-2 py-1 rounded ${
-                                    admin.active_status ? "bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200" : "bg-red-200 text-red-800 dark:bg-red-800 dark:text-red-200"
-                                }`}
+                                className={`px-2 py-1 rounded ${admin.active_status ? "bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200" : "bg-red-200 text-red-800 dark:bg-red-800 dark:text-red-200"
+                                    }`}
                             >
                                 {admin.active_status ? "Active" : "Inactive"}
                             </button>

@@ -1,31 +1,36 @@
 import ErrorPage from "@/Error";
 import NotFound from "@/NotFound";
-import AdminLoginPage from "@/components/pages/AdminLoginPage";
 import DashboardPage from "@/dashboard/components/pages/DashboardPage";
+import { createBrowserRouter } from "react-router-dom";
+import PrivateRoutes from "./PrivateRoutes";
+
+import AdminLoginPage from "@/components/pages/AdminLoginPage";
 import StudentCreateForAdminPage from "@/dashboard/components/pages/StudentCreateForAdminPage";
 import StudentListForAdminPage from "@/dashboard/components/pages/StudentListForAdminPage";
 import UserCreateForAdminPage from "@/dashboard/components/pages/UserCreateForAdminPage";
 import UserListForAdminPage from "@/dashboard/components/pages/UserListForAdminPage";
+
 import ModelTestCreatePage from "@/dashboard/components/pages/modelTests/ModelTestCreatePage";
 import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPage";
-import AllPackagesForAdminPage from "@/dashboard/components/pages/packages/AllPackagesForAdminPage";
-import PackageManagementForAdminPage from "@/dashboard/components/pages/packages/PackageCreateForAdminPage";
-import PackageEditForAdminPage from "@/dashboard/components/pages/packages/PackageEditForAdminPage";
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
-import QuestionEditForAdminPage from "@/dashboard/components/pages/questions/QuestionEditForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
-import ExamSubTypeForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/ExamSubTypeForQuestionPage";
-import ExamTypeForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/ExamTypeForQuestionPage";
-import GroupForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/GroupForQuestionPage";
-import LessonForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/LessonForQuestionPage";
-import LevelForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/LevelForQuestionPage";
-import SectionForQuestionPage from '@/dashboard/components/pages/questions/questioncategories/SectionForQuestionPage';
-import SubTopicsForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/SubTopicsForQuestionPage";
-import SubjectForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/SubjectForQuestionPage";
-import TopicsForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/TopicsForQuestionPage";
-import YearForQuestionPage from "@/dashboard/components/pages/questions/questioncategories/YearForQuestionPage";
-import { createBrowserRouter } from "react-router-dom";
-import PrivateRoutes from "./PrivateRoutes";
+
+import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
+import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
+import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
+import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
+import ExamSubTypePage from "@/dashboard/components/pages/questioncategories/ExamSubTypePage";
+import ExamTypePage from "@/dashboard/components/pages/questioncategories/ExamTypePage";
+import GroupPage from "@/dashboard/components/pages/questioncategories/GroupPage";
+import LessonPage from "@/dashboard/components/pages/questioncategories/LessonPage";
+import LevelPage from "@/dashboard/components/pages/questioncategories/LevelPage";
+import SectionPage from "@/dashboard/components/pages/questioncategories/SectionPage";
+import SubTopicsPage from "@/dashboard/components/pages/questioncategories/SubTopicsPage";
+import SubjectPage from "@/dashboard/components/pages/questioncategories/SubjectPage";
+import TagsPage from "@/dashboard/components/pages/questioncategories/TagsPage";
+import TopicsPage from "@/dashboard/components/pages/questioncategories/TopicsPage";
+import YearPage from "@/dashboard/components/pages/questioncategories/YearPage";
+import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
 
 const router = createBrowserRouter([
     {
@@ -59,44 +64,48 @@ const router = createBrowserRouter([
                         element: <StudentCreateForAdminPage />
                     },
                     {
-                        path: "/admin/questions/section",
-                        element: <SectionForQuestionPage />
+                        path: "/admin/category/section",
+                        element: <SectionPage />
                     },
                     {
-                        path: "/admin/questions/exam-type",
-                        element: <ExamTypeForQuestionPage />
+                        path: "/admin/category/exam-type",
+                        element: <ExamTypePage />
                     },
                     {
-                        path: "/admin/questions/year",
-                        element: <YearForQuestionPage />
+                        path: "/admin/category/year",
+                        element: <YearPage />
                     },
                     {
-                        path: "/admin/questions/group",
-                        element: <GroupForQuestionPage />
+                        path: "/admin/category/group",
+                        element: <GroupPage />
                     },
                     {
-                        path: "/admin/questions/exam-sub-type",
-                        element: <ExamSubTypeForQuestionPage />
+                        path: "/admin/category/exam-sub-type",
+                        element: <ExamSubTypePage />
                     },
                     {
-                        path: "/admin/questions/level",
-                        element: <LevelForQuestionPage />
+                        path: "/admin/category/level",
+                        element: <LevelPage />
                     },
                     {
-                        path: "/admin/questions/subject",
-                        element: <SubjectForQuestionPage />
+                        path: "/admin/category/subject",
+                        element: <SubjectPage />
                     },
                     {
-                        path: "/admin/questions/lesson",
-                        element: <LessonForQuestionPage />
+                        path: "/admin/category/lesson",
+                        element: <LessonPage />
                     },
                     {
-                        path: "/admin/questions/topics",
-                        element: <TopicsForQuestionPage />
+                        path: "/admin/category/topics",
+                        element: <TopicsPage />
                     },
                     {
-                        path: "/admin/questions/sub-topics",
-                        element: <SubTopicsForQuestionPage />
+                        path: "/admin/category/sub-topics",
+                        element: <SubTopicsPage />
+                    },
+                    {
+                        path: "/admin/category/tags",
+                        element: <TagsPage />
                     },
                     {
                         path: "/admin/question/create",
@@ -108,19 +117,19 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/admin/question/edit/:questionId",
-                        element: <QuestionEditForAdminPage />
+                        element: <QuestionEditPage />
                     },
                     {
                         path: "/admin/package/create",
-                        element: <PackageManagementForAdminPage />
+                        element: <PackageCreatePage />
                     },
                     {
                         path: "/admin/package/edit/:packageId",
-                        element: <PackageEditForAdminPage />
+                        element: <PackageEditPage />
                     },
                     {
                         path: "/admin/packages",
-                        element: <AllPackagesForAdminPage />
+                        element: <PackagesPage />
                     },
                     {
                         path: "/admin/model-tests/create",
@@ -129,6 +138,10 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/model-tests",
                         element: <ModelTestsPage />
+                    },
+                    {
+                        path: "/admin/model-tests/:modelTestId/create-exam",
+                        element: <CreateExamForModelTestPage />
                     },
                 ]
             },

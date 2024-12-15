@@ -3,7 +3,6 @@ import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import Loading from "../../atoms/Loading";
 import PageTitle from "../../atoms/PageTitle";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
 import PaginationSCN from "../../molecules/questionList/PaginationSCN";
@@ -19,16 +18,13 @@ const QuestionListForAdminPage = () => {
     // Fetch data based on the current page, per-page value, and filters
     const {
         data: paginationData,
-        isLoading: isLoadingGetQuestions,
-        isFetching: isFetchingGetQuestions,
-        isSuccess,
         refetch,
+        isFetching
     } = useGetQuestionsQuery({
         page: currentPage,
         per_page: perPage,
         ...filters,
     });
-console.log(isFetchingGetQuestions);
 
     const {
         register,
@@ -76,10 +72,6 @@ console.log(isFetchingGetQuestions);
         }
     };
 
-    if (isLoadingGetQuestions) return <Loading />;
-    if (!isSuccess || !paginationData)
-        return <h1 className="text-5xl text-black">No data found</h1>;
-
     return (
         <Layout>
             <Layout.Header sticky>
@@ -102,18 +94,18 @@ console.log(isFetchingGetQuestions);
                         register={register}
                         handleSubmit={handleSubmit}
                         errors={errors}
-                        refetch={refetch}
-                        isFetchingGetQuestions={isFetchingGetQuestions}
+                        isLoadingQuestions={isFetching}
                     />
                 </Card>
 
                 <div>
                     <PaginationSCN
-                        data={paginationData.data.data}
-                        totalRecords={paginationData.data.total}
+                        data={paginationData?.data?.data}
+                        totalRecords={paginationData?.data?.total}
                         currentPage={currentPage}
                         perPage={perPage}
                         refetch={refetch}
+                        isLoadingQuestions={isFetching}
                         onPageChange={(newPage) => {
                             setCurrentPage(newPage);
                             refetch({

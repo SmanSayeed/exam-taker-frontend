@@ -136,41 +136,44 @@ export default function ModelTestCreateForm() {
                     <Controller
                         name="package"
                         control={control}
-                        render={({ field }) => (
-                            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                                <PopoverTrigger asChild>
-                                    <Button variant="outline" className="w-full justify-start">
-                                        {selectedPackageName ? selectedPackageName : "Select Package"}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-full p-0">
-                                    <Command>
-                                        <CommandInput placeholder="Search package..." />
-                                        <CommandList>
-                                            <CommandEmpty>No results found.</CommandEmpty>
-                                            <CommandGroup>
-                                                {
-                                                    allPackages?.data.map((type) => {
-                                                        const plainText = getPlainTextFromHtml(type?.name);
+                        render={({ field, formState: { errors } }) => (
+                            <>
+                                <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                                    <PopoverTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-start">
+                                            {selectedPackageName ? selectedPackageName : "Select Package"}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-full p-0">
+                                        <Command>
+                                            <CommandInput placeholder="Search package..." />
+                                            <CommandList>
+                                                <CommandEmpty>No results found.</CommandEmpty>
+                                                <CommandGroup>
+                                                    {
+                                                        allPackages?.data.map((type) => {
+                                                            const plainText = getPlainTextFromHtml(type?.name);
 
-                                                        return (
-                                                            <CommandItem
-                                                                key={type?.id}
-                                                                onSelect={() => {
-                                                                    field.onChange(type?.id, plainText);
-                                                                    handlePackageSelect(type?.id, plainText)
-                                                                }}
-                                                            >
-                                                                {plainText.charAt(0).toUpperCase() + plainText.slice(1)}
-                                                            </CommandItem>
-                                                        )
-                                                    })
-                                                }
-                                            </CommandGroup>
-                                        </CommandList>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
+                                                            return (
+                                                                <CommandItem
+                                                                    key={type?.id}
+                                                                    onSelect={() => {
+                                                                        field.onChange(type?.id, plainText);
+                                                                        handlePackageSelect(type?.id, plainText)
+                                                                    }}
+                                                                >
+                                                                    {plainText.charAt(0).toUpperCase() + plainText.slice(1)}
+                                                                </CommandItem>
+                                                            )
+                                                        })
+                                                    }
+                                                </CommandGroup>
+                                            </CommandList>
+                                        </Command>
+                                    </PopoverContent>
+                                </Popover>
+                                {errors.package && <span className="text-red-600">{errors.package.message}</span>}
+                            </>
                         )}
                     />
                 </div>
@@ -182,19 +185,21 @@ export default function ModelTestCreateForm() {
                         name="title"
                         control={control}
                         rules={{ required: "Title is required" }}
-                        render={({ field }) => (
-                            <ReactQuill
-                                theme="snow"
-                                value={field.value}
-                                onChange={(value) => {
-                                    field.onChange(value);
-                                    dispatch(updateField({ field: 'title', value }));
-                                }}
-                                modules={module}
-                            />
+                        render={({ field, formState: errors }) => (
+                            <>
+                                <ReactQuill
+                                    theme="snow"
+                                    value={field.value}
+                                    onChange={(value) => {
+                                        field.onChange(value);
+                                        dispatch(updateField({ field: 'title', value }));
+                                    }}
+                                    modules={module}
+                                />
+                                {errors.title && <span className="text-red-600">{errors.title.message}</span>}
+                            </>
                         )}
                     />
-                    {errors.title && <span className="text-red-600">{errors.title.message}</span>}
                 </div>
 
                 {/* description */}
@@ -203,7 +208,6 @@ export default function ModelTestCreateForm() {
                     <Controller
                         name="description"
                         control={control}
-                        rules={{ required: "Description is required" }}
                         render={({ field }) => (
                             <ReactQuill
                                 theme="snow"
@@ -216,7 +220,6 @@ export default function ModelTestCreateForm() {
                             />
                         )}
                     />
-                    {errors.description && <span className="text-red-600">{errors.description.message}</span>}
                 </div>
 
                 {/* start time */}
@@ -266,7 +269,7 @@ export default function ModelTestCreateForm() {
                 </div>
 
                 {/* is active */}
-                <div>
+                <div className="flex items-center">
                     <Checkbox
                         id="status"
                         checked={modelTestForm?.is_active}

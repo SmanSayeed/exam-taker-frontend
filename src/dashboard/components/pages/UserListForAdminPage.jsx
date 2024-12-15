@@ -1,14 +1,13 @@
+import { useDeleteAdminMutation, useEditAdminMutation, useGetAdminsQuery, useToggleAdminStatusMutation } from "@/features/admin/adminApi";
+import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import ThemeSwitch from "../atoms/ThemeSwitch";
+import EditAdminModal from "../molecules/admin/EditAdminModal";
+import ResponsiveAdminTable from "../molecules/admin/ResponsiveAdminTable";
 import UserNav from "../organism/UserNav";
 import { Layout } from "../templates/Layout";
-import EditAdminModal from "../molecules/admin/EditAdminModal";
-import { Loader } from "lucide-react";
-import { useDeleteAdminMutation, useEditAdminMutation, useGetAdminsQuery, useToggleAdminStatusMutation } from "@/features/admin/adminApi";
-import ResponsiveAdminTable from "../molecules/admin/ResponsiveAdminTable";
-
 
 const UserListForAdminPage = () => {
     const navigate = useNavigate();
