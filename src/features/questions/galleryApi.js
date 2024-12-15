@@ -1,29 +1,12 @@
 import { apiSlice } from "@/features/api/apiSlice";
 
-const formatParams = (params) => {
-  const formattedParams = new URLSearchParams();
-
-  Object.keys(params).forEach((key) => {
-    const value = params[key];
-
-    if (Array.isArray(value)) {
-      value.forEach((item) => {
-        formattedParams.append(`${key}[]`, item);
-      });
-    } else {
-      formattedParams.append(key, value);
-    }
-  });
-
-  return formattedParams.toString();
-};
 
 export const galleryApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
   // Upload image
   uploadImage: builder.mutation({
     query: (formData) => ({
-      url: '/admin/image/upload',
+      url: '/image/upload',
       method: 'POST',
       body: formData, // FormData with image
     }),
@@ -32,8 +15,8 @@ export const galleryApi = apiSlice.injectEndpoints({
   // Update image
   updateImage: builder.mutation({
     query: ({ id, formData }) => ({
-      url: `/admin/image/update/${id}`,
-      method: 'PUT',
+      url: `/image/update/${id}`,
+      method: 'POST',
       body: formData, // FormData with image
     }),
   }),
@@ -41,7 +24,7 @@ export const galleryApi = apiSlice.injectEndpoints({
   // Delete image
   deleteImage: builder.mutation({
     query: (id) => ({
-      url: `/admin/image/delete/${id}`,
+      url: `/image/delete/${id}`,
       method: 'DELETE',
     }),
   }),
@@ -49,7 +32,7 @@ export const galleryApi = apiSlice.injectEndpoints({
   // Get all images
   getImages: builder.query({
     query: () => ({
-      url: '/admin/images',
+      url: '/images',
       method: 'GET',
     }),
   }),

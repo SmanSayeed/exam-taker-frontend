@@ -26,6 +26,8 @@ import { McqOptions } from "./McqOptions";
 import SelectCategory from "./SelectCategory";
 import TagsField from "./TagsField";
 import CFileInput from "@/components/atoms/CFileInput";
+import QImageUpload from "@/components/atoms/QImageUpload";
+
 
 export default function QuestionCreateForm() {
     const [statusCheck, setStatusCheck] = useState(true);
@@ -34,6 +36,7 @@ export default function QuestionCreateForm() {
     const [options, setOptions] = useState([0, 1, 2, 3]);
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
+    const [qImageId, setQImageId] = useState(null); // Use array destructuring here
 
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState("");
@@ -187,7 +190,7 @@ export default function QuestionCreateForm() {
             creative_options: creativeQuestions,
             categories: categoriesPayload,
             tags: selectedTagIds,
-            image: image && image
+            images: qImageId || null
         };
 
         try {
@@ -235,7 +238,8 @@ export default function QuestionCreateForm() {
                           {/* Image Upload */}
                     {/* Image Upload */}
             <div className="pb-10">
-                <CFileInput
+              <QImageUpload setQImageId={setQImageId} />
+                {/* <CFileInput
                     name="image"
                     label="Upload Image"
                     control={control}
@@ -251,7 +255,7 @@ export default function QuestionCreateForm() {
                             className="w-32 h-32 object-cover rounded"
                         />
                     </div>
-                )}
+                )} */}
             </div>
 
 
