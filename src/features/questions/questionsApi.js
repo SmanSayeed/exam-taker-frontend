@@ -32,12 +32,18 @@ export const questionsApi = apiSlice.injectEndpoints({
     }),
 
     createQuestion: builder.mutation({
-      query: (data) => ({
-        url: "/que/create",
-        method: "POST",
-        body: data,
-      }),
+      query: (data) => {
+        // Log the data being sent in the request
+        console.log("Request payload data:", data);
+        
+        return {
+          url: "/que/create",
+          method: "POST",
+          body: data,  // Send the FormData containing JSON and images
+        };
+      },
     }),
+    
 
     deleteQuestion: builder.mutation({
       query: (id) => ({
