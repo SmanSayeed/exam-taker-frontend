@@ -6,7 +6,7 @@ import { QueCardActions } from "./QueCardActions";
 import TagsTitle from "./TagsTitle";
 
 export default function QuestionCard({ data: questionData, refetch }) {
-    const { id, title, mcq_questions, tags } = questionData || {};
+    const { id, title, mcq_questions, tags, images } = questionData || {};
 
     const tagIds = tags ? tags.split(",").map(tagId => parseInt(tagId, 10)) : [];
 
@@ -16,12 +16,12 @@ export default function QuestionCard({ data: questionData, refetch }) {
                 #{id}
             </span>
 
+            {/* display question title and tagsname */}
             <div className="mb-4">
                 <p className="my-4 text-lg dark:text-white">
                     {parseHtmlContent(title)}
                 </p>
 
-                {/* Display Tag Names */}
                 <div className="flex flex-wrap gap-2 justify-end">
                     {tagIds.map((tagId) => (
                         <TagsTitle
@@ -31,6 +31,17 @@ export default function QuestionCard({ data: questionData, refetch }) {
                     ))}
                 </div>
             </div>
+
+            {/* Render the image if available */}
+            {images && (
+                <div className="my-4">
+                    <img
+                        src={images}
+                        alt={`Image for question ${id}`}
+                        className="rounded-md shadow-md max-w-full"
+                    />
+                </div>
+            )}
 
             <div>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">

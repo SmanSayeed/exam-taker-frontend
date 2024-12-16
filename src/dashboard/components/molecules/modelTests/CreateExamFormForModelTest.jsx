@@ -7,14 +7,21 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
+import FilterQuestionsByCategory from "../questionList/FilterQuestionsByCategory";
 import { DataTableForExamCreate } from "./DataTableForExamCreate";
 import { questionsColumns } from "./questionsColumns";
 
 export default function CreateExamFormForModelTest() {
+    const [filters, setFilters] = useState({});
+
     const { modelTestId } = useParams();
     const { data: singleModelTest } = useGetSingleModelTestQuery(modelTestId);
 
     const [selectedRowIds, setSelectedRowIds] = useState([]);
+    const handleSelectedRowIds = (ids) => {
+        setSelectedRowIds(ids);
+    };
 
     const form = useForm({
         defaultValues: {
@@ -46,17 +53,54 @@ export default function CreateExamFormForModelTest() {
     }, [selectedRowIds]);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(20);
+    const [perPage, setPerPage] = useState(10);
 
     const {
         data: questionsData,
         refetch,
+        isLoadingQuestions
     } = useGetQuestionsQuery({
         page: currentPage,
-        per_page: perPage,
+        perPage: perPage,
+        ...filters
     });
 
-    console.log("question data", questionsData)
+    const cleanPayload = (payload) =>
+        Object.fromEntries(
+            Object.entries(payload).filter(
+                ([, value]) => value !== undefined && value.length > 0 // Remove empty fields
+            )
+        );
+
+    const handleFilterQuestions = async (formData) => {
+        const rawPayload = {
+            section_id: formData.section || [],
+            exam_type_id: formData.exam_type || [],
+            exam_sub_type_id: formData.exam_sub_type || [],
+            group_id: formData.group || [],
+            level_id: formData.level || [],
+            subject_id: formData.subject || [],
+            lesson_id: formData.lesson || [],
+            topic_id: formData.topic || [],
+            sub_topic_id: formData.sub_topic || [],
+        };
+        const payload = cleanPayload(rawPayload); // Remove empty values
+
+        try {
+            setFilters(payload);
+            refetch({
+                page: currentPage,
+                perPage: perPage,
+                ...payload,
+            });
+        } catch (err) {
+            toast.error(
+                err?.data?.error ||
+                err?.data?.message ||
+                "An error occurred while filtering"
+            );
+        }
+    };
 
     const onSubmit = async (data) => {
         const payload = {
@@ -171,20 +215,31 @@ export default function CreateExamFormForModelTest() {
                 />
 
                 {/* filtering catgeory */}
-                {/* <FilterQuestionsByCategory /> */}
+                <FilterQuestionsByCategory
+                    control={form.control}
+                    setValue={form.setValue}
+                />
+                <div className="text-end">
+                    <Button
+                        type="button"
+                        onClick={form.handleSubmit(handleFilterQuestions)}
+                        disabled={isLoadingQuestions}
+                    >
+                        Filtered
+                    </Button>
+                </div>
 
                 {/* question list table */}
                 <DataTableForExamCreate
-                    // data={fakeQuestions}
                     data={questionsData?.data?.data}
                     currentPage={currentPage}
                     perPage={perPage}
                     setCurrentPage={setCurrentPage}
                     setPerPage={setPerPage}
                     columns={questionsColumns}
-                    onRowSelectionChange={setSelectedRowIds}
+                    onSelectRowIds={handleSelectedRowIds}
                     refetch={refetch}
-                    totalPages={questionsData?.data?.last_page}
+                    totalRecords={questionsData?.data?.total}
                 />
 
                 {/* Action Buttons */}
