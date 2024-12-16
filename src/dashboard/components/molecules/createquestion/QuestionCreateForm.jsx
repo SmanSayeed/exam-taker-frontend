@@ -25,6 +25,9 @@ import { CreativeQuestions } from "./CreativeQuestions";
 import { McqOptions } from "./McqOptions";
 import SelectCategory from "./SelectCategory";
 import TagsField from "./TagsField";
+import CFileInput from "@/components/atoms/CFileInput";
+import QImageUpload from "@/components/atoms/QImageUpload";
+
 
 export default function QuestionCreateForm() {
     const [statusCheck, setStatusCheck] = useState(true);
@@ -33,6 +36,7 @@ export default function QuestionCreateForm() {
     const [options, setOptions] = useState([0, 1, 2, 3]);
     const [correctOptions, setCorrectOptions] = useState([]);
     const [creativeQueTypes, setCreativeQueTypes] = useState([0, 1, 2]);
+    const [qImageId, setQImageId] = useState(null); // Use array destructuring here
 
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState("");
@@ -138,6 +142,7 @@ export default function QuestionCreateForm() {
     const [createQuestion, { isLoading }] = useCreateQuestionMutation();
 
     const handleCreate = async (formData) => {
+        console.log("form data - ",formData);
         const mcqOptions = options.map((optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
@@ -185,7 +190,7 @@ export default function QuestionCreateForm() {
             creative_options: creativeQuestions,
             categories: categoriesPayload,
             tags: selectedTagIds,
-            image: image && image
+            images: qImageId || null
         };
 
         try {
@@ -229,6 +234,30 @@ export default function QuestionCreateForm() {
                             }}
                         />
                     </div>
+
+                          {/* Image Upload */}
+                    {/* Image Upload */}
+            <div className="pb-10">
+              <QImageUpload setQImageId={setQImageId} />
+                {/* <CFileInput
+                    name="image"
+                    label="Upload Image"
+                    control={control}
+                    // rules={{ required: "Image is required" }}
+                    errors={errors}
+                    onChange={handleImageUpload}
+                />
+                {imagePreview && (
+                    <div className="mt-2">
+                        <img
+                            src={imagePreview}
+                            alt="Selected"
+                            className="w-32 h-32 object-cover rounded"
+                        />
+                    </div>
+                )} */}
+            </div>
+
 
                     {/* mcq question */}
                     {selectedQuesType === "mcq" && (
@@ -345,27 +374,7 @@ export default function QuestionCreateForm() {
                         </div>
                     </div>
 
-                    {/* Image Upload */}
-                    <div className="pb-10">
-                        <Label htmlFor="image-upload" className="text-md font-bold">
-                            Upload Image
-                        </Label>
-                        <Input
-                            type="file"
-                            id="image-upload"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                        />
-                        {imagePreview && (
-                            <div className="mt-2">
-                                <img
-                                    src={imagePreview}
-                                    alt="Selected"
-                                    className="w-32 h-32 object-cover rounded"
-                                />
-                            </div>
-                        )}
-                    </div>
+              
 
                     {/* select category */}
                     <SelectCategory
