@@ -19,6 +19,9 @@ export default function CreateExamFormForModelTest() {
     const { data: singleModelTest } = useGetSingleModelTestQuery(modelTestId);
 
     const [selectedRowIds, setSelectedRowIds] = useState([]);
+    const handleSelectedRowIds = (ids) => {
+        setSelectedRowIds(ids);
+    };
 
     const form = useForm({
         defaultValues: {
@@ -50,9 +53,7 @@ export default function CreateExamFormForModelTest() {
     }, [selectedRowIds]);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(20);
-
-    console.log("perpage", perPage)
+    const [perPage, setPerPage] = useState(10);
 
     const {
         data: questionsData,
@@ -60,11 +61,9 @@ export default function CreateExamFormForModelTest() {
         isLoadingQuestions
     } = useGetQuestionsQuery({
         page: currentPage,
-        per_page: perPage,
+        perPage: perPage,
         ...filters
     });
-
-    console.log("question data", questionsData)
 
     const cleanPayload = (payload) =>
         Object.fromEntries(
@@ -238,7 +237,7 @@ export default function CreateExamFormForModelTest() {
                     setCurrentPage={setCurrentPage}
                     setPerPage={setPerPage}
                     columns={questionsColumns}
-                    onRowSelectionChange={setSelectedRowIds}
+                    onSelectRowIds={handleSelectedRowIds}
                     refetch={refetch}
                     totalRecords={questionsData?.data?.total}
                 />

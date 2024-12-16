@@ -27,7 +27,7 @@ export function DataTableForExamCreate({
     data,
     currentPage,
     perPage,
-    onRowSelectionChange,
+    onSelectRowIds,
     setPerPage,
     setCurrentPage,
     refetch,
@@ -38,6 +38,8 @@ export function DataTableForExamCreate({
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
+
+    console.log("ROW SELECTION", rowSelection)
 
     const table = useReactTable({
         data: data || [],
@@ -51,12 +53,13 @@ export function DataTableForExamCreate({
         enableRowSelection: true,
         onRowSelectionChange: (newSelection) => {
             setRowSelection(newSelection);
+            console.log("new selection", newSelection)
             const selectedRows = table.getSelectedRowModel().rows;
             const selectedIds = selectedRows.map((row) => row.original.id);
-            console.log("Selected IDs:", selectedIds);
 
-            onRowSelectionChange(selectedIds);
+            onSelectRowIds(selectedIds);
         },
+        // onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
@@ -143,14 +146,14 @@ export function DataTableForExamCreate({
                     setCurrentPage(newPage);
                     refetch({
                         page: newPage,
-                        per_page: perPage
+                        perPage: perPage
                     });
                 }}
                 onPerPageChange={(newPageSize) => {
                     setPerPage(newPageSize);
                     refetch({
                         page: currentPage,
-                        per_page: newPageSize,
+                        perPage: newPageSize,
                     });
                 }}
                 totalRecords={totalRecords}
