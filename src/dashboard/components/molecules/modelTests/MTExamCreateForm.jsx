@@ -7,7 +7,6 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import * as z from "zod";
 import { DataTableForExamCreate } from "./DataTableForExamCreate";
@@ -22,7 +21,7 @@ const formSchema = z.object({
     description: z.string().optional(),
 });
 
-export default function MTExamCreateForm() {
+export default function MTExamCreateForm({ modelTestId }) {
     const [isActive, setIsActive] = useState(true);
     const [isPaid, setIsPaid] = useState(true);
     const [isOptional, setIsOptional] = useState(true);
@@ -38,7 +37,6 @@ export default function MTExamCreateForm() {
     };
 
     const auth = useSelector(state => state.auth);
-    const { modelTestId } = useParams();
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -110,7 +108,6 @@ export default function MTExamCreateForm() {
         };
 
         console.log("Submitting exam data:", payload);
-        console.log("model test id", modelTestId)
 
         try {
             const response = await createMTExam({ id: modelTestId, data: payload }).unwrap();

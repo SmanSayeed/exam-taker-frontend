@@ -16,6 +16,7 @@ import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/Q
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
 
 import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
+import MTExamListPage from "@/dashboard/components/pages/modelTests/MTExamListPage";
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
 import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
 import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
@@ -142,6 +143,10 @@ const router = createBrowserRouter([
                     {
                         path: "/admin/model-tests/:modelTestId/create-exam",
                         element: <CreateExamForModelTestPage />
+                    },
+                    {
+                        path: "/admin/model-tests/:modelTestId/exams",
+                        element: <MTExamListPage />
                     },
                 ]
             },
