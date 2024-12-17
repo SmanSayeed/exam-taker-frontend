@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
-import { useGetAllModelTestsQuery } from "@/features/modelTests/modelTestApi";
 import { Link } from "react-router-dom";
 import Loading from "../../atoms/Loading";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import ModelTestCard from "../../molecules/modelTests/ModelTestCard";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
+import PdfCard from "../../molecules/pdf/PdfCard";
+import { useGetPdfsQuery } from "@/features/pdfs/pdfApi";
 
-const ModelTestsPage = () => {
+const PdfIndexPage = () => {
   const {
-    data: allModelTests,
+    data: allPdfs,
     isLoading,
     isSuccess,
     refetch,
-  } = useGetAllModelTestsQuery();
+  } = useGetPdfsQuery();
 
   if (isLoading) return <Loading />;
 
@@ -28,20 +28,16 @@ const ModelTestsPage = () => {
 
       <Layout.Body>
         <div className="flex justify-between mb-4">
-          <h1 className="text-2xl font-semibold">Model Test</h1>
-          <Link to="/admin/model-tests/create">
+          <h1 className="text-2xl font-semibold">PDFs</h1>
+          <Link to="/admin/pdf/create">
             <Button>Create New</Button>
           </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {isSuccess &&
-            allModelTests?.data &&
-            allModelTests?.data.map((item) => (
-              <ModelTestCard
-                key={item?.id}
-                modelTest={item}
-                refetch={refetch}
-              />
+            allPdfs?.data &&
+            allPdfs?.data.map((pdf) => (
+              <PdfCard key={pdf?.id} pdf={pdf} refetch={refetch} />
             ))}
         </div>
       </Layout.Body>
@@ -49,4 +45,4 @@ const ModelTestsPage = () => {
   );
 };
 
-export default ModelTestsPage;
+export default PdfIndexPage;
