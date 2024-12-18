@@ -1,5 +1,7 @@
 import CheckboxField from "@/components/atoms/CheckboxField";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function MTExamDetailsForm({
     form, isActive, setIsActive, isPaid, setIsPaid, isOptional, setIsOptional, isNegativeMarking, setIsNegativeMarking
@@ -14,7 +16,7 @@ export default function MTExamDetailsForm({
                     <FormItem>
                         <FormLabel>Exam Title</FormLabel>
                         <FormControl>
-                            <input
+                            <Input
                                 {...field}
                                 type="text"
                                 className="w-full px-4 py-2 border rounded-md" placeholder="Enter exam title"
@@ -33,7 +35,7 @@ export default function MTExamDetailsForm({
                     <FormItem>
                         <FormLabel>Description</FormLabel>
                         <FormControl>
-                            <textarea
+                            <Textarea
                                 {...field}
                                 className="w-full px-4 py-2 border rounded-md" placeholder="Enter exam description"
                             />

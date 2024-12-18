@@ -1,44 +1,36 @@
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-import { AutoSearchSelect } from "@/components/autosearch-select";
 import { Input } from "@/components/ui/input";
-import { useCreateModelTestMutation } from "@/features/modelTests/modelTestApi";
-import { updateField } from "@/features/modelTests/modelTestFormSlice";
-import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import SelectCatForModelTest from "../../molecules/modelTests/SelectCatForModelTest";
+import { AutoSearchSelectForEdit } from "../../molecules/questionedit/AutoSearchSelectForEdit";
 
-export default function ModelTestCreateForm() {
-    const { data: allPackages } = useGetPackagesQuery();
-    const [createModelTest, { isLoading }] = useCreateModelTestMutation();
-
-    const dispatch = useDispatch();
-    const modelTestForm = useSelector((state) => state.modelTestForm);
+export function MTEditForm({ isFetching, modelTestData }) {
+    console.log(modelTestData)
+    // const [updateModelTest, { isLoading: isUpdating }] = useUpdateModelTestMutation();
 
     const {
         formState: { errors },
         control,
         setValue,
-        handleSubmit,
-        reset
+        handleSubmit
     } = useForm({
-        defaultValues: modelTestForm,
+        defaultValues: modelTestData || {},
+        values: modelTestData || {},
     });
 
-    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'group', defaultValue: "" });
-    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'level', defaultValue: "" });
-    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'subject', defaultValue: "" });
-    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'lesson', defaultValue: "" });
-    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'topic', defaultValue: "" });
-    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'sub_topic', defaultValue: "" });
+    const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'group', defaultValue: modelTestData?.category?.group_id || "" });
+    const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'level', defaultValue: modelTestData?.category?.level_id || "" });
+    const [selectedSubject, setSelectedSubject] = useLocalStorage({ key: 'subject', defaultValue: modelTestData?.category?.subject_id || "" });
+    const [selectedLesson, setSelectedLesson] = useLocalStorage({ key: 'lesson', defaultValue: modelTestData?.category?.lesson_id || "" });
+    const [selectedTopic, setSelectedTopic] = useLocalStorage({ key: 'topic', defaultValue: modelTestData?.category?.topic_id || "" });
+    const [selectedSubTopic, setSelectedSubTopic] = useLocalStorage({ key: 'sub_topic', defaultValue: modelTestData?.category?.sub_topic_id || "" });
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],
@@ -59,12 +51,12 @@ export default function ModelTestCreateForm() {
 
         ['clean']
     ];
+
     const module = {
         toolbar: toolbarOptions
-    }
+    };
 
-    const handleCreate = async (formData) => {
-
+    const handleUpdate = async (formData) => {
         const categoriesPayload = {
             group_id: selectedGroup || formData.group,
             level_id: selectedLevel || formData.level,
@@ -72,78 +64,74 @@ export default function ModelTestCreateForm() {
             lesson_id: selectedLesson || formData.lesson,
             topic_id: selectedTopic || formData.topic,
             sub_topic_id: selectedSubTopic || formData.sub_topic,
-        }
+        };
 
         const payload = {
-            "package_id": modelTestForm.package || formData.package,
-            "title": formData.title,
-            "description": formData.description,
-            "start_time": formData.start_time,
-            "end_time": formData.end_time,
-            "is_active": modelTestForm.is_active,
-            "category": categoriesPayload
-        }
+            id: modelTestData?.id,
+            package_id: formData.package,
+            title: formData.title,
+            description: formData.description,
+            start_time: formData.start_time,
+            end_time: formData.end_time,
+            is_active: formData.is_active,
+            category: categoriesPayload,
+        };
 
         try {
-            const response = await createModelTest(payload).unwrap();
+            const response = await updateModelTest(payload).unwrap();
             toast.success(response.message);
-            reset();
         } catch (error) {
             console.error(error);
-            toast.error(error?.data?.message)
+            toast.error(error?.data?.message);
         }
-    }
+    };
+
+    if (isFetching) return <p>Loading...</p>;
 
     return (
-        <form onSubmit={handleSubmit(handleCreate)} id="question-form">
+        <form onSubmit={handleSubmit(handleUpdate)} id="model-test-edit-form">
             <div className="space-y-4 mt-4">
                 {/* Select Package */}
-                <AutoSearchSelect
+                <AutoSearchSelectForEdit
                     label="Select Package"
                     name="package"
                     control={control}
                     options={
-                        allPackages?.data.map((pkg) => ({
-                            id: pkg.id.toString(),
-                            title: getPlainTextFromHtml(pkg.name),
-                        })) || []
+                        modelTestData
+                            ? [
+                                {
+                                    id: modelTestData.package.id.toString(),
+                                    title: getPlainTextFromHtml(modelTestData.package.name),
+                                },
+                            ]
+                            : []
                     }
                     placeholder="Select Package"
-                    onChange={(packageId) => {
-                        dispatch(updateField({ field: 'package', value: packageId }));
-                    }}
-                    rules={{ required: "Package selection is required" }}
-                    defaultValue={modelTestForm.package}
+                    defaultValue={modelTestData?.package_id}
                     showRemoveButton={false}
                 />
 
-                {/* title */}
+                {/* Title */}
                 <div className="space-y-1">
                     <Label htmlFor="title" className="text-md font-bold">Title</Label>
                     <Controller
                         name="title"
                         control={control}
                         rules={{ required: "Title is required" }}
-                        render={({ field, formState: errors }) => (
-                            <>
-                                <ReactQuill
-                                    theme="snow"
-                                    value={field.value}
-                                    onChange={(value) => {
-                                        field.onChange(value);
-                                        dispatch(updateField({ field: 'title', value }));
-                                    }}
-                                    modules={module}
-                                />
-                                {errors.title && <span className="text-red-600">{errors.title.message}</span>}
-                            </>
+                        render={({ field }) => (
+                            <ReactQuill
+                                theme="snow"
+                                value={field.value}
+                                onChange={field.onChange}
+                                modules={module}
+                            />
                         )}
                     />
                 </div>
 
-                {/* description */}
+                {/* Description */}
                 <div className="space-y-1">
-                    <Label htmlFor="details" className="text-md font-bold">Description</Label>
+                    <Label htmlFor="description" className="text-md font-bold">Description</Label>
                     <Controller
                         name="description"
                         control={control}
@@ -151,17 +139,14 @@ export default function ModelTestCreateForm() {
                             <ReactQuill
                                 theme="snow"
                                 value={field.value}
-                                onChange={(value) => {
-                                    field.onChange(value);
-                                    dispatch(updateField({ field: 'description', value }));
-                                }}
+                                onChange={field.onChange}
                                 modules={module}
                             />
                         )}
                     />
                 </div>
 
-                {/* start time */}
+                {/* Start Time */}
                 <div className="space-y-1">
                     <Label htmlFor="start_time" className="text-md font-bold">Start Time</Label>
                     <Controller
@@ -173,18 +158,13 @@ export default function ModelTestCreateForm() {
                                 type="datetime-local"
                                 id="start_time"
                                 {...field}
-                                onChange={(e) => {
-                                    field.onChange(e.target.value);
-                                    dispatch(updateField({ field: 'start_time', value: e.target.value }));
-                                }}
-                                className="w-full p-2 border border-gray-300 bg-inherit rounded"
                             />
                         )}
                     />
                     {errors.start_time && <p className="text-red-500">{errors.start_time.message}</p>}
                 </div>
 
-                {/* end time */}
+                {/* End Time */}
                 <div className="space-y-1">
                     <Label htmlFor="end_time" className="text-md font-bold">End Time</Label>
                     <Controller
@@ -192,32 +172,27 @@ export default function ModelTestCreateForm() {
                         control={control}
                         rules={{ required: "End time is required" }}
                         render={({ field }) => (
-                            <input
+                            <Input
                                 type="datetime-local"
                                 id="end_time"
                                 {...field}
-                                onChange={(e) => {
-                                    field.onChange(e.target.value);
-                                    dispatch(updateField({ field: 'end_time', value: e.target.value }));
-                                }}
-                                className="w-full p-2 border border-gray-300 bg-inherit rounded"
                             />
                         )}
                     />
                     {errors.end_time && <p className="text-red-500">{errors.end_time.message}</p>}
                 </div>
 
-                {/* is active */}
+                {/* Is Active */}
                 <div className="flex items-center">
                     <Checkbox
                         id="status"
-                        checked={modelTestForm?.is_active}
-                        onCheckedChange={(checked) => dispatch(updateField({ field: 'is_active', value: checked }))}
+                        checked={modelTestData?.is_active}
+                        onCheckedChange={(checked) => setValue('is_active', checked)}
                     />
                     <Label htmlFor="status" className="ml-2">Status</Label>
                 </div>
 
-                {/* select category */}
+                {/* Select Category */}
                 <SelectCatForModelTest
                     control={control}
                     setValue={setValue}
@@ -229,14 +204,14 @@ export default function ModelTestCreateForm() {
                     setSelectedSubTopic={setSelectedSubTopic}
                 />
 
-                <Button
-                    disabled={isLoading}
+                {/* <Button
+                    disabled={isUpdating}
                     type="submit"
                     className="w-full"
                 >
-                    {isLoading ? "Proceeding" : "Create Model Test"}
-                </Button>
+                    {isUpdating ? "Updating..." : "Update Model Test"}
+                </Button> */}
             </div>
         </form>
-    )
+    );
 }

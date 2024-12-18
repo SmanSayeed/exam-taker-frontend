@@ -15,7 +15,11 @@ import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPa
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
 
+import PdfCreatePage from "@/dashboard/components/pages/PDF/PdfCreatePage";
+import PdfEditPage from "@/dashboard/components/pages/PDF/PdfEditPage";
+import PdfIndexPage from "@/dashboard/components/pages/PDF/PdfIdexPage";
 import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
+import MTEditPage from "@/dashboard/components/pages/modelTests/MTEditPage";
 import MTExamListPage from "@/dashboard/components/pages/modelTests/MTExamListPage";
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
 import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
@@ -141,12 +145,28 @@ const router = createBrowserRouter([
             element: <ModelTestsPage />
           },
           {
+            path: "/admin/model-test/:modelTestId",
+            element: <MTEditPage />
+          },
+          {
             path: "/admin/model-tests/:modelTestId/create-exam",
             element: <CreateExamForModelTestPage />
           },
           {
             path: "/admin/model-tests/:modelTestId/exams",
             element: <MTExamListPage />
+          },
+          {
+            path: "/admin/pdf", // New route for PDF
+            element: <PdfIndexPage />,
+          },
+          {
+            path: "/admin/pdf/create", // New route for PDF
+            element: <PdfCreatePage />,
+          },
+          {
+            path: "/admin/pdf/edit/:pdfId", // New route for PDF
+            element: <PdfEditPage />,
           },
         ]
       },

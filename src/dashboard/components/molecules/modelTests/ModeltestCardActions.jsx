@@ -29,14 +29,15 @@ export function ModeltestCardActions({ modelTestId, refetch }) {
             <DropdownMenuContent align="end">
                 {/* Edit Model test */}
                 <DropdownMenuItem>
-                    <button
-                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                    <Link
+                        to={`/admin/model-test/${modelTestId}`}
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
                     >
                         <IconMenu
                             text="Edit"
                             icon={<FilePenIcon className="h-4 w-4" />}
                         />
-                    </button>
+                    </Link>
                 </DropdownMenuItem>
 
                 {/* Delete model test */}
@@ -53,7 +54,7 @@ export function ModeltestCardActions({ modelTestId, refetch }) {
                 <DropdownMenuItem>
                     <Link
                         to={`/admin/model-tests/${modelTestId}/exams`}
-                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
                     >
                         <IconMenu
                             text="View Exams"

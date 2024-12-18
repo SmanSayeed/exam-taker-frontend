@@ -29,6 +29,7 @@ export const AutoSearchSelectForEdit = ({
     rules = {},
     onRemove,
     selectedValue,
+    showRemoveButton = true
 }) => {
 
     const [popoverOpen, setPopoverOpen] = useState(false);
@@ -107,7 +108,7 @@ export const AutoSearchSelectForEdit = ({
                                 </PopoverContent>
                             </Popover>
                             {
-                                field.value && (
+                                showRemoveButton && field.value && (
                                     <button
                                         type="button"
                                         onClick={() => {
