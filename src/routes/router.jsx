@@ -15,7 +15,12 @@ import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPa
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
 
+import PdfCreatePage from "@/dashboard/components/pages/PDF/PdfCreatePage";
+import PdfEditPage from "@/dashboard/components/pages/PDF/PdfEditPage";
+import PdfIndexPage from "@/dashboard/components/pages/PDF/PdfIdexPage";
 import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
+import MTEditPage from "@/dashboard/components/pages/modelTests/MTEditPage";
+import MTExamListPage from "@/dashboard/components/pages/modelTests/MTExamListPage";
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
 import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
 import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
@@ -31,9 +36,6 @@ import TagsPage from "@/dashboard/components/pages/questioncategories/TagsPage";
 import TopicsPage from "@/dashboard/components/pages/questioncategories/TopicsPage";
 import YearPage from "@/dashboard/components/pages/questioncategories/YearPage";
 import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
-import PdfIndexPage from "@/dashboard/components/pages/PDF/PdfIdexPage";
-import PdfCreatePage from "@/dashboard/components/pages/PDF/PdfCreatePage";
-import PdfEditPage from "@/dashboard/components/pages/PDF/PdfEditPage";
 
 const router = createBrowserRouter([
   {
@@ -41,110 +43,118 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <AdminLoginPage />,
+        element: <AdminLoginPage />
       },
       {
         element: <PrivateRoutes />,
         children: [
           {
             path: "/admin",
-            element: <DashboardPage />,
+            element: <DashboardPage />
           },
           {
             path: "/admin/users",
-            element: <UserListForAdminPage />,
+            element: <UserListForAdminPage />
           },
           {
             path: "/admin/user/create",
-            element: <UserCreateForAdminPage />,
+            element: <UserCreateForAdminPage />
           },
           {
             path: "/admin/students",
-            element: <StudentListForAdminPage />,
+            element: <StudentListForAdminPage />
           },
           {
             path: "/admin/student/create",
-            element: <StudentCreateForAdminPage />,
+            element: <StudentCreateForAdminPage />
           },
           {
             path: "/admin/category/section",
-            element: <SectionPage />,
+            element: <SectionPage />
           },
           {
             path: "/admin/category/exam-type",
-            element: <ExamTypePage />,
+            element: <ExamTypePage />
           },
           {
             path: "/admin/category/year",
-            element: <YearPage />,
+            element: <YearPage />
           },
           {
             path: "/admin/category/group",
-            element: <GroupPage />,
+            element: <GroupPage />
           },
           {
             path: "/admin/category/exam-sub-type",
-            element: <ExamSubTypePage />,
+            element: <ExamSubTypePage />
           },
           {
             path: "/admin/category/level",
-            element: <LevelPage />,
+            element: <LevelPage />
           },
           {
             path: "/admin/category/subject",
-            element: <SubjectPage />,
+            element: <SubjectPage />
           },
           {
             path: "/admin/category/lesson",
-            element: <LessonPage />,
+            element: <LessonPage />
           },
           {
             path: "/admin/category/topics",
-            element: <TopicsPage />,
+            element: <TopicsPage />
           },
           {
             path: "/admin/category/sub-topics",
-            element: <SubTopicsPage />,
+            element: <SubTopicsPage />
           },
           {
             path: "/admin/category/tags",
-            element: <TagsPage />,
+            element: <TagsPage />
           },
           {
             path: "/admin/question/create",
-            element: <QuestionCreateForAdminPage />,
+            element: <QuestionCreateForAdminPage />
           },
           {
             path: "/admin/questions",
-            element: <QuestionListForAdminPage />,
+            element: <QuestionListForAdminPage />
           },
           {
             path: "/admin/question/edit/:questionId",
-            element: <QuestionEditPage />,
+            element: <QuestionEditPage />
           },
           {
             path: "/admin/package/create",
-            element: <PackageCreatePage />,
+            element: <PackageCreatePage />
           },
           {
             path: "/admin/package/edit/:packageId",
-            element: <PackageEditPage />,
+            element: <PackageEditPage />
           },
           {
             path: "/admin/packages",
-            element: <PackagesPage />,
+            element: <PackagesPage />
           },
           {
             path: "/admin/model-tests/create",
-            element: <ModelTestCreatePage />,
+            element: <ModelTestCreatePage />
           },
           {
             path: "/admin/model-tests",
-            element: <ModelTestsPage />,
+            element: <ModelTestsPage />
+          },
+          {
+            path: "/admin/model-test/:modelTestId",
+            element: <MTEditPage />
           },
           {
             path: "/admin/model-tests/:modelTestId/create-exam",
-            element: <CreateExamForModelTestPage />,
+            element: <CreateExamForModelTestPage />
+          },
+          {
+            path: "/admin/model-tests/:modelTestId/exams",
+            element: <MTExamListPage />
           },
           {
             path: "/admin/pdf", // New route for PDF
@@ -158,13 +168,13 @@ const router = createBrowserRouter([
             path: "/admin/pdf/edit/:pdfId", // New route for PDF
             element: <PdfEditPage />,
           },
-        ],
+        ]
       },
     ],
   },
   {
     path: "*",
-    element: <NotFound />,
+    element: <NotFound />
   },
 ]);
 export default router;

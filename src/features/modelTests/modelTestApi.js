@@ -67,6 +67,13 @@ export const modelTestApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    createMTExam: builder.mutation({
+      query: ({id, data}) => ({
+        url: `exam/create/${id}`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -75,5 +82,6 @@ export const {
     useGetSingleModelTestQuery,
     useGetAllModelTestsQuery,
     useDeleteModelTestMutation,
-    useChangeModelTestStatusMutation
+    useChangeModelTestStatusMutation,
+    useCreateMTExamMutation
 } = modelTestApi;

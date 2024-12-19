@@ -1,10 +1,14 @@
 import { Card } from "@/components/ui/card";
+import { useGetSingleModelTestQuery } from "@/features/modelTests/modelTestApi";
+import { useParams } from "react-router-dom";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import ModelTestCreateForm from "../../organism/modelTests/ModelTestCreateForm";
+import { MTEditForm } from "../../organism/modelTests/MTEditForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
-const ModelTestCreatePage = () => {
+const MTEditPage = () => {
+    const { modelTestId } = useParams();
+    const { data: modelTestData, isLoading: isFetching } = useGetSingleModelTestQuery(modelTestId);
 
     return (
         <Layout>
@@ -20,11 +24,14 @@ const ModelTestCreatePage = () => {
                     <div>
                         <Card className="container">
                             <div className="my-4">
-                                <h1 className="text-xl font-semibold">ModelTest Creation</h1>
-                                <p>Enter proper information to create a Model Test</p>
+                                <h1 className="text-xl font-semibold">ModelTest Modification</h1>
+                                <p>Enter proper information to modify a Model Test</p>
                             </div>
 
-                            <ModelTestCreateForm />
+                            <MTEditForm
+                                modelTestData={modelTestData?.data}
+                                isFetching={isFetching}
+                            />
                         </Card>
                     </div>
                 </div>
@@ -33,4 +40,4 @@ const ModelTestCreatePage = () => {
     )
 }
 
-export default ModelTestCreatePage;
+export default MTEditPage;

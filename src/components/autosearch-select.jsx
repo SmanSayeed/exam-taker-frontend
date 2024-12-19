@@ -30,7 +30,7 @@ export const AutoSearchSelect = ({
     rules = {},
     onRemove,
     defaultValue,
-    disabled = false,
+    showRemoveButton = true,
 }) => {
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [selectedCatName, setSelectedCatName] = useState("");
@@ -108,7 +108,7 @@ export const AutoSearchSelect = ({
                                 </PopoverContent>
                             </Popover>
                             {
-                                field.value && (
+                                showRemoveButton && field.value && (
                                     <button
                                         type="button"
                                         onClick={() => {
