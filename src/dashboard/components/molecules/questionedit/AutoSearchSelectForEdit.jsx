@@ -95,7 +95,7 @@ export const AutoSearchSelectForEdit = ({
                                                         <Check
                                                             className={cn(
                                                                 "mr-2 h-4 w-4",
-                                                                selectedCatId === item?.id.toString() ? "opacity-100" : "opacity-0"
+                                                                selectedCatId == item?.id.toString() ? "opacity-100" : "opacity-0"
                                                             )}
                                                         />
 

@@ -2,6 +2,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 import { Input } from "@/components/ui/input";
+import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
 import { Controller, useForm } from "react-hook-form";
@@ -14,6 +15,7 @@ import { AutoSearchSelectForEdit } from "../../molecules/questionedit/AutoSearch
 export function MTEditForm({ isFetching, modelTestData }) {
     console.log(modelTestData)
     // const [updateModelTest, { isLoading: isUpdating }] = useUpdateModelTestMutation();
+    const { data: allPackages } = useGetPackagesQuery();
 
     const {
         formState: { errors },
@@ -97,17 +99,13 @@ export function MTEditForm({ isFetching, modelTestData }) {
                     name="package"
                     control={control}
                     options={
-                        modelTestData
-                            ? [
-                                {
-                                    id: modelTestData.package.id.toString(),
-                                    title: getPlainTextFromHtml(modelTestData.package.name),
-                                },
-                            ]
-                            : []
+                        allPackages?.data.map((pkg) => ({
+                            id: pkg.id,
+                            title: getPlainTextFromHtml(pkg.name),
+                        })) || []
                     }
                     placeholder="Select Package"
-                    defaultValue={modelTestData?.package_id}
+                    selectedValue={modelTestData?.package.id}
                     showRemoveButton={false}
                 />
 
