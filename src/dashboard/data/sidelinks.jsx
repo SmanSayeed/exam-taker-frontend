@@ -5,10 +5,12 @@ import {
   FileQuestion,
   Group,
   LayoutDashboard,
+  ListOrdered,
+  PackagePlus,
   Tags,
   User,
   UserPlus,
-  Users,
+  Users
 } from "lucide-react";
 
 export const sidelinks = [
@@ -18,6 +20,7 @@ export const sidelinks = [
     href: "/admin",
     icon: <LayoutDashboard size={18} />,
   },
+  // users management
   {
     title: "Users",
     label: "",
@@ -38,6 +41,7 @@ export const sidelinks = [
       },
     ],
   },
+  // students management
   {
     title: "Students",
     label: "",
@@ -58,7 +62,34 @@ export const sidelinks = [
       },
     ],
   },
-  // categories
+  // payment && subscription mmanagement
+  {
+    title: "Payments & Subscriptions",
+    label: "",
+    href: "/admin/payments",
+    icon: <PackagePlus size={18} />,
+    sub: [
+      {
+        title: "Payment List",
+        label: "",
+        href: "/admin/payments",
+        icon: <ListOrdered size={18} />,
+      },
+      {
+        title: "Subscriptions",
+        label: "",
+        href: "/admin/subscriptions",
+        icon: <PackagePlus size={18} />,
+      },
+      {
+        title: "Add Payment",
+        label: "",
+        href: "/admin/payment/add",
+        icon: <PackagePlus size={18} />,
+      },
+    ],
+  },
+  // categories management
   {
     title: "Categories",
     label: "",
@@ -133,7 +164,7 @@ export const sidelinks = [
       },
     ],
   },
-  // questions
+  // questions management
   {
     title: "Questions",
     label: "",
@@ -154,7 +185,7 @@ export const sidelinks = [
       },
     ],
   },
-  // model tests
+  // model tests management
   {
     title: "Model Tests",
     label: "",
@@ -175,7 +206,7 @@ export const sidelinks = [
       },
     ],
   },
-  // packages
+  // packages management
   {
     title: "Packages",
     label: "",
@@ -196,6 +227,7 @@ export const sidelinks = [
       },
     ],
   },
+  // pdf management
   {
     title: "Pdf's",
     label: "",

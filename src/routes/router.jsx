@@ -36,6 +36,7 @@ import TagsPage from "@/dashboard/components/pages/questioncategories/TagsPage";
 import TopicsPage from "@/dashboard/components/pages/questioncategories/TopicsPage";
 import YearPage from "@/dashboard/components/pages/questioncategories/YearPage";
 import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
+import PaymentListPage from "@/dashboard/components/pages/subscriptions/PaymentListPage";
 
 const router = createBrowserRouter([
   {
@@ -136,6 +137,7 @@ const router = createBrowserRouter([
             path: "/admin/packages",
             element: <PackagesPage />
           },
+          // modeltest management
           {
             path: "/admin/model-tests/create",
             element: <ModelTestCreatePage />
@@ -152,21 +154,27 @@ const router = createBrowserRouter([
             path: "/admin/model-tests/:modelTestId/create-exam",
             element: <CreateExamForModelTestPage />
           },
+          // pdf management
           {
             path: "/admin/model-tests/:modelTestId/exams",
             element: <MTExamListPage />
           },
           {
-            path: "/admin/pdf", // New route for PDF
+            path: "/admin/pdf",
             element: <PdfIndexPage />,
           },
           {
-            path: "/admin/pdf/create", // New route for PDF
+            path: "/admin/pdf/create",
             element: <PdfCreatePage />,
           },
           {
-            path: "/admin/pdf/edit/:pdfId", // New route for PDF
+            path: "/admin/pdf/edit/:pdfId",
             element: <PdfEditPage />,
+          },
+          // payments && subscriptions management
+          {
+            path: "/admin/payments",
+            element: <PaymentListPage />,
           },
         ]
       },
