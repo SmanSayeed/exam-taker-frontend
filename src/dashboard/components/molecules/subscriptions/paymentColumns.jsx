@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/dashboard/components/organism/datatable/DataTableColumnHeader";
+import { PaymentTableRowActions } from "./PaymentTableRowActions";
 
 export const paymentColumns = [
     {
@@ -94,8 +95,8 @@ export const paymentColumns = [
         cell: ({ row }) =>
             new Date(row.getValue("created_at")).toLocaleString(),
     },
-    // {
-    //     id: "actions",
-    //     cell: () => <DataTableRowActions />
-    // }
+    {
+        id: "actions",
+        cell: ({ row }) => <PaymentTableRowActions row={row} />
+    }
 ];
