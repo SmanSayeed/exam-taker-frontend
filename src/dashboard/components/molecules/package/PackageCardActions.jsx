@@ -31,7 +31,7 @@ export function PackageCardActions({ refetch, singlePackage }) {
                 <DropdownMenuItem>
                     <Link
                         to={`/admin/package/edit/${singlePackage?.id}`}
-                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
                         state={{ singlePackage }}
                     >
                         <IconMenu
@@ -55,7 +55,7 @@ export function PackageCardActions({ refetch, singlePackage }) {
                 <DropdownMenuItem>
                     <Link
                         to={`/admin/package/${singlePackage?.id}/model-tests`}
-                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
                     >
                         <IconMenu
                             text="View model tests"

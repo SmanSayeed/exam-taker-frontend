@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import PackageCreateForm from "../../molecules/package/PackageCreateForm";
+import { PackageCreateForm } from "../../molecules/package/PackageCreateForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 

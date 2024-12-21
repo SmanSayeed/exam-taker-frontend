@@ -192,7 +192,7 @@ export default function ModelTestCreateForm() {
                         control={control}
                         rules={{ required: "End time is required" }}
                         render={({ field }) => (
-                            <input
+                            <Input
                                 type="datetime-local"
                                 id="end_time"
                                 {...field}
