@@ -7,24 +7,31 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger
+    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useDeclineSubscriptionMutation } from "@/features/subscriptions/subscriptionsApi";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export function DeclineSubscrption({ row }) {
+export function DeclineSubscription({ row }) {
     const [open, setOpen] = useState(false);
+    const [declineSubscription, { isLoading }] = useDeclineSubscriptionMutation();
 
     const handleOpen = (event) => {
         event.preventDefault();
         setOpen(true);
     };
 
-    const handleDecline = () => {
-        // Add API logic here if needed
-        toast.warning("Payment declined.");
-        setOpen(false);
+    const handleDecline = async () => {
+        try {
+            const response = await declineSubscription({ id: row.id, data: { is_active: false } }).unwrap();
+            toast.success(response?.message || "Subscription declined successfully.");
+        } catch (error) {
+            toast.error("Failed to decline the subscription. Please try again.");
+        } finally {
+            setOpen(false);
+        }
     };
 
     return (
@@ -44,7 +51,9 @@ export function DeclineSubscrption({ row }) {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction>
-                        <Button onClick={handleDecline}>Confirm</Button>
+                        <Button onClick={handleDecline} disabled={isLoading}>
+                            {isLoading ? "Processing..." : "Confirm"}
+                        </Button>
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

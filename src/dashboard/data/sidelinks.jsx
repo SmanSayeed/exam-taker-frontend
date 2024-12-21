@@ -75,18 +75,18 @@ export const sidelinks = [
         href: "/admin/payments",
         icon: <ListOrdered size={18} />,
       },
-      {
-        title: "Subscriptions",
-        label: "",
-        href: "/admin/subscriptions",
-        icon: <PackagePlus size={18} />,
-      },
-      {
-        title: "Add Payment",
-        label: "",
-        href: "/admin/payment/add",
-        icon: <PackagePlus size={18} />,
-      },
+      // {
+      //   title: "Subscriptions",
+      //   label: "",
+      //   href: "/admin/subscriptions",
+      //   icon: <PackagePlus size={18} />,
+      // },
+      // {
+      //   title: "Add Payment",
+      //   label: "",
+      //   href: "/admin/payment/add",
+      //   icon: <PackagePlus size={18} />,
+      // },
     ],
   },
   // categories management

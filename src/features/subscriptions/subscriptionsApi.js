@@ -11,10 +11,22 @@ export const subscriptionsApi = apiSlice.injectEndpoints({
             query: (id) => `/manage/student-payments/${id}`,
         }),
 
+        getAllSubscription: builder.query({
+            query: () => "manage/subscriptions?is_active=true",
+        }),
+
         createSubscription: builder.mutation({
             query: (data) => ({
                 url: "/manage/subscriptions",
                 method: "POST",
+                body: data,
+            }),
+        }),
+        
+        declineSubscription: builder.mutation({
+            query: ({id, data}) => ({
+                url: `manage/subscriptions/${id}`,
+                method: "PUT",
                 body: data,
             }),
         }),
@@ -32,6 +44,8 @@ export const subscriptionsApi = apiSlice.injectEndpoints({
 export const {
     useGetAllPaymentsQuery,
     useGetPaymentByIdQuery,
+    useGetAllSubscriptionQuery,
     useDeletePaymentMutation,
-    useCreateSubscriptionMutation
+    useCreateSubscriptionMutation,
+    useDeclineSubscriptionMutation,
 } = subscriptionsApi;

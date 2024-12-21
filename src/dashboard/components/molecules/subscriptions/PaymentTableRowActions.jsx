@@ -1,3 +1,4 @@
+import { DeleteAction } from "@/components/delete-action";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -6,12 +7,26 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import {
+    useDeletePaymentMutation,
+    useGetAllPaymentsQuery,
+    useGetAllSubscriptionQuery
+} from "@/features/subscriptions/subscriptionsApi";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { ApproveSubscription } from "./ApproveSubscrption";
-import { DeclineSubscrption } from "./DeclineSubscrption";
-import { DeletePayment } from "./DeletePayment";
+import { DeclineSubscription } from "./DeclineSubscrption";
 
 export function PaymentTableRowActions({ row }) {
+    const [deletePayment] = useDeletePaymentMutation();
+    const { refetch } = useGetAllPaymentsQuery();
+    const { data: subscribedData } = useGetAllSubscriptionQuery();
+
+    // check student has subscribed to a package
+    const hasSubscribedToPkg = subscribedData?.data?.every((sub) => {
+        sub?.student_id === row.original.student_id &&
+            sub?.package_id === row?.original.package_id
+    });
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -25,22 +40,39 @@ export function PaymentTableRowActions({ row }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 {/* Approve Subscrption */}
-                <DropdownMenuItem className="cursor-pointer">
-                    <ApproveSubscription row={row} />
-                </DropdownMenuItem>
+                {
+                    !hasSubscribedToPkg && (
+                        <>
+                            <DropdownMenuItem className="cursor-pointer">
+                                <ApproveSubscription row={row} />
+                            </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+                            <DropdownMenuSeparator />
+                        </>
+                    )
+                }
 
                 {/* Decline Subscrption */}
-                <DropdownMenuItem className="cursor-pointer">
-                    <DeclineSubscrption row={row} />
-                </DropdownMenuItem>
+                {
+                    hasSubscribedToPkg && (
+                        <>
+                            <DropdownMenuItem className="cursor-pointer">
+                                <DeclineSubscription row={row} />
+                            </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+                            <DropdownMenuSeparator />
+                        </>
+                    )
+                }
 
                 {/* Delete Payment */}
                 <DropdownMenuItem className="cursor-pointer">
-                    <DeletePayment row={row} />
+                    <DeleteAction
+                        entityId={row.original.id}
+                        entityName="Payment"
+                        deleteFunction={deletePayment}
+                        refetch={refetch}
+                    />
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

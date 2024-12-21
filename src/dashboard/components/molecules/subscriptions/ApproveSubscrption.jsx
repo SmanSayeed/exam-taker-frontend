@@ -10,7 +10,6 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useGetSinglePackageQuery } from "@/features/packages/packageApi";
 import { useCreateSubscriptionMutation } from "@/features/subscriptions/subscriptionsApi";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -25,25 +24,12 @@ export function ApproveSubscription({ row }) {
     };
 
     const [createSubscription, { isLoading }] = useCreateSubscriptionMutation();
-    const { data: packageData, isLoading: packageLoading } = useGetSinglePackageQuery(row.original.package_id, {
-        skip: !row.original.package_id, // Skip query if package_id is null
-    });
 
     const handleApprove = async () => {
-        if (!packageData?.data || packageLoading) {
-            toast.error("Package data is not available. Cannot approve subscription.");
-            return;
-        }
-
-        const durationDays = packageData?.data?.duration_days || 0;
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + durationDays);
-
         const payload = {
             student_id: row.original.student_id,
             package_id: row.original.package_id,
-            expires_at: expiresAt.toISOString().split("T")[0],
-            is_active: packageData?.data?.is_active === 1 || false,
+            is_active: true,
         };
 
         try {
@@ -72,8 +58,8 @@ export function ApproveSubscription({ row }) {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction>
-                        <Button onClick={handleApprove} disabled={isLoading || packageLoading}>
-                            {isLoading || packageLoading ? "Processing..." : "Confirm"}
+                        <Button onClick={handleApprove} disabled={isLoading}>
+                            {isLoading ? "Processing..." : "Confirm"}
                         </Button>
                     </AlertDialogAction>
                 </AlertDialogFooter>
