@@ -31,6 +31,7 @@ export const SearchableSelect = ({
     setSelectedCatId,
     setSelectedCatName,
     showRemoveButton = true,
+    defaultValue
 }) => {
     const isMobile = useMediaQuery("(max-width: 768px)");
 

@@ -11,11 +11,34 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
         exam_sub_type: true,
     });
 
-    const { data: sections, selected: selectedSection, setSelected: setSelectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData, selectedCatName: selectedSectionName, setSelectedCatName: setSelectedSectionName } = useCategoryData("sections", "pkgSection");
+    const {
+        isLoading,
+        error,
+        data: sections,
+        selected: selectedSection,
+        setSelected: setSelectedSection,
+        categoryData: sectionData,
+        setCategoryData: setSectionData,
+        selectedCatName: selectedSectionName,
+        setSelectedCatName: setSelectedSectionName
+    } = useCategoryData("sections", "pkgSection");
 
-    const { data: examTypes, selected: selectedExamType, setSelected: setSelectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData, selectedCatName: selectedExamTypeName, setSelectedCatName: setSelectedExamTypeName } = useCategoryData("exam-types", "pkgExamType");
+    const {
+        data: examTypes,
+        selected: selectedExamType,
+        setSelected: setSelectedExamType,
+        categoryData: examTypeData,
+        setCategoryData: setExamTypeData,
+        selectedCatName: selectedExamTypeName,
+        setSelectedCatName: setSelectedExamTypeName
+    } = useCategoryData("exam-types", "pkgExamType");
 
-    const { selected: selectedExamSubType, setSelected: setSelectedExamSubType, selectedCatName: selectedExamSubTypeName, setSelectedCatName: setSelectedExamSubTypeName } = useCategoryData("exam-sub-types", "pkgExamSubTye");
+    const {
+        selected: selectedExamSubType,
+        setSelected: setSelectedExamSubType,
+        selectedCatName: selectedExamSubTypeName,
+        setSelectedCatName: setSelectedExamSubTypeName
+    } = useCategoryData("exam-sub-types", "pkgExamSubTye");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
@@ -115,7 +138,7 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
                 name: "section",
                 options: sections,
                 onChange: handleSectionChange,
-                defaultValue: selectedSection,
+                defaultValue: initialCategory?.section_id || selectedSection,
                 setSelectedCatId: setSelectedSection,
                 selectedCatName: selectedSectionName,
                 setSelectedCatName: setSelectedSectionName,
@@ -126,7 +149,7 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
                 name: "exam_type",
                 options: sectionData.exam_types,
                 onChange: handleExamTypeChange,
-                defaultValue: selectedExamType,
+                defaultValue: initialCategory?.exam_type_id || selectedExamType,
                 setSelectedCatId: setSelectedExamType,
                 selectedCatName: selectedExamTypeName,
                 setSelectedCatName: setSelectedExamTypeName,
@@ -138,7 +161,7 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
                 name: "exam_sub_type",
                 options: examTypeData.exam_sub_types,
                 onChange: handleExamSubTypeChange,
-                defaultValue: selectedExamSubType,
+                defaultValue: initialCategory?.exam_sub_type_id || selectedExamSubType,
                 setSelectedCatId: setSelectedExamSubType,
                 selectedCatName: selectedExamSubTypeName,
                 setSelectedCatName: setSelectedExamSubTypeName,

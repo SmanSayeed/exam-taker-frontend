@@ -14,6 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useEffect } from "react";
 
 export const PackageForm = ({
     initialValues = {},
@@ -23,10 +24,9 @@ export const PackageForm = ({
 }) => {
 
     console.log("initial values", initialValues);
-    // const pkgCategory = JSON.parse(localStorage.getItem("pkgCategory"));
-    // if (pkgCategory) {
-    //     initialValues.category = pkgCategory;
-    // }
+    const pkgSection = JSON.parse(localStorage.getItem("pkgSection"));
+    const pkgExamType = JSON.parse(localStorage.getItem("pkgExamType"));
+    const pkgExamSubTye = JSON.parse(localStorage.getItem("pkgExamSubTye"));
 
     const {
         register,
@@ -44,11 +44,25 @@ export const PackageForm = ({
             discount_type: initialValues.discount_type || "amount",
             is_active: initialValues.is_active === 1 ? true : false,
             img: initialValues.img || "",
-            // section: initialValues.category.section_id || "",
-            // exam_type: initialValues.category.exam_type_id || "",
-            // exam_sub_type: initialValues.category.exam_sub_type_id || ""
+            section: initialValues?.category?.section_id || pkgSection || "",
+            exam_type: initialValues?.category?.exam_type_id || pkgExamType || "",
+            exam_sub_type: initialValues?.category?.exam_sub_type_id || pkgExamSubTye || ""
         }
     });
+
+    // reset form values after the form is submitted
+    useEffect(() => {
+        setValue("name", initialValues.name || "");
+        setValue("description", initialValues.description || "");
+        setValue("duration_days", initialValues.duration_days || "");
+        setValue("price", initialValues.price || "");
+        setValue("discount", initialValues.discount || "");
+        setValue("discount_type", initialValues.discount_type || "amount");
+        setValue("img", initialValues.img || "");
+        setValue("section", initialValues.category?.section_id || pkgSection || "");
+        setValue("exam_type", initialValues.category?.exam_type_id || pkgExamType || "");
+        setValue("exam_sub_type", initialValues.category?.exam_sub_type_id || pkgExamSubTye || "");
+    }, [setValue, initialValues, pkgSection, pkgExamType, pkgExamSubTye]);
 
     const toolbarOptions = [
         ["bold", "italic", "underline", "strike"],
@@ -171,7 +185,9 @@ export const PackageForm = ({
                         render={({ field }) => (
                             <ImageUploader
                                 value={field.value}
-                                onChange={field.onChange}
+                                onChange={(file) => {
+                                    field.onChange(file);
+                                }}
                             />
                         )}
                     />
