@@ -22,6 +22,12 @@ export const PackageForm = ({
     buttonLabel = "Submit"
 }) => {
 
+    console.log("initial values", initialValues);
+    // const pkgCategory = JSON.parse(localStorage.getItem("pkgCategory"));
+    // if (pkgCategory) {
+    //     initialValues.category = pkgCategory;
+    // }
+
     const {
         register,
         control,
@@ -37,7 +43,10 @@ export const PackageForm = ({
             discount: initialValues.discount || "",
             discount_type: initialValues.discount_type || "amount",
             is_active: initialValues.is_active === 1 ? true : false,
-            img: initialValues.img || ""
+            img: initialValues.img || "",
+            // section: initialValues.category.section_id || "",
+            // exam_type: initialValues.category.exam_type_id || "",
+            // exam_sub_type: initialValues.category.exam_sub_type_id || ""
         }
     });
 
@@ -172,6 +181,7 @@ export const PackageForm = ({
                 <SelectCategoryForPackage
                     setValue={setValue}
                     control={control}
+                    initialCategory={initialValues.category}
                 />
 
                 {/* Active Checkbox */}

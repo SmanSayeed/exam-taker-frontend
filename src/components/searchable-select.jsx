@@ -67,41 +67,45 @@ export const SearchableSelect = ({
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>
-                                                {options.map((item) => (
-                                                    <CommandItem
-                                                        key={item.id}
-                                                        onSelect={() => {
-                                                            field.onChange(item.id.toString());
-                                                            handleSelect(item);
-                                                        }}
-                                                    >
-                                                        <Check
-                                                            className={cn(
-                                                                "mr-2 h-4 w-4",
-                                                                field.value === item.id.toString() ? "opacity-100" : "opacity-0"
-                                                            )}
-                                                        />
-                                                        {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
-                                                    </CommandItem>
-                                                ))}
+                                                {
+                                                    options.map((item) => (
+                                                        <CommandItem
+                                                            key={item.id}
+                                                            onSelect={() => {
+                                                                field.onChange(item.id.toString());
+                                                                handleSelect(item);
+                                                            }}
+                                                        >
+                                                            <Check
+                                                                className={cn(
+                                                                    "mr-2 h-4 w-4",
+                                                                    selectedCatName == item.title ? "opacity-100" : "opacity-0"
+                                                                )}
+                                                            />
+                                                            {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
+                                                        </CommandItem>
+                                                    ))
+                                                }
                                             </CommandGroup>
                                         </CommandList>
                                     </Command>
                                 </PopoverContent>
                             </Popover>
-                            {showRemoveButton && selectedCatName && (
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        if (onRemove) onRemove();
-                                        setSelectedCatName("");
-                                        setSelectedCatId("");
-                                    }}
-                                    className="p-2 rounded-full bg-gray-200 hover:bg-red-200 text-gray-500 hover:text-red-500"
-                                >
-                                    <XIcon className="w-5 h-5" aria-hidden="true" />
-                                </button>
-                            )}
+                            {
+                                name !== "section" && name !== "group" && showRemoveButton && selectedCatName && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (onRemove) onRemove();
+                                            setSelectedCatName("");
+                                            setSelectedCatId("");
+                                        }}
+                                        className="p-2 rounded-full bg-gray-200 hover:bg-red-200 text-gray-500 hover:text-red-500"
+                                    >
+                                        <XIcon className="w-5 h-5" aria-hidden="true" />
+                                    </button>
+                                )
+                            }
                         </div>
                         {errors[name] && (
                             <span className="text-red-600">{errors[name]?.message}</span>

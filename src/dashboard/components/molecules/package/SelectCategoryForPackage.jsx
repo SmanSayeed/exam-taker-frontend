@@ -1,12 +1,9 @@
 import { SearchableSelect } from "@/components/searchable-select";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
-import { useCategoryData } from "../createquestion/useCategoryData";
+import { useCategoryData } from "../../../hooks/useCategoryData";
 
-export default function SelectCategoryForPackage({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType }) {
-
-    const [selectedCatId, setSelectedCatId] = useLocalStorage({ key: "categoryId", defaultValue: "" });
-    const [selectedCatName, setSelectedCatName] = useState("");
+export default function SelectCategoryForPackage({ control, setValue, initialCategory = {} }) {
 
     const [visibleFields, setVisibleFields] = useState({
         section: true,
@@ -14,11 +11,11 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
         exam_sub_type: true,
     });
 
-    const { data: sections, selected: selectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "selectedSection");
+    const { data: sections, selected: selectedSection, setSelected: setSelectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData, selectedCatName: selectedSectionName, setSelectedCatName: setSelectedSectionName } = useCategoryData("sections", "pkgSection");
 
-    const { data: examTypes, selected: selectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "selectedExamType");
+    const { data: examTypes, selected: selectedExamType, setSelected: setSelectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData, selectedCatName: selectedExamTypeName, setSelectedCatName: setSelectedExamTypeName } = useCategoryData("exam-types", "pkgExamType");
 
-    const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "selectedExamSubType");
+    const { selected: selectedExamSubType, setSelected: setSelectedExamSubType, selectedCatName: selectedExamSubTypeName, setSelectedCatName: setSelectedExamSubTypeName } = useCategoryData("exam-sub-types", "pkgExamSubTye");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
@@ -70,15 +67,11 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
         setValue("exam_sub_type", id)
     };
 
-    if (isLoading) {
-        return <div className="flex items-center justify-center">Sections Loading...</div>;
-    }
-
     if (error) {
         return <div>Failed to sections load: {error.message}</div>;
     }
 
-    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => {
+    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled, setSelectedCatId, selectedCatName, setSelectedCatName }) => {
         // If no options are available, don't render the selector
         if (!options || options.length === 0) {
             return null;
@@ -97,8 +90,8 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
                     rules={rules}
                     disabled={disabled}
                     onRemove={() => handleRemoveField(name)}
-                    selectedCatName={selectedCatName}
                     setSelectedCatId={setSelectedCatId}
+                    selectedCatName={selectedCatName}
                     setSelectedCatName={setSelectedCatName}
                 />
             )
@@ -108,12 +101,24 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
     {/* Section → Exam Type → Exam Sub Type */ }
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  fle flex-col md:flex-row gap-6">
+            {
+                isLoading && (
+                    <div className="space-y-2">
+                        <Skeleton className="h-4 w-[150px]" />
+                        <Skeleton className="h-4 w-[250px]" />
+                    </div>
+                )
+            }
+
             {renderSelectField({
                 label: "Section",
                 name: "section",
                 options: sections,
                 onChange: handleSectionChange,
                 defaultValue: selectedSection,
+                setSelectedCatId: setSelectedSection,
+                selectedCatName: selectedSectionName,
+                setSelectedCatName: setSelectedSectionName,
             })}
 
             {sectionData?.exam_types && renderSelectField({
@@ -122,6 +127,9 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
                 options: sectionData.exam_types,
                 onChange: handleExamTypeChange,
                 defaultValue: selectedExamType,
+                setSelectedCatId: setSelectedExamType,
+                selectedCatName: selectedExamTypeName,
+                setSelectedCatName: setSelectedExamTypeName,
                 disabled: !sectionData
             })}
 
@@ -131,6 +139,9 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
                 options: examTypeData.exam_sub_types,
                 onChange: handleExamSubTypeChange,
                 defaultValue: selectedExamSubType,
+                setSelectedCatId: setSelectedExamSubType,
+                selectedCatName: selectedExamSubTypeName,
+                setSelectedCatName: setSelectedExamSubTypeName,
                 disabled: !examTypeData
             })}
         </div>
