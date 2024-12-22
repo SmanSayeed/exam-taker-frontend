@@ -35,7 +35,7 @@ export const PackageForm = ({
             duration_days: initialValues.duration_days || "",
             price: initialValues.price || "",
             discount: initialValues.discount || "",
-            discount_type: initialValues.discount_type || "percentage",
+            discount_type: initialValues.discount_type || "amount",
             is_active: initialValues.is_active === 1 ? true : false,
             img: initialValues.img || ""
         }
@@ -175,15 +175,6 @@ export const PackageForm = ({
                 />
 
                 {/* Active Checkbox */}
-                {/* <div>
-                    <Checkbox
-                        id="is_active"
-                        name="is_active"
-                        checked={isActive}
-                        onCheckedChange={(checked) => setIsActive(checked)}
-                    />
-                    <Label htmlFor="is_active" className="ml-2">Active</Label>
-                </div> */}
                 <div>
                     <Controller
                         name="is_active"

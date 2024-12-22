@@ -1,8 +1,12 @@
-import { AutoSearchSelect } from "@/components/autosearch-select";
+import { SearchableSelect } from "@/components/searchable-select";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
 import { useCategoryData } from "../createquestion/useCategoryData";
 
 export default function SelectCategoryForPackage({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType }) {
+
+    const [selectedCatId, setSelectedCatId] = useLocalStorage({ key: "categoryId", defaultValue: "" });
+    const [selectedCatName, setSelectedCatName] = useState("");
 
     const [visibleFields, setVisibleFields] = useState({
         section: true,
@@ -45,8 +49,9 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
         if (sections) {
             const foundData = sections.find(item => item.id == id);
             setSectionData(foundData || null);
-            setSelectedSection(id)
-            setValue("section", id)
+            setSelectedSection(id);
+            setValue("section", id);
+            setVisibleFields((prev) => ({ ...prev, exam_type: true }));
         }
     }
 
@@ -54,8 +59,9 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
         if (examTypes) {
             const foundData = examTypes.find(item => item.id == id);
             setExamTypeData(foundData || null);
-            setSelectedExamType(id)
-            setValue("exam_type", id)
+            setSelectedExamType(id);
+            setValue("exam_type", id);
+            setVisibleFields((prev) => ({ ...prev, exam_sub_type: true }));
         }
     }
 
@@ -80,7 +86,7 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
 
         return (
             visibleFields[name] && (
-                <AutoSearchSelect
+                <SearchableSelect
                     label={label}
                     name={name}
                     control={control}
@@ -91,6 +97,9 @@ export default function SelectCategoryForPackage({ control, setValue, setSelecte
                     rules={rules}
                     disabled={disabled}
                     onRemove={() => handleRemoveField(name)}
+                    selectedCatName={selectedCatName}
+                    setSelectedCatId={setSelectedCatId}
+                    setSelectedCatName={setSelectedCatName}
                 />
             )
         )
