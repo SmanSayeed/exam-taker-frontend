@@ -2,12 +2,16 @@ import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import Loading from "../../atoms/Loading";
 import PageTitle from "../../atoms/PageTitle";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import PackageCard from "../../molecules/package/PackageCard";
+import { PackageCard } from "../../molecules/package/PackageCard";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
 const PackagesPage = () => {
   const { data: allPackages, isLoading, isSuccess, refetch } = useGetPackagesQuery();
+
+  const sortedPackages = allPackages?.data
+    ? [...allPackages.data].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    : [];
 
   return (
     <Layout>
@@ -27,7 +31,7 @@ const PackagesPage = () => {
             ) : isSuccess && allPackages?.data ? (
               <div className="grid  grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6">
                 {
-                  allPackages?.data.map(singlePackage => (
+                  sortedPackages.map(singlePackage => (
                     <PackageCard
                       key={singlePackage?.id}
                       singlePackage={singlePackage}

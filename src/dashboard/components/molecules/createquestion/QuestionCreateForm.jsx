@@ -14,6 +14,7 @@ import { useCreateQuestionMutation } from "@/features/questions/questionsApi";
 import { useState } from "react";
 
 import CInput from "@/components/atoms/CInput";
+import QImageUpload from "@/components/atoms/QImageUpload";
 import { updateField } from "@/features/questions/questionFormSlice";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { Loader2 } from "lucide-react";
@@ -25,8 +26,6 @@ import { CreativeQuestions } from "./CreativeQuestions";
 import { McqOptions } from "./McqOptions";
 import SelectCategory from "./SelectCategory";
 import TagsField from "./TagsField";
-import CFileInput from "@/components/atoms/CFileInput";
-import QImageUpload from "@/components/atoms/QImageUpload";
 
 
 export default function QuestionCreateForm() {
@@ -142,7 +141,7 @@ export default function QuestionCreateForm() {
     const [createQuestion, { isLoading }] = useCreateQuestionMutation();
 
     const handleCreate = async (formData) => {
-        console.log("form data - ",formData);
+        console.log("form data - ", formData);
         const mcqOptions = options.map((optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
@@ -235,11 +234,11 @@ export default function QuestionCreateForm() {
                         />
                     </div>
 
-                          {/* Image Upload */}
                     {/* Image Upload */}
-            <div className="pb-10">
-              <QImageUpload setQImageId={setQImageId} />
-                {/* <CFileInput
+                    {/* Image Upload */}
+                    <div className="pb-10">
+                        <QImageUpload setQImageId={setQImageId} />
+                        {/* <CFileInput
                     name="image"
                     label="Upload Image"
                     control={control}
@@ -256,7 +255,7 @@ export default function QuestionCreateForm() {
                         />
                     </div>
                 )} */}
-            </div>
+                    </div>
 
 
                     {/* mcq question */}
@@ -373,8 +372,6 @@ export default function QuestionCreateForm() {
                             </Label>
                         </div>
                     </div>
-
-              
 
                     {/* select category */}
                     <SelectCategory

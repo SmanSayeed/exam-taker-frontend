@@ -13,14 +13,12 @@ import {
     PopoverContent,
     PopoverTrigger
 } from "@/components/ui/popover";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { Check, XIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
-export const AutoSearchSelect = ({
+export const SearchableSelect = ({
     label,
     name,
     control,
@@ -29,29 +27,17 @@ export const AutoSearchSelect = ({
     onChange,
     rules = {},
     onRemove,
-    defaultValue,
+    selectedCatName,
+    setSelectedCatId,
+    setSelectedCatName,
     showRemoveButton = true,
+    defaultValue
 }) => {
-    const [popoverOpen, setPopoverOpen] = useState(false);
-    const [selectedCatName, setSelectedCatName] = useState("");
-    const [selectedCatId, setSelectedCatId] = useLocalStorage({ key: name, defaultValue: "" });
-
-    const isMobile = useMediaQuery('(max-width: 768px)');
-
-    useEffect(() => {
-        if (selectedCatId && options.length > 0) {
-            const selectedOption = options.find((item) => item.id.toString() === selectedCatId);
-
-            if (selectedOption) {
-                setSelectedCatName(selectedOption.title.charAt(0).toUpperCase() + selectedOption.title.slice(1));
-            }
-        }
-    }, [selectedCatId, options]);
+    const isMobile = useMediaQuery("(max-width: 768px)");
 
     const handleSelect = (item) => {
         setSelectedCatId(item.id.toString());
         setSelectedCatName(item.title);
-        setPopoverOpen(false);
         if (onChange) onChange(item.id.toString());
     };
 
@@ -62,11 +48,10 @@ export const AutoSearchSelect = ({
                 name={name}
                 control={control}
                 rules={rules}
-                defaultValue={defaultValue}
                 render={({ field, formState: { errors } }) => (
                     <>
                         <div className="flex items-center gap-2">
-                            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                            <Popover>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" className="w-full justify-start">
                                         {selectedCatName ? selectedCatName : placeholder}
@@ -74,7 +59,6 @@ export const AutoSearchSelect = ({
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
                                     <Command>
-                                        {/* <CommandInput placeholder={placeholder} /> */}
                                         {!isMobile && (
                                             <CommandInput
                                                 placeholder={placeholder}
@@ -84,31 +68,32 @@ export const AutoSearchSelect = ({
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>
-                                                {options && options.map((item) => (
-                                                    <CommandItem
-                                                        key={item?.id.toString()}
-                                                        onSelect={() => {
-                                                            field.onChange(item?.id.toString());
-                                                            handleSelect(item);
-                                                        }}
-                                                    >
-                                                        <Check
-                                                            className={cn(
-                                                                "mr-2 h-4 w-4",
-                                                                selectedCatId.includes(item?.id) ? "opacity-100" : "opacity-0"
-                                                            )}
-                                                        />
-
-                                                        {item?.title.charAt(0).toUpperCase() + item?.title.slice(1)}
-                                                    </CommandItem>
-                                                ))}
+                                                {
+                                                    options.map((item) => (
+                                                        <CommandItem
+                                                            key={item.id}
+                                                            onSelect={() => {
+                                                                field.onChange(item.id.toString());
+                                                                handleSelect(item);
+                                                            }}
+                                                        >
+                                                            <Check
+                                                                className={cn(
+                                                                    "mr-2 h-4 w-4",
+                                                                    selectedCatName == item.title ? "opacity-100" : "opacity-0"
+                                                                )}
+                                                            />
+                                                            {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
+                                                        </CommandItem>
+                                                    ))
+                                                }
                                             </CommandGroup>
                                         </CommandList>
                                     </Command>
                                 </PopoverContent>
                             </Popover>
                             {
-                                name !== "section" && name !== "group" && showRemoveButton && field.value && (
+                                name !== "section" && name !== "group" && showRemoveButton && selectedCatName && (
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -123,11 +108,12 @@ export const AutoSearchSelect = ({
                                 )
                             }
                         </div>
-
-                        {errors[name] && <span className="text-red-600">{errors[name]?.message}</span>}
+                        {errors[name] && (
+                            <span className="text-red-600">{errors[name]?.message}</span>
+                        )}
                     </>
                 )}
             />
         </div>
     );
-}
+};

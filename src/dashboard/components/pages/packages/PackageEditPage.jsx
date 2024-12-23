@@ -1,7 +1,7 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLocation } from "react-router-dom";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import PackageEditForm from "../../molecules/package/PackageEditForm";
+import { PackageEditForm } from "../../molecules/package/PackageEditForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 

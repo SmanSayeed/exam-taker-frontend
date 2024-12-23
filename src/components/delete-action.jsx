@@ -41,12 +41,19 @@ export function DeleteAction({ entityId, entityName, deleteFunction, refetch }) 
     return (
         <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <AlertDialogTrigger asChild onClick={handleOpen}>
-                <button className="w-full justify-start flex rounded-md p-2 transition-all duration-75 text-red-500">
-                    <IconMenu
-                        text={`Delete`}
-                        icon={<Trash2 className="h-4 w-4" />}
-                    />
-                </button>
+                {
+                    entityName === "Payment" ? (
+                        <span className="text-red-500">Delete Payment</span>
+                    ) : (
+                        <button className="w-full justify-start flex rounded-md p-2 transition-all duration-75 text-red-500">
+                            <IconMenu
+                                text={`Delete`}
+                                icon={<Trash2 className="h-4 w-4" />}
+                            />
+                        </button>
+                    )
+                }
+
             </AlertDialogTrigger>
             <AlertDialogContent onClick={(e) => e.stopPropagation()}>
                 <AlertDialogHeader>

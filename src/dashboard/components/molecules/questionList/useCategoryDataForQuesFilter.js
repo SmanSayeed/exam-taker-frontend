@@ -1,7 +1,7 @@
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import { useState } from "react";
 
-export const useCategoryData = (category) => {
+export const useCategoryDataForQuesFilter = (category) => {
   const {data: categoriesData, isLoading, error} = useGetQuestionsCategoryQuery(category);
   const [categoryData, setCategoryData] = useState(null);
 
