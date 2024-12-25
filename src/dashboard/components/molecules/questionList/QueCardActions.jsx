@@ -46,7 +46,7 @@ export function QueCardActions({ refetch, questionData, tagIds }) {
                     <DropdownMenuItem>
                         <button
                             onClick={() => setIsViewOpen(true)}
-                            className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                            className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
                         >
                             <IconMenu
                                 text="View"
@@ -59,7 +59,7 @@ export function QueCardActions({ refetch, questionData, tagIds }) {
                     <DropdownMenuItem>
                         <Link
                             state={questionData}
-                            className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                            className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
                             to={`/admin/question/edit/${questionData?.id}`}
                         >
                             <IconMenu
