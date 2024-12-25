@@ -74,8 +74,8 @@ export default function QuestionEditForm() {
             setQuestion(question);
 
             reset({
-                title: getPlainTextFromHtml(question.title) || "",
-                description: getPlainTextFromHtml(question.description) || "",
+                title: question.title || "",
+                description: question.description || "",
                 type: question.type || "",
                 mark: question.mark || ""
             });
@@ -110,8 +110,8 @@ export default function QuestionEditForm() {
 
                 // Set initial values for each MCQ question text in React Hook Form
                 question?.mcq_questions.forEach((option, index) => {
-                    setValue(`mcq_question_text${index}`, getPlainTextFromHtml(option?.mcq_question_text));
-                    setValue(`explanation${index}`, getPlainTextFromHtml(option?.description));
+                    setValue(`mcq_question_text${index}`, option?.mcq_question_text);
+                    setValue(`explanation${index}`, option?.description);
                 });
             }
 
@@ -137,6 +137,8 @@ export default function QuestionEditForm() {
     const [editQuestion, { isLoading: isUpdating }] = useEditQuestionMutation();
 
     const handleUpdate = async (formData) => {
+        console.log("formdata", formData)
+
         const mcqOptions = options
             .map((option, optionIndex) => {
                 let data;
