@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/dashboard/components/organism/datatable/DataTableColumnHeader";
 import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
@@ -96,7 +97,13 @@ export default function useDataTableColumns(type) {
                 return (
                     <div className="flex space-x-2">
                         <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
-                            {row.getValue("status")}
+                            {
+                                row.getValue("status") === 1 ? (
+                                    <Badge className="bg-green-600">Active</Badge>
+                                ) : (
+                                    <Badge className="bg-red-600">Inactive</Badge>
+                                )
+                            }
                         </span>
                     </div>
                 )

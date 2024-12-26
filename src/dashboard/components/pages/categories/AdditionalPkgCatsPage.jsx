@@ -15,7 +15,7 @@ export default function AdditionalPkgCatsPage() {
     return (
         <Layout>
             <Layout.Header>
-                <PageTitle title={"Tags"} />
+                <PageTitle title={"Additional Package Categories"} />
                 <div className='ml-auto flex items-center space-x-4'>
                     <ThemeSwitch />
                     <UserNav />
