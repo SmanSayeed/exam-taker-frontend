@@ -162,6 +162,12 @@ export const sidelinks = [
         href: "/admin/category/tags",
         icon: <Tags size={18} />,
       },
+      {
+        title: "Additional Package Categories",
+        label: "",
+        href: "/admin/category/additional-package-categories",
+        icon: <Tags size={18} />,
+      },
     ],
   },
   // questions management

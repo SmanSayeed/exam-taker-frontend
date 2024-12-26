@@ -24,11 +24,29 @@ const QuestionCategoryForm = ({ type, refetchOnQuestionsCategoryQuery }) => {
     const [createQuestionsCategory, { data, isSuccess, isLoading, error }] = useCreateQuestionsCategoryMutation();
 
     const handleCreate = (formData) => {
-        const payload = {
-            title: formData.title,
-            status: statusCheck,
-            details: formData.details,
-            // picture: image
+        // const payload = {
+        //     title: formData.title,
+        //     status: statusCheck,
+        //     details: formData.details,
+        //     // picture: image
+        // }
+
+        const payload = new FormData();
+
+        // name and title payload based on type
+        if (type === "additional-package-categories") {
+            payload.append("name", formData.title);
+        } else {
+            payload.append("title", formData.title);
+        }
+
+        payload.append("status", statusCheck);
+
+        // description and details payload based on type
+        if (type === "additional-package-categories") {
+            payload.append("description", formData.details);
+        } else {
+            payload.append("details", formData.details);
         }
 
         createQuestionsCategory({
