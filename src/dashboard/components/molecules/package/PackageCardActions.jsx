@@ -27,7 +27,7 @@ export function PackageCardActions({ refetch, singlePackage }) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                {/* Edit Model test */}
+                {/* Edit Package */}
                 <DropdownMenuItem>
                     <Link
                         to={`/admin/package/edit/${singlePackage?.id}`}
@@ -41,7 +41,7 @@ export function PackageCardActions({ refetch, singlePackage }) {
                     </Link>
                 </DropdownMenuItem>
 
-                {/* Delete model test */}
+                {/* Delete Package */}
                 <DropdownMenuItem>
                     <DeleteAction
                         entityId={singlePackage?.id}
@@ -51,7 +51,7 @@ export function PackageCardActions({ refetch, singlePackage }) {
                     />
                 </DropdownMenuItem>
 
-                {/* Edit Model test */}
+                {/* View Model tests */}
                 <DropdownMenuItem>
                     <Link
                         to={`/admin/package/${singlePackage?.id}/model-tests`}

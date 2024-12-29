@@ -36,6 +36,7 @@ import YearPage from "@/dashboard/components/pages/categories/YearPage";
 import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
 import MTEditPage from "@/dashboard/components/pages/modelTests/MTEditPage";
 import MTExamListPage from "@/dashboard/components/pages/modelTests/MTExamListPage";
+import MTUnderPkgPage from "@/dashboard/components/pages/packages/MTUnderPkgPage";
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
 import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
 import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
@@ -148,6 +149,10 @@ const router = createBrowserRouter([
             path: "/admin/packages",
             element: <PackagesPage />
           },
+          {
+            path: "/admin/package/:packageId/model-tests",
+            element: <MTUnderPkgPage />
+          },
           // modeltest management
           {
             path: "/admin/model-tests/create",
@@ -165,11 +170,11 @@ const router = createBrowserRouter([
             path: "/admin/model-tests/:modelTestId/create-exam",
             element: <CreateExamForModelTestPage />
           },
-          // pdf management
           {
             path: "/admin/model-tests/:modelTestId/exams",
             element: <MTExamListPage />
           },
+          // pdf management
           {
             path: "/admin/pdf",
             element: <PdfIndexPage />,
