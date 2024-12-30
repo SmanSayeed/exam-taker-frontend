@@ -2,7 +2,6 @@ import { ImageUploader } from "@/components/atoms/ImageUploader";
 import { Button } from "@/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
-import SelectCategoryForPackage from "./SelectCategoryForPackage";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -15,6 +14,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useEffect } from "react";
+import { SelectCategoryForPkg } from "./SelectCategoryForPkg";
 
 export const PackageForm = ({
     initialValues = {},
@@ -22,11 +22,7 @@ export const PackageForm = ({
     isLoading,
     buttonLabel = "Submit"
 }) => {
-
     console.log("initial values", initialValues);
-    const pkgSection = JSON.parse(localStorage.getItem("pkgSection"));
-    const pkgExamType = JSON.parse(localStorage.getItem("pkgExamType"));
-    const pkgExamSubTye = JSON.parse(localStorage.getItem("pkgExamSubTye"));
 
     const {
         register,
@@ -43,10 +39,7 @@ export const PackageForm = ({
             discount: initialValues.discount || "",
             discount_type: initialValues.discount_type || "amount",
             is_active: initialValues.is_active === 1 ? true : false,
-            img: initialValues.img || "",
-            section: initialValues?.category?.section_id || pkgSection || "",
-            exam_type: initialValues?.category?.exam_type_id || pkgExamType || "",
-            exam_sub_type: initialValues?.category?.exam_sub_type_id || pkgExamSubTye || ""
+            img: initialValues.img || ""
         }
     });
 
@@ -59,10 +52,7 @@ export const PackageForm = ({
         setValue("discount", initialValues.discount || "");
         setValue("discount_type", initialValues.discount_type || "amount");
         setValue("img", initialValues.img || "");
-        setValue("section", initialValues.category?.section_id || pkgSection || "");
-        setValue("exam_type", initialValues.category?.exam_type_id || pkgExamType || "");
-        setValue("exam_sub_type", initialValues.category?.exam_sub_type_id || pkgExamSubTye || "");
-    }, [setValue, initialValues, pkgSection, pkgExamType, pkgExamSubTye]);
+    }, [setValue, initialValues]);
 
     const toolbarOptions = [
         ["bold", "italic", "underline", "strike"],
@@ -194,14 +184,14 @@ export const PackageForm = ({
                 </div>
 
                 {/* Select Category */}
-                <SelectCategoryForPackage
+                <SelectCategoryForPkg
                     setValue={setValue}
                     control={control}
                     initialCategory={initialValues.category}
                 />
 
                 {/* Active Checkbox */}
-                <div>
+                <div className="flex items-center space-x-2">
                     <Controller
                         name="is_active"
                         control={control}

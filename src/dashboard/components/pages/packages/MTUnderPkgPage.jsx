@@ -17,7 +17,7 @@ const MTUnderPkgPage = () => {
     } = useGetAllModelTestsQuery();
     console.log("allModelTests", allModelTests)
 
-    const allMTUnderPkg = allModelTests?.data.filter((item) => item.package.id === packageId);
+    const allMTUnderPkg = allModelTests?.data.filter((item) => item?.package?.id === packageId);
     console.log("allmtunderpkg", allMTUnderPkg)
 
     if (isLoading) return <Loading />;
