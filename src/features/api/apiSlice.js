@@ -28,6 +28,6 @@ export const apiSlice = createApi({
 
         return result;
     },
-    tagTypes: ["Questions", "ModelTests"],
+    tagTypes: ["Questions", "ModelTests", "Packages"],
     endpoints: (builder) => ({}),
 });

@@ -1,8 +1,8 @@
+import { AutoSearchSelectForEdit } from "@/components/autosearch-select-edit";
 import { Skeleton } from "@/components/ui/skeleton";
 import { setSelectedExamSubType, setSelectedExamType, setSelectedGroup, setSelectedLesson, setSelectedLevel, setSelectedSection, setSelectedSubject, setSelectedSubTopic, setSelectedTopic, setSelectedYear } from "@/features/questions/selectedCategoriesSlice";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AutoSearchSelectForEdit } from "./AutoSearchSelectForEdit";
 import { useCategoryDataForEdit } from "./useCategoryDataForEdit";
 
 export default function SelectCategoryForEdit({ control, setValue }) {

@@ -9,8 +9,8 @@ import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { toast } from "sonner";
+import { AutoSearchSelectForEdit } from "../../../../components/autosearch-select-edit";
 import SelectCatForModelTest from "../../molecules/modelTests/SelectCatForModelTest";
-import { AutoSearchSelectForEdit } from "../../molecules/questionedit/AutoSearchSelectForEdit";
 
 export function MTEditForm({ isFetching, modelTestData }) {
     console.log(modelTestData)

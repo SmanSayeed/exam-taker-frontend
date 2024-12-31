@@ -32,7 +32,6 @@ export function PackageCardActions({ refetch, singlePackage }) {
                     <Link
                         to={`/admin/package/edit/${singlePackage?.id}`}
                         className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
-                        state={{ singlePackage }}
                     >
                         <IconMenu
                             text="Edit"

@@ -108,7 +108,7 @@ export const AutoSearchSelectForEdit = ({
                                 </PopoverContent>
                             </Popover>
                             {
-                                showRemoveButton && field.value && (
+                                name !== "section" && name !== "group" && name !== "pkgSection" && showRemoveButton && field.value && (
                                     <button
                                         type="button"
                                         onClick={() => {
