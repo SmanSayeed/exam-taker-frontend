@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { SelectCategoryForPkg } from "./SelectCategoryForPkg";
 
-export default function PackageCreateForm() {
+export function PackageCreateForm() {
     const [isActive, setIsActive] = useState(false);
 
     const aPackage = useSelector((state) => state.package);
@@ -148,7 +148,6 @@ export default function PackageCreateForm() {
                     <Controller
                         name="description"
                         control={control}
-                        rules={{ required: "Description is required" }}
                         render={({ field }) => (
                             <ReactQuill
                                 theme="snow"
