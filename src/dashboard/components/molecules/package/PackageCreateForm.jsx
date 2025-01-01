@@ -11,19 +11,20 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useCreatePackageMutation } from "@/features/packages/packageApi";
+import { updatePkgField } from "@/features/packages/packageFormSlice";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { SelectCategoryForPkg } from "./SelectCategoryForPkg";
 
 export function PackageCreateForm() {
     const [isActive, setIsActive] = useState(false);
 
-    const aPackage = useSelector((state) => state.package);
-    const { name, description, duration_days, price } = aPackage;
+    const dispatch = useDispatch();
+    const packageForm = useSelector((state) => state.packageForm);
 
     const {
         register,
@@ -32,15 +33,7 @@ export function PackageCreateForm() {
         setValue,
         handleSubmit,
     } = useForm({
-        defaultValues: {
-            name: name || "",
-            description: description || "",
-            duration_days: duration_days || "",
-            price: price || "",
-            img: "",
-            discount: "",
-            discount_type: "amount",
-        },
+        defaultValues: packageForm
     });
 
     const toolbarOptions = [
@@ -130,7 +123,10 @@ export function PackageCreateForm() {
                             <ReactQuill
                                 theme="snow"
                                 value={field.value}
-                                onChange={field.onChange}
+                                onChange={(value) => {
+                                    field.onChange(value);
+                                    dispatch(updatePkgField({ field: 'name', value }));
+                                }}
                                 modules={module}
                             />
                         )}
@@ -152,7 +148,10 @@ export function PackageCreateForm() {
                             <ReactQuill
                                 theme="snow"
                                 value={field.value}
-                                onChange={field.onChange}
+                                onChange={(value) => {
+                                    field.onChange(value);
+                                    dispatch(updatePkgField({ field: 'description', value }));
+                                }}
                                 modules={module}
                             />
                         )}
@@ -162,7 +161,7 @@ export function PackageCreateForm() {
                     )}
                 </div>
 
-                {/* Duration */}
+                {/* Duration days */}
                 <div className="space-y-1 md:w-1/2">
                     <Label htmlFor="duration" className="text-md font-semibold">
                         Duration (in days)
@@ -172,6 +171,9 @@ export function PackageCreateForm() {
                         id="duration"
                         type="number"
                         className="dark:bg-gray-600"
+                        onChange={(e) => {
+                            dispatch(updatePkgField({ field: 'duration_days', value: e.target.value }));
+                        }}
                     />
                 </div>
 
@@ -186,6 +188,7 @@ export function PackageCreateForm() {
                                 value={field.value}
                                 onChange={(file) => {
                                     field.onChange(file);
+                                    dispatch(updatePkgField({ field: 'img', value: file[0] }))
                                 }}
                             />
                         )}
@@ -203,6 +206,9 @@ export function PackageCreateForm() {
                             id="price"
                             type="number"
                             className="dark:bg-gray-600"
+                            onChange={(e) => {
+                                dispatch(updatePkgField({ field: 'price', value: e.target.value }));
+                            }}
                         />
                     </div>
                     <div className="space-y-1 md:w-1/2">
@@ -214,6 +220,9 @@ export function PackageCreateForm() {
                             id="discount"
                             type="number"
                             className="dark:bg-gray-600"
+                            onChange={(e) => {
+                                dispatch(updatePkgField({ field: 'discount', value: e.target.value }));
+                            }}
                         />
                     </div>
                 </div>
@@ -227,7 +236,13 @@ export function PackageCreateForm() {
                         name="discount_type"
                         control={control}
                         render={({ field }) => (
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value);
+                                    dispatch(updatePkgField({ field: 'discount_type', value }));
+                                }}
+                                defaultValue={field.value}
+                            >
                                 <SelectTrigger>
                                     <SelectValue />
                                 </SelectTrigger>

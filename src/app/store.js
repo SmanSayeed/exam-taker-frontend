@@ -1,6 +1,6 @@
 import authSliceReducer from "@/features/auth/authSlice";
 import modelTestFormReducer from "@/features/modelTests/modelTestFormSlice";
-import packageSliceReducer from "@/features/packages/packageSlice";
+import packageFormSliceReducer from "@/features/packages/packageFormSlice";
 import questionFormReducer from "@/features/questions/questionFormSlice";
 import selectedCategoriesReducer from "@/features/questions/selectedCategoriesSlice";
 import { configureStore } from "@reduxjs/toolkit";
@@ -10,10 +10,10 @@ export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authSliceReducer,
-    package: packageSliceReducer,
     selectedCategories: selectedCategoriesReducer,
     questionForm: questionFormReducer,
-    modelTestForm: modelTestFormReducer
+    packageForm: packageFormSliceReducer,
+    modelTestForm: modelTestFormReducer,
   },
   // devTools: import.meta.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddlewares) =>

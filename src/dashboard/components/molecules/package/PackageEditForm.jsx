@@ -21,8 +21,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { SelectCatForPkgEdit } from "./SelectCatForPkgEdit";
 
 export const PackageEditForm = ({ singlePackage }) => {
-    console.log("singlePackage", singlePackage);
-
     const dispatch = useDispatch();
     const selectedCategories = useSelector((state) => state.selectedCategories);
 

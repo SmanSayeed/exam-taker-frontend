@@ -6,7 +6,9 @@ const initialState = {
     description: '',
     start_time: '',
     end_time: '',
-    is_active: true,
+    pass_mark: '',
+    full_mark: '',
+    is_active: false,
 };
 
 const modelTestFormSlice = createSlice({
