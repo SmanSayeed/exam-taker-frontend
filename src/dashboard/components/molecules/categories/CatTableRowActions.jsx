@@ -25,7 +25,7 @@ export function CatTableRowActions({ row, type }) {
             <CustomDialog
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
-                title="Edit question's category"
+                title={`Edit ${type === "additional-package-categories" ? "Additional Package Category" : "Question Category"}`}
                 description="Make changes to your categories here. Click save when you&apos;re done."
             >
                 <CategoryEditForm
@@ -50,7 +50,6 @@ export function CatTableRowActions({ row, type }) {
                 <DropdownMenuContent align="end" className="w-[160px]">
                     {/* Edit action */}
                     <DropdownMenuItem className="cursor-pointer">
-                        {/* <TableRowEditBtn row={row} type={type} /> */}
                         <button
                             onClick={() => setIsOpen(true)}
                         >

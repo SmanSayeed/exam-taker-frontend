@@ -27,12 +27,11 @@ export function PackageCardActions({ refetch, singlePackage }) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                {/* Edit Model test */}
+                {/* Edit Package */}
                 <DropdownMenuItem>
                     <Link
                         to={`/admin/package/edit/${singlePackage?.id}`}
                         className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
-                        state={{ singlePackage }}
                     >
                         <IconMenu
                             text="Edit"
@@ -41,7 +40,7 @@ export function PackageCardActions({ refetch, singlePackage }) {
                     </Link>
                 </DropdownMenuItem>
 
-                {/* Delete model test */}
+                {/* Delete Package */}
                 <DropdownMenuItem>
                     <DeleteAction
                         entityId={singlePackage?.id}
@@ -51,7 +50,7 @@ export function PackageCardActions({ refetch, singlePackage }) {
                     />
                 </DropdownMenuItem>
 
-                {/* Edit Model test */}
+                {/* View Model tests */}
                 <DropdownMenuItem>
                     <Link
                         to={`/admin/package/${singlePackage?.id}/model-tests`}

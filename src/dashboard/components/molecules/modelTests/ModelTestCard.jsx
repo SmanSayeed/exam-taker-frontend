@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { ModeltestCardActions } from "./ModeltestCardActions";
 
-
 const ModelTestCard = ({ modelTest, refetch }) => {
     const [isActive, setIsActive] = useState(modelTest?.is_active);
     const [changeModelTestStatus, { isLoading }] = useChangeModelTestStatusMutation();

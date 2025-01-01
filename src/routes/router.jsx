@@ -18,23 +18,28 @@ import QuestionListForAdminPage from "@/dashboard/components/pages/questions/Que
 import PdfCreatePage from "@/dashboard/components/pages/PDF/PdfCreatePage";
 import PdfEditPage from "@/dashboard/components/pages/PDF/PdfEditPage";
 import PdfIndexPage from "@/dashboard/components/pages/PDF/PdfIdexPage";
+
+// category management
+import AdditionalPkgCatsPage from "@/dashboard/components/pages/categories/AdditionalPkgCatsPage";
+import ExamSubTypePage from "@/dashboard/components/pages/categories/ExamSubTypePage";
+import ExamTypePage from "@/dashboard/components/pages/categories/ExamTypePage";
+import GroupPage from "@/dashboard/components/pages/categories/GroupPage";
+import LessonPage from "@/dashboard/components/pages/categories/LessonPage";
+import LevelPage from "@/dashboard/components/pages/categories/LevelPage";
+import SectionPage from "@/dashboard/components/pages/categories/SectionPage";
+import SubTopicsPage from "@/dashboard/components/pages/categories/SubTopicsPage";
+import SubjectPage from "@/dashboard/components/pages/categories/SubjectPage";
+import TagsPage from "@/dashboard/components/pages/categories/TagsPage";
+import TopicsPage from "@/dashboard/components/pages/categories/TopicsPage";
+import YearPage from "@/dashboard/components/pages/categories/YearPage";
+
 import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
 import MTEditPage from "@/dashboard/components/pages/modelTests/MTEditPage";
 import MTExamListPage from "@/dashboard/components/pages/modelTests/MTExamListPage";
+import MTUnderPkgPage from "@/dashboard/components/pages/packages/MTUnderPkgPage";
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
 import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
 import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
-import ExamSubTypePage from "@/dashboard/components/pages/questioncategories/ExamSubTypePage";
-import ExamTypePage from "@/dashboard/components/pages/questioncategories/ExamTypePage";
-import GroupPage from "@/dashboard/components/pages/questioncategories/GroupPage";
-import LessonPage from "@/dashboard/components/pages/questioncategories/LessonPage";
-import LevelPage from "@/dashboard/components/pages/questioncategories/LevelPage";
-import SectionPage from "@/dashboard/components/pages/questioncategories/SectionPage";
-import SubTopicsPage from "@/dashboard/components/pages/questioncategories/SubTopicsPage";
-import SubjectPage from "@/dashboard/components/pages/questioncategories/SubjectPage";
-import TagsPage from "@/dashboard/components/pages/questioncategories/TagsPage";
-import TopicsPage from "@/dashboard/components/pages/questioncategories/TopicsPage";
-import YearPage from "@/dashboard/components/pages/questioncategories/YearPage";
 import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
 import PaymentListPage from "@/dashboard/components/pages/subscriptions/PaymentListPage";
 
@@ -69,6 +74,7 @@ const router = createBrowserRouter([
             path: "/admin/student/create",
             element: <StudentCreateForAdminPage />
           },
+          // category management
           {
             path: "/admin/category/section",
             element: <SectionPage />
@@ -78,16 +84,12 @@ const router = createBrowserRouter([
             element: <ExamTypePage />
           },
           {
-            path: "/admin/category/year",
-            element: <YearPage />
+            path: "/admin/category/exam-sub-type",
+            element: <ExamSubTypePage />
           },
           {
             path: "/admin/category/group",
             element: <GroupPage />
-          },
-          {
-            path: "/admin/category/exam-sub-type",
-            element: <ExamSubTypePage />
           },
           {
             path: "/admin/category/level",
@@ -110,9 +112,18 @@ const router = createBrowserRouter([
             element: <SubTopicsPage />
           },
           {
+            path: "/admin/category/year",
+            element: <YearPage />
+          },
+          {
             path: "/admin/category/tags",
             element: <TagsPage />
           },
+          {
+            path: "/admin/category/additional-package-categories",
+            element: <AdditionalPkgCatsPage />
+          },
+          // question management
           {
             path: "/admin/question/create",
             element: <QuestionCreateForAdminPage />
@@ -125,6 +136,7 @@ const router = createBrowserRouter([
             path: "/admin/question/edit/:questionId",
             element: <QuestionEditPage />
           },
+          // package management
           {
             path: "/admin/package/create",
             element: <PackageCreatePage />
@@ -136,6 +148,10 @@ const router = createBrowserRouter([
           {
             path: "/admin/packages",
             element: <PackagesPage />
+          },
+          {
+            path: "/admin/package/:packageId/model-tests",
+            element: <MTUnderPkgPage />
           },
           // modeltest management
           {
@@ -154,11 +170,11 @@ const router = createBrowserRouter([
             path: "/admin/model-tests/:modelTestId/create-exam",
             element: <CreateExamForModelTestPage />
           },
-          // pdf management
           {
             path: "/admin/model-tests/:modelTestId/exams",
             element: <MTExamListPage />
           },
+          // pdf management
           {
             path: "/admin/pdf",
             element: <PdfIndexPage />,

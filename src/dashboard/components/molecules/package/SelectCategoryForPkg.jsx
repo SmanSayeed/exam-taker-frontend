@@ -1,44 +1,21 @@
-import { SearchableSelect } from "@/components/searchable-select";
+import { AutoSearchSelect } from "@/components/autosearch-select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useCategoryData } from "@/dashboard/hooks/useCategoryData";
 import { useState } from "react";
-import { useCategoryData } from "../../../hooks/useCategoryData";
 
-export default function SelectCategoryForPackage({ control, setValue, initialCategory = {} }) {
+export function SelectCategoryForPkg({ control, setValue, setSelectedSection, setSelectedExamType, setSelectedExamSubType }) {
 
     const [visibleFields, setVisibleFields] = useState({
-        section: true,
-        exam_type: true,
-        exam_sub_type: true,
+        pkgSection: true,
+        pkgExamType: true,
+        pkgExamSubType: true,
     });
 
-    const {
-        isLoading,
-        error,
-        data: sections,
-        selected: selectedSection,
-        setSelected: setSelectedSection,
-        categoryData: sectionData,
-        setCategoryData: setSectionData,
-        selectedCatName: selectedSectionName,
-        setSelectedCatName: setSelectedSectionName
-    } = useCategoryData("sections", "pkgSection");
+    const { data: sections, selected: selectedSection, isLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections", "pkgSection");
 
-    const {
-        data: examTypes,
-        selected: selectedExamType,
-        setSelected: setSelectedExamType,
-        categoryData: examTypeData,
-        setCategoryData: setExamTypeData,
-        selectedCatName: selectedExamTypeName,
-        setSelectedCatName: setSelectedExamTypeName
-    } = useCategoryData("exam-types", "pkgExamType");
+    const { data: examTypes, selected: selectedExamType, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types", "pkgExamType");
 
-    const {
-        selected: selectedExamSubType,
-        setSelected: setSelectedExamSubType,
-        selectedCatName: selectedExamSubTypeName,
-        setSelectedCatName: setSelectedExamSubTypeName
-    } = useCategoryData("exam-sub-types", "pkgExamSubTye");
+    const { selected: selectedExamSubType } = useCategoryData("exam-sub-types", "pkgExamSubType");
 
     const handleRemoveField = (fieldName) => {
         setVisibleFields((prev) => ({ ...prev, [fieldName]: false }));
@@ -49,15 +26,15 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
 
     const clearSelectedState = (fieldName) => {
         switch (fieldName) {
-            case "section":
+            case "pkgSection":
                 setSelectedSection("");
                 setSectionData(null);
                 break;
-            case "exam_type":
+            case "pkgExamType":
                 setSelectedExamType("");
                 setExamTypeData(null);
                 break;
-            case "exam_sub_type":
+            case "pkgExamSubType":
                 setSelectedExamSubType("");
                 break;
             default:
@@ -70,8 +47,8 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
             const foundData = sections.find(item => item.id == id);
             setSectionData(foundData || null);
             setSelectedSection(id);
-            setValue("section", id);
-            setVisibleFields((prev) => ({ ...prev, exam_type: true }));
+            setVisibleFields((prev) => ({ ...prev, pkgExamType: true }));
+            setValue("pkgSection", id);
         }
     }
 
@@ -80,21 +57,21 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
             const foundData = examTypes.find(item => item.id == id);
             setExamTypeData(foundData || null);
             setSelectedExamType(id);
-            setValue("exam_type", id);
-            setVisibleFields((prev) => ({ ...prev, exam_sub_type: true }));
+            setVisibleFields((prev) => ({ ...prev, pkgExamSubType: true }));
+            setValue("pkgExamType", id);
         }
     }
 
     const handleExamSubTypeChange = (id) => {
-        setSelectedExamSubType(id)
-        setValue("exam_sub_type", id)
+        setSelectedExamSubType(id);
+        setValue("pkgExamSubType", id);
     };
 
     if (error) {
         return <div>Failed to sections load: {error.message}</div>;
     }
 
-    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled, setSelectedCatId, selectedCatName, setSelectedCatName }) => {
+    const renderSelectField = ({ label, name, options, onChange, defaultValue, rules, disabled }) => {
         // If no options are available, don't render the selector
         if (!options || options.length === 0) {
             return null;
@@ -102,7 +79,7 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
 
         return (
             visibleFields[name] && (
-                <SearchableSelect
+                <AutoSearchSelect
                     label={label}
                     name={name}
                     control={control}
@@ -113,15 +90,11 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
                     rules={rules}
                     disabled={disabled}
                     onRemove={() => handleRemoveField(name)}
-                    setSelectedCatId={setSelectedCatId}
-                    selectedCatName={selectedCatName}
-                    setSelectedCatName={setSelectedCatName}
                 />
             )
         )
     };
 
-    {/* Section → Exam Type → Exam Sub Type */ }
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  fle flex-col md:flex-row gap-6">
             {
@@ -135,36 +108,27 @@ export default function SelectCategoryForPackage({ control, setValue, initialCat
 
             {renderSelectField({
                 label: "Section",
-                name: "section",
+                name: "pkgSection",
                 options: sections,
                 onChange: handleSectionChange,
-                defaultValue: initialCategory?.section_id || selectedSection,
-                setSelectedCatId: setSelectedSection,
-                selectedCatName: selectedSectionName,
-                setSelectedCatName: setSelectedSectionName,
+                defaultValue: selectedSection,
             })}
 
             {sectionData?.exam_types && renderSelectField({
                 label: "Exam Type",
-                name: "exam_type",
+                name: "pkgExamType",
                 options: sectionData.exam_types,
                 onChange: handleExamTypeChange,
-                defaultValue: initialCategory?.exam_type_id || selectedExamType,
-                setSelectedCatId: setSelectedExamType,
-                selectedCatName: selectedExamTypeName,
-                setSelectedCatName: setSelectedExamTypeName,
+                defaultValue: selectedExamType,
                 disabled: !sectionData
             })}
 
             {examTypeData?.exam_sub_types && renderSelectField({
                 label: "Exam Sub Type",
-                name: "exam_sub_type",
+                name: "pkgExamSubType",
                 options: examTypeData.exam_sub_types,
                 onChange: handleExamSubTypeChange,
-                defaultValue: initialCategory?.exam_sub_type_id || selectedExamSubType,
-                setSelectedCatId: setSelectedExamSubType,
-                selectedCatName: selectedExamSubTypeName,
-                setSelectedCatName: setSelectedExamSubTypeName,
+                defaultValue: selectedExamSubType,
                 disabled: !examTypeData
             })}
         </div>

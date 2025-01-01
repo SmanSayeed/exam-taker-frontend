@@ -16,9 +16,10 @@ import {
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { Check, XIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 
-export const SearchableSelect = ({
+export const AutoSearchSelectForEdit = ({
     label,
     name,
     control,
@@ -27,17 +28,30 @@ export const SearchableSelect = ({
     onChange,
     rules = {},
     onRemove,
-    selectedCatName,
-    setSelectedCatId,
-    setSelectedCatName,
-    showRemoveButton = true,
-    defaultValue
+    selectedValue,
+    showRemoveButton = true
 }) => {
-    const isMobile = useMediaQuery("(max-width: 768px)");
+
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const [selectedCatName, setSelectedCatName] = useState("");
+    const [selectedCatId, setSelectedCatId] = useState(selectedValue);
+
+    const isMobile = useMediaQuery('(max-width: 768px)');
+
+    useEffect(() => {
+        if (selectedCatId && options.length > 0) {
+            const selectedOption = options.find((item) => item.id === selectedCatId);
+
+            if (selectedOption) {
+                setSelectedCatName(selectedOption.title.charAt(0).toUpperCase() + selectedOption.title.slice(1));
+            }
+        }
+    }, [selectedCatId, options]);
 
     const handleSelect = (item) => {
         setSelectedCatId(item.id.toString());
         setSelectedCatName(item.title);
+        setPopoverOpen(false);
         if (onChange) onChange(item.id.toString());
     };
 
@@ -48,10 +62,11 @@ export const SearchableSelect = ({
                 name={name}
                 control={control}
                 rules={rules}
+                defaultValue={selectedValue}
                 render={({ field, formState: { errors } }) => (
                     <>
                         <div className="flex items-center gap-2">
-                            <Popover>
+                            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" className="w-full justify-start">
                                         {selectedCatName ? selectedCatName : placeholder}
@@ -59,6 +74,7 @@ export const SearchableSelect = ({
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full p-0">
                                     <Command>
+                                        {/* <CommandInput placeholder={placeholder} /> */}
                                         {!isMobile && (
                                             <CommandInput
                                                 placeholder={placeholder}
@@ -68,32 +84,31 @@ export const SearchableSelect = ({
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>
-                                                {
-                                                    options.map((item) => (
-                                                        <CommandItem
-                                                            key={item.id}
-                                                            onSelect={() => {
-                                                                field.onChange(item.id.toString());
-                                                                handleSelect(item);
-                                                            }}
-                                                        >
-                                                            <Check
-                                                                className={cn(
-                                                                    "mr-2 h-4 w-4",
-                                                                    selectedCatName == item.title ? "opacity-100" : "opacity-0"
-                                                                )}
-                                                            />
-                                                            {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
-                                                        </CommandItem>
-                                                    ))
-                                                }
+                                                {options && options?.map((item) => (
+                                                    <CommandItem
+                                                        key={item?.id.toString()}
+                                                        onSelect={() => {
+                                                            field.onChange(item?.id.toString());
+                                                            handleSelect(item);
+                                                        }}
+                                                    >
+                                                        <Check
+                                                            className={cn(
+                                                                "mr-2 h-4 w-4",
+                                                                selectedCatId == item?.id.toString() ? "opacity-100" : "opacity-0"
+                                                            )}
+                                                        />
+
+                                                        {item?.title.charAt(0).toUpperCase() + item?.title.slice(1)}
+                                                    </CommandItem>
+                                                ))}
                                             </CommandGroup>
                                         </CommandList>
                                     </Command>
                                 </PopoverContent>
                             </Popover>
                             {
-                                name !== "section" && name !== "group" && showRemoveButton && selectedCatName && (
+                                name !== "section" && name !== "group" && name !== "pkgSection" && showRemoveButton && field.value && (
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -108,12 +123,11 @@ export const SearchableSelect = ({
                                 )
                             }
                         </div>
-                        {errors[name] && (
-                            <span className="text-red-600">{errors[name]?.message}</span>
-                        )}
+
+                        {errors[name] && <span className="text-red-600">{errors[name]?.message}</span>}
                     </>
                 )}
             />
         </div>
     );
-};
+}
