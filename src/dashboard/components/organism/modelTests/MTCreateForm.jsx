@@ -10,6 +10,7 @@ import { updateField } from "@/features/modelTests/modelTestFormSlice";
 import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
@@ -63,17 +64,19 @@ export function MTCreateForm() {
         toolbar: toolbarOptions
     }
 
+    // Synchronize selectedPkg with Redux on mount
+    useEffect(() => {
+        const storedPkg = localStorage.getItem('package');
+
+        if (storedPkg) {
+            dispatch(updateField({ field: 'package', value: storedPkg }));
+        }
+
+        setValue('package', storedPkg);
+    }, [dispatch, setValue]);
+
     const handleCreate = async (formData) => {
         const payload = new FormData();
-
-        const categoryPayload = {
-            group_id: selectedGroup || formData.group,
-            level_id: selectedLevel || formData.level,
-            subject_id: selectedSubject || formData.subject,
-            lesson_id: selectedLesson || formData.lesson,
-            topic_id: selectedTopic || formData.topic,
-            sub_topic_id: selectedSubTopic || formData.sub_topic,
-        };
 
         payload.append("package_id", modelTestForm.package || formData.package);
         payload.append("title", formData.title);
@@ -83,27 +86,26 @@ export function MTCreateForm() {
         payload.append("pass_mark", formData.pass_mark);
         payload.append("full_mark", formData.full_mark);
         payload.append("is_active", modelTestForm.is_active ? 1 : 0);
-        payload.append("category", categoryPayload);
 
         // Append categories conditionally
-        // if (selectedGroup || formData.group) {
-        //     payload.append("category.group_id", selectedGroup || formData.group);
-        // }
-        // if (selectedLevel || formData.level) {
-        //     payload.append("category.level_id", selectedLevel || formData.level);
-        // }
-        // if (selectedSubject || formData.subject) {
-        //     payload.append("category.subject_id", selectedSubject || formData.subject);
-        // }
-        // if (selectedLesson || formData.lesson) {
-        //     payload.append("category.lesson_id", selectedLesson || formData.lesson);
-        // }
-        // if (selectedTopic || formData.topic) {
-        //     payload.append("category.topic_id", selectedTopic || formData.topic);
-        // }
-        // if (selectedSubTopic || formData.sub_topic) {
-        //     payload.append("category.sub_topic_id", selectedSubTopic || formData.sub_topic);
-        // }
+        if (selectedGroup || formData.group) {
+            payload.append("group_id", selectedGroup || formData.group);
+        }
+        if (selectedLevel || formData.level) {
+            payload.append("level_id", selectedLevel || formData.level);
+        }
+        if (selectedSubject || formData.subject) {
+            payload.append("subject_id", selectedSubject || formData.subject);
+        }
+        if (selectedLesson || formData.lesson) {
+            payload.append("lesson_id", selectedLesson || formData.lesson);
+        }
+        if (selectedTopic || formData.topic) {
+            payload.append("topic_id", selectedTopic || formData.topic);
+        }
+        if (selectedSubTopic || formData.sub_topic) {
+            payload.append("sub_topic_id", selectedSubTopic || formData.sub_topic);
+        }
 
         try {
             const response = await createModelTest(payload).unwrap();
