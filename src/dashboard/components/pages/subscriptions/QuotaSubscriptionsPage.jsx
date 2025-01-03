@@ -3,9 +3,10 @@ import { Layout } from "../../templates/Layout";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
 import UserNav from "../../organism/UserNav";
 import { CardHeader } from "@/components/ui/card";
-import QuotaSubscriptionRequestsTable from "../../molecules/subscriptions/QuotaSubscriptionRequestsPageTable";
+import QuotaSubscriptionsTable from "../../molecules/subscriptions/QuotaSubscriptionsTable";
 
-const QuotaSubscriptionRequestsPage = () => {
+
+const QuotaSubscriptionsPage = () => {
   // Fetch quota subscriptions data
   const { data, error, isLoading } = useGetQuotaSubscriptionsQuery();
 
@@ -34,10 +35,10 @@ const QuotaSubscriptionRequestsPage = () => {
             <p className="text-muted-foreground">Here's list of subscriptions request!</p>
           </div>
         </div>
-        <QuotaSubscriptionRequestsTable />
+        <QuotaSubscriptionsTable />
       </Layout.Body>
     </Layout>
   );
 };
 
-export default QuotaSubscriptionRequestsPage;
+export default QuotaSubscriptionsPage;

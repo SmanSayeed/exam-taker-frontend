@@ -10,6 +10,7 @@ import {
 import {
   useGetQuotaSubscriptionsQuery,
   useVerifyQuotaSubscriptionMutation,
+  useUpdateQuotaMutation,
 } from "@/features/subscriptions/quotaSubscriptionApi";
 import { ArrowUpDown } from "lucide-react";
 import {
@@ -24,14 +25,20 @@ import { toast } from "sonner";
 
 const columnHelper = createColumnHelper();
 
-const QuotaSubscriptionRequestsTable = () => {
+const QuotaSubscriptionsTable = () => {
   const { data, error, isLoading } = useGetQuotaSubscriptionsQuery();
   const [verifyQuotaSubscription] = useVerifyQuotaSubscriptionMutation();
+  const [updateQuota] = useUpdateQuotaMutation(); // Hook for updating quota
   const [sorting, setSorting] = React.useState([]);
   const [timeSort, setTimeSort] = React.useState("newest");
 
   const [openModal, setOpenModal] = React.useState(false);
+  const [openFormModal, setOpenFormModal] = React.useState(false); // State to control form modal
   const [selectedId, setSelectedId] = React.useState(null);
+  const [quotaData, setQuotaData] = React.useState({
+    paid_exam_quota: 1,
+    exams_count: 0,
+  });
 
   // Sort data based on timeSort selection
   const sortedData = React.useMemo(() => {
@@ -99,17 +106,37 @@ const QuotaSubscriptionRequestsTable = () => {
     columnHelper.display({
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => (
-        <button
-          className="bg-accent text-accent-foreground py-1 px-3 rounded hover:bg-accent-foreground hover:text-accent"
-          onClick={() => {
-            setSelectedId(row.original.id);
-            setOpenModal(true);
-          }}
-        >
-          Verify
-        </button>
-      ),
+      cell: ({ row }) => {
+        const isVerified = row.original.verified; // Check if it's already verified
+        return (
+          <div className="flex gap-2">
+            <button
+              className={`bg-accent text-accent-foreground py-1 px-3 rounded hover:bg-accent-foreground hover:text-accent ${
+                isVerified ? "cursor-not-allowed opacity-50" : ""
+              }`}
+              onClick={() => {
+                if (!isVerified) {
+                  setSelectedId(row.original.id);
+                  setOpenModal(true);
+                }
+              }}
+              disabled={isVerified} // Disable if already verified
+            >
+              Verify
+            </button>
+            {/* New action button to open form modal */}
+            <button
+              className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
+              onClick={() => {
+                setSelectedId(row.original.id);
+                setOpenFormModal(true);
+              }}
+            >
+              Update Quota
+            </button>
+          </div>
+        );
+      },
     }),
   ];
 
@@ -124,6 +151,24 @@ const QuotaSubscriptionRequestsTable = () => {
     } finally {
       setOpenModal(false);
       setSelectedId(null);
+    }
+  };
+
+  const handleUpdateQuota = async () => {
+    try {
+      if (selectedId) {
+        await updateQuota({
+          id: selectedId,
+          data: quotaData,
+        }).unwrap();
+        toast.success("Quota updated successfully.");
+      }
+    } catch (error) {
+      toast.error("Failed to update quota.");
+    } finally {
+      setOpenFormModal(false);
+      setSelectedId(null);
+      setQuotaData({ paid_exam_quota: 1, exams_count: 0 });
     }
   };
 
@@ -150,6 +195,7 @@ const QuotaSubscriptionRequestsTable = () => {
 
   return (
     <div className="container mx-auto p-4">
+      {/* Common Modal for Verification */}
       <CommonModal
         isOpen={openModal}
         onClose={() => setOpenModal(false)}
@@ -170,6 +216,69 @@ const QuotaSubscriptionRequestsTable = () => {
           </button>
         </div>
       </CommonModal>
+
+      {/* Form Modal for Quota Update */}
+      <CommonModal
+        isOpen={openFormModal}
+        onClose={() => setOpenFormModal(false)}
+        title="Update Quota"
+      >
+        <div className="space-y-4">
+          {/* Paid Exam Quota Input */}
+          <div className="flex flex-col">
+            <label htmlFor="paid_exam_quota" className="font-semibold mb-2">
+              Paid Exam Quota
+            </label>
+            <input
+              id="paid_exam_quota"
+              type="number"
+              value={quotaData.paid_exam_quota}
+              onChange={(e) =>
+                setQuotaData({ ...quotaData, paid_exam_quota: e.target.value })
+              }
+              className="input border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-accent transition"
+              min="0"
+              required
+            />
+          </div>
+
+          {/* Exams Count Input */}
+          <div className="flex flex-col">
+            <label htmlFor="exams_count" className="font-semibold mb-2">
+              Exams Count
+            </label>
+            <input
+              id="exams_count"
+              type="number"
+              value={quotaData.exams_count}
+              onChange={(e) =>
+                setQuotaData({ ...quotaData, exams_count: e.target.value })
+              }
+              className="input border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-accent transition"
+              min="0"
+              required
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-end gap-4">
+            <button
+              className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition"
+              onClick={() => setOpenFormModal(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition"
+              onClick={handleUpdateQuota}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </CommonModal>
+
+      {/* Time Sort Filter */}
       <div className="flex justify-end mb-4">
         <Select value={timeSort} onValueChange={setTimeSort}>
           <SelectTrigger className="w-36">
@@ -181,6 +290,8 @@ const QuotaSubscriptionRequestsTable = () => {
           </SelectContent>
         </Select>
       </div>
+
+      {/* Table */}
       <div className="overflow-x-auto bg-card shadow-md rounded-lg border-l border-r border-border">
         <table className="min-w-full text-sm text-left text-foreground">
           <thead className="bg-primary text-primary-foreground">
@@ -222,4 +333,4 @@ const QuotaSubscriptionRequestsTable = () => {
   );
 };
 
-export default QuotaSubscriptionRequestsTable;
+export default QuotaSubscriptionsTable;
