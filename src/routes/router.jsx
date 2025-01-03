@@ -15,7 +15,12 @@ import ModelTestsPage from "@/dashboard/components/pages/modelTests/ModelTestsPa
 import QuestionCreateForAdminPage from "@/dashboard/components/pages/questions/QuestionCreateForAdminPage";
 import QuestionListForAdminPage from "@/dashboard/components/pages/questions/QuestionListForAdminPage";
 
+import PdfCreatePage from "@/dashboard/components/pages/PDF/PdfCreatePage";
+import PdfEditPage from "@/dashboard/components/pages/PDF/PdfEditPage";
+import PdfIndexPage from "@/dashboard/components/pages/PDF/PdfIdexPage";
 import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
+import MTEditPage from "@/dashboard/components/pages/modelTests/MTEditPage";
+import MTExamListPage from "@/dashboard/components/pages/modelTests/MTExamListPage";
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
 import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
 import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
@@ -31,9 +36,8 @@ import TagsPage from "@/dashboard/components/pages/questioncategories/TagsPage";
 import TopicsPage from "@/dashboard/components/pages/questioncategories/TopicsPage";
 import YearPage from "@/dashboard/components/pages/questioncategories/YearPage";
 import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
-import PdfIndexPage from "@/dashboard/components/pages/PDF/PdfIdexPage";
-import PdfCreatePage from "@/dashboard/components/pages/PDF/PdfCreatePage";
-import PdfEditPage from "@/dashboard/components/pages/PDF/PdfEditPage";
+import PaymentListPage from "@/dashboard/components/pages/subscriptions/PaymentListPage";
+import QuotaSubscriptionRequestsPage from "@/dashboard/components/pages/subscriptions/QuotaSubscriptionRequestsPage";
 
 const router = createBrowserRouter([
   {
@@ -134,6 +138,7 @@ const router = createBrowserRouter([
             path: "/admin/packages",
             element: <PackagesPage />,
           },
+          // modeltest management
           {
             path: "/admin/model-tests/create",
             element: <ModelTestCreatePage />,
@@ -143,20 +148,38 @@ const router = createBrowserRouter([
             element: <ModelTestsPage />,
           },
           {
+            path: "/admin/model-test/:modelTestId",
+            element: <MTEditPage />,
+          },
+          {
             path: "/admin/model-tests/:modelTestId/create-exam",
             element: <CreateExamForModelTestPage />,
           },
+          // pdf management
           {
-            path: "/admin/pdf", // New route for PDF
+            path: "/admin/model-tests/:modelTestId/exams",
+            element: <MTExamListPage />,
+          },
+          {
+            path: "/admin/pdf",
             element: <PdfIndexPage />,
           },
           {
-            path: "/admin/pdf/create", // New route for PDF
+            path: "/admin/pdf/create",
             element: <PdfCreatePage />,
           },
           {
-            path: "/admin/pdf/edit/:pdfId", // New route for PDF
+            path: "/admin/pdf/edit/:pdfId",
             element: <PdfEditPage />,
+          },
+          // payments && subscriptions management
+          {
+            path: "/admin/payments",
+            element: <PaymentListPage />,
+          },
+          {
+            path: "/admin/quota-subscription-requests",
+            element: <QuotaSubscriptionRequestsPage />,
           },
         ],
       },
@@ -164,7 +187,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <NotFound />,
+    element: <NotFound />
   },
 ]);
 export default router;

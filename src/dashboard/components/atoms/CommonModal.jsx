@@ -9,7 +9,7 @@ const CommonModal = ({ isOpen, onClose, title, children }) => {
         <button onClick={onClose} className="absolute top-2 right-2">
           ✖
         </button>
-        <h2 className="text-xl font-bold mb-4">{title}</h2>
+        <h2 className="text-xl text-black font-bold mb-4">{title}</h2>
         {children}
       </div>
     </div>
