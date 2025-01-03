@@ -10,7 +10,7 @@ import {
   Tags,
   User,
   UserPlus,
-  Users
+  Users,
 } from "lucide-react";
 
 export const sidelinks = [
@@ -234,24 +234,31 @@ export const sidelinks = [
     ],
   },
   // pdf management
+  // {
+  //   title: "Pdf's",
+  //   label: "",
+  //   href: "/admin/pdf",
+  //   icon: <FileQuestion size={18} />,
+  //   sub: [
+  //     {
+  //       title: "Pdf List",
+  //       label: "",
+  //       href: "/admin/pdf",
+  //       icon: <FileQuestion size={18} />,
+  //     },
+  //     {
+  //       title: "Create Pdf",
+  //       label: "",
+  //       href: "/admin/pdf/create",
+  //       icon: <FileQuestion size={18} />,
+  //     },
+  //   ],
+  // },
+  // quota-subscription
   {
-    title: "Pdf's",
+    title: "Quota Subscription",
     label: "",
-    href: "/admin/pdf",
+    href: "/admin/quota",
     icon: <FileQuestion size={18} />,
-    sub: [
-      {
-        title: "Pdf List",
-        label: "",
-        href: "/admin/pdf",
-        icon: <FileQuestion size={18} />,
-      },
-      {
-        title: "Create Pdf",
-        label: "",
-        href: "/admin/pdf/create",
-        icon: <FileQuestion size={18} />,
-      },
-    ],
   },
 ];

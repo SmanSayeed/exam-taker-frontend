@@ -42,6 +42,7 @@ import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPa
 import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
 import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
 import PaymentListPage from "@/dashboard/components/pages/subscriptions/PaymentListPage";
+import QuotaSubscriptionsPage from "@/dashboard/components/pages/subscriptions/QuotaSubscriptionsPage";
 
 const router = createBrowserRouter([
   {
@@ -49,130 +50,130 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <AdminLoginPage />
+        element: <AdminLoginPage />,
       },
       {
         element: <PrivateRoutes />,
         children: [
           {
             path: "/admin",
-            element: <DashboardPage />
+            element: <DashboardPage />,
           },
           {
             path: "/admin/users",
-            element: <UserListForAdminPage />
+            element: <UserListForAdminPage />,
           },
           {
             path: "/admin/user/create",
-            element: <UserCreateForAdminPage />
+            element: <UserCreateForAdminPage />,
           },
           {
             path: "/admin/students",
-            element: <StudentListForAdminPage />
+            element: <StudentListForAdminPage />,
           },
           {
             path: "/admin/student/create",
-            element: <StudentCreateForAdminPage />
+            element: <StudentCreateForAdminPage />,
           },
           // category management
           {
             path: "/admin/category/section",
-            element: <SectionPage />
+            element: <SectionPage />,
           },
           {
             path: "/admin/category/exam-type",
-            element: <ExamTypePage />
+            element: <ExamTypePage />,
           },
           {
             path: "/admin/category/exam-sub-type",
-            element: <ExamSubTypePage />
+            element: <ExamSubTypePage />,
           },
           {
             path: "/admin/category/group",
-            element: <GroupPage />
+            element: <GroupPage />,
           },
           {
             path: "/admin/category/level",
-            element: <LevelPage />
+            element: <LevelPage />,
           },
           {
             path: "/admin/category/subject",
-            element: <SubjectPage />
+            element: <SubjectPage />,
           },
           {
             path: "/admin/category/lesson",
-            element: <LessonPage />
+            element: <LessonPage />,
           },
           {
             path: "/admin/category/topics",
-            element: <TopicsPage />
+            element: <TopicsPage />,
           },
           {
             path: "/admin/category/sub-topics",
-            element: <SubTopicsPage />
+            element: <SubTopicsPage />,
           },
           {
             path: "/admin/category/year",
-            element: <YearPage />
+            element: <YearPage />,
           },
           {
             path: "/admin/category/tags",
-            element: <TagsPage />
+            element: <TagsPage />,
           },
           {
             path: "/admin/category/additional-package-categories",
-            element: <AdditionalPkgCatsPage />
+            element: <AdditionalPkgCatsPage />,
           },
           // question management
           {
             path: "/admin/question/create",
-            element: <QuestionCreateForAdminPage />
+            element: <QuestionCreateForAdminPage />,
           },
           {
             path: "/admin/questions",
-            element: <QuestionListForAdminPage />
+            element: <QuestionListForAdminPage />,
           },
           {
             path: "/admin/question/edit/:questionId",
-            element: <QuestionEditPage />
+            element: <QuestionEditPage />,
           },
           // package management
           {
             path: "/admin/package/create",
-            element: <PackageCreatePage />
+            element: <PackageCreatePage />,
           },
           {
             path: "/admin/package/edit/:packageId",
-            element: <PackageEditPage />
+            element: <PackageEditPage />,
           },
           {
             path: "/admin/packages",
-            element: <PackagesPage />
+            element: <PackagesPage />,
           },
           {
             path: "/admin/package/:packageId/model-tests",
-            element: <MTUnderPkgPage />
+            element: <MTUnderPkgPage />,
           },
           // modeltest management
           {
             path: "/admin/model-tests/create",
-            element: <ModelTestCreatePage />
+            element: <ModelTestCreatePage />,
           },
           {
             path: "/admin/model-tests",
-            element: <ModelTestsPage />
+            element: <ModelTestsPage />,
           },
           {
             path: "/admin/model-test/:modelTestId",
-            element: <MTEditPage />
+            element: <MTEditPage />,
           },
           {
             path: "/admin/model-tests/:modelTestId/create-exam",
-            element: <CreateExamForModelTestPage />
+            element: <CreateExamForModelTestPage />,
           },
           {
             path: "/admin/model-tests/:modelTestId/exams",
-            element: <MTExamListPage />
+            element: <MTExamListPage />,
           },
           // pdf management
           {
@@ -192,13 +193,17 @@ const router = createBrowserRouter([
             path: "/admin/payments",
             element: <PaymentListPage />,
           },
-        ]
+          {
+            path: "/admin/quota",
+            element: <QuotaSubscriptionsPage />,
+          },
+        ],
       },
     ],
   },
   {
     path: "*",
-    element: <NotFound />
+    element: <NotFound />,
   },
 ]);
 export default router;
