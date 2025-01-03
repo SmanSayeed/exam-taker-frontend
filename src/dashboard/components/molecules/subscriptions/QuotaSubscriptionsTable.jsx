@@ -36,9 +36,24 @@ const QuotaSubscriptionsTable = () => {
   const [openFormModal, setOpenFormModal] = React.useState(false); // State to control form modal
   const [selectedId, setSelectedId] = React.useState(null);
   const [quotaData, setQuotaData] = React.useState({
-    paid_exam_quota: 1,
+    paid_exam_quota: 0,
     exams_count: 0,
   });
+
+  // Update quotaData when a student is selected for quota update
+  React.useEffect(() => {
+    if (selectedId && data?.message) {
+      const selectedSubscription = data.message.find((subscription) => {
+        return subscription.student_id === selectedId;
+      });
+      if (selectedSubscription) {
+        setQuotaData({
+          paid_exam_quota: selectedSubscription.student.paid_exam_quota,
+          exams_count: selectedSubscription.student.exams_count,
+        });
+      }
+    }
+  }, [selectedId, data?.message]);
 
   // Sort data based on timeSort selection
   const sortedData = React.useMemo(() => {
@@ -52,7 +67,7 @@ const QuotaSubscriptionsTable = () => {
   }, [data?.message, timeSort]);
 
   const columns = [
-    columnHelper.accessor("id", {
+    columnHelper.accessor("student_id", {
       header: ({ column }) => (
         <button
           className="flex items-center gap-1"
@@ -116,7 +131,7 @@ const QuotaSubscriptionsTable = () => {
               }`}
               onClick={() => {
                 if (!isVerified) {
-                  setSelectedId(row.original.id);
+                  setSelectedId(row.original.student_id);
                   setOpenModal(true);
                 }
               }}
@@ -128,7 +143,7 @@ const QuotaSubscriptionsTable = () => {
             <button
               className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
               onClick={() => {
-                setSelectedId(row.original.id);
+                setSelectedId(row.original.student_id);
                 setOpenFormModal(true);
               }}
             >
@@ -192,6 +207,7 @@ const QuotaSubscriptionsTable = () => {
         Error loading data!
       </p>
     );
+  console.log(quotaData);
 
   return (
     <div className="container mx-auto p-4">
