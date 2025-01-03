@@ -31,9 +31,16 @@ export function CategoryEditForm({ rowData, open, type, setOpen }) {
 
     useEffect(() => {
         if (open && rowData) {
-            setValue("title", rowData.title);
-            setValue("details", rowData.details);
-            setStatusCheck(rowData.status);
+            if (type === "additional-package-categories") {
+                setValue("title", rowData.name);
+                setValue("details", rowData.description);
+                setStatusCheck(rowData.is_active);
+            } else {
+                setValue("title", rowData.title);
+                setValue("details", rowData.details);
+                setStatusCheck(rowData.status);
+            }
+
             setValue("sections", rowData.section_id);
             setValue("exam_types", rowData.exam_type_id);
             setValue("exam_types", rowData.exam_type_id);
@@ -45,32 +52,55 @@ export function CategoryEditForm({ rowData, open, type, setOpen }) {
             setValue("topics", rowData.topic_id);
             setValue("years", rowData.year);
         }
-    }, [open, rowData, setValue]);
+    }, [open, rowData, setValue, type]);
 
     const [editQuestionsCategory, { isLoading }] = useEditQuestionsCategoryMutation();
 
     const handleCreate = async (formData) => {
-        const payload = {
-            section_id: formData.sections,
-            level_id: formData.levels,
-            group_id: formData.groups,
-            exam_type_id: formData.exam_types,
-            subject_id: formData.subjects,
-            lesson_id: formData.lessons,
-            topic_id: formData.topics,
-            part: formData.part,
-            year: formData.years,
+        const payload = type === "additional-package-categories" ? {
+            name: formData.title,
+            description: formData.details,
+            is_active: statusCheck ? 1 : 0,
+        } : {
             title: formData.title,
-            status: statusCheck,
+            status: statusCheck ? 1 : 0,
             details: formData.details,
-            // picture: image,
+        };
+
+        // Add optional fields to the payload dynamically
+        if (formData.sections) {
+            payload.section_id = formData.sections;
+        }
+        if (formData.exam_types) {
+            payload.exam_type_id = formData.exam_types;
+        }
+        if (formData.groups) {
+            payload.group_id = formData.groups;
+        }
+        if (formData.levels) {
+            payload.level_id = formData.levels;
+        }
+        if (formData.subjects) {
+            payload.subject_id = formData.subjects;
+        }
+        if (formData.lessons) {
+            payload.lesson_id = formData.lessons;
+        }
+        if (formData.topics) {
+            payload.topic_id = formData.topics;
+        }
+        if (formData.part) {
+            payload.part = formData.part;
+        }
+        if (formData.year) {
+            payload.year = formData.year;
         }
 
         try {
             const response = await editQuestionsCategory({
                 type,
                 data: payload,
-                id: rowData.id
+                id: rowData.id,
             }).unwrap();
 
             toast.success(response?.message);
@@ -78,7 +108,7 @@ export function CategoryEditForm({ rowData, open, type, setOpen }) {
         } catch (err) {
             toast.error(err?.data?.message || "An error occurred");
         }
-    }
+    };
 
     return (
         <form onSubmit={handleSubmit(handleCreate)} className="container gap-2 p-8 ">

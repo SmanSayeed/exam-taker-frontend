@@ -1,13 +1,17 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLocation } from "react-router-dom";
+import { useGetSinglePackageQuery } from "@/features/packages/packageApi";
+import { useParams } from "react-router-dom";
+import Loading from "../../atoms/Loading";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import PackageEditForm from "../../molecules/package/PackageEditForm";
+import { PackageEditForm } from "../../molecules/package/PackageEditForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
 const PackageEditPage = () => {
-    const location = useLocation();
-    const singlePackage = location.state?.singlePackage;
+    const { packageId } = useParams();
+    const { data: singlePackage, isLoading } = useGetSinglePackageQuery(packageId);
+
+    if (isLoading) return <Loading />;
 
     return (
         <Layout>
@@ -30,7 +34,7 @@ const PackageEditPage = () => {
                             </CardDescription>
                         </CardHeader>
 
-                        <PackageEditForm singlePackage={singlePackage} />
+                        <PackageEditForm singlePackage={singlePackage?.data} />
                     </Card>
                 </div>
             </Layout.Body>

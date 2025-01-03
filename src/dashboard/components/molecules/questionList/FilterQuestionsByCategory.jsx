@@ -1,16 +1,16 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { MultipleSelector } from "./MultipleSelector";
-import { useCategoryData } from "./useCategoryData";
+import { useCategoryDataForQuesFilter } from "./useCategoryDataForQuesFilter";
 
 export default function FilterQuestionsByCategory({ control, setValue }) {
-    const { categories: sections, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryData("sections");
-    const { categories: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryData("exam-types");
-    const { categories: groups, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryData("groups");
-    const { categories: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryData("levels");
-    const { categories: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryData("subjects");
-    const { categories: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryData("lessons");
-    const { categories: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryData("topics");
-    // const { categories: years, isLoading: isYearLoading } = useCategoryData("years");
+    const { categories: sections, isLoading: isSectionLoading, error, categoryData: sectionData, setCategoryData: setSectionData } = useCategoryDataForQuesFilter("sections");
+    const { categories: examTypes, categoryData: examTypeData, setCategoryData: setExamTypeData } = useCategoryDataForQuesFilter("exam-types");
+    const { categories: groups, isLoading: isGroupLoading, categoryData: groupData, setCategoryData: setGroupData } = useCategoryDataForQuesFilter("groups");
+    const { categories: levels, categoryData: levelData, setCategoryData: setLevelData } = useCategoryDataForQuesFilter("levels");
+    const { categories: subjects, categoryData: subjectData, setCategoryData: setSubjectData } = useCategoryDataForQuesFilter("subjects");
+    const { categories: lessons, categoryData: lessonData, setCategoryData: setLessonData } = useCategoryDataForQuesFilter("lessons");
+    const { categories: topics, categoryData: topicData, setCategoryData: setTopicData } = useCategoryDataForQuesFilter("topics");
+    // const { categories: years, isLoading: isYearLoading } = useCategoryDataForQuesFilter("years");
 
     const handleSectionChange = (ids) => {
         if (sections) {
@@ -148,7 +148,7 @@ export default function FilterQuestionsByCategory({ control, setValue }) {
     };
 
     return (
-        <div className="flex flex-col md:flex-row items-start gap-4 my-6 border rounded-md ">
+        <div className="flex flex-col md:flex-row items-start gap-4 my-4">
             {/* Section → Exam Type → Exam Sub Type */}
             <div className="grid grid-cols-1 gap-4 p-4 w-full">
                 {
@@ -185,7 +185,7 @@ export default function FilterQuestionsByCategory({ control, setValue }) {
             </div>
 
             {/* Group → Level → Subject → Lesson → Topic → Sub Topic */}
-            <div className="grid gap-4  md:border-l md:border-r  py-4 px-4 md:px-8 w-full ">
+            <div className="grid gap-4 py-4 px-4 md:px-8 w-full ">
                 {
                     isGroupLoading && (
                         <div className="space-y-2">

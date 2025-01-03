@@ -6,7 +6,7 @@ export function CustomDialog({ children, isOpen, setIsOpen, title, description }
             onClick={() => setIsOpen(false)}
         >
             <div
-                className="bg-white max-w-3xl w-[95%] rounded-md shadow-lg p-8 relative"
+                className="bg-white dark:bg-gray-600 max-w-3xl w-[95%] rounded-md shadow-lg p-8 relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button

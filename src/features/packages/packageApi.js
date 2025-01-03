@@ -1,10 +1,10 @@
 import { apiSlice } from "@/features/api/apiSlice";
-import { savePackage } from "./packageSlice";
 
 export const packageApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPackages: builder.query({
       query: () => "/packages",
+      providesTags: ["Packages"],
     }),
     getSinglePackage: builder.query({
       query: (id) => `/packages/${id}`,
@@ -15,24 +15,19 @@ export const packageApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Packages"],
 
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
+      // Refetch the list of packages after creation
+    async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+      try {
+        await queryFulfilled;
 
-          dispatch(
-            savePackage({
-              id: result.data.data.id,
-              name: result.data.data.name,
-              description: result.data.data.description,
-              duration_days: result.data.data.duration_days,
-              is_active: result.data.data.is_active,
-            })
-          );
-        } catch (err) {
-          console.log("err from same package ", err);
-        }
-      },
+        // Manually refetch the packages list
+        dispatch(packageApi.util.invalidateTags(["Packages"]));
+      } catch (err) {
+        console.log("Error from createModelTest", err);
+      }
+    },
     }),
     deletePackage: builder.mutation({
       query: (id) => ({

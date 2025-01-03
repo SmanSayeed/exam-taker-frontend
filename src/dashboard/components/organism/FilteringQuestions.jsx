@@ -12,7 +12,10 @@ export default function FilteringQuestions({ control, setValue, handleFilterQues
     >
       <div className="mb-4">
         {/* Filter Options */}
-        <FilterQuestionsByCategory control={control} setValue={setValue} />
+        <FilterQuestionsByCategory
+          control={control}
+          setValue={setValue}
+        />
       </div>
 
       <div className="relative mb-4">

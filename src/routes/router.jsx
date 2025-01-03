@@ -18,26 +18,30 @@ import QuestionListForAdminPage from "@/dashboard/components/pages/questions/Que
 import PdfCreatePage from "@/dashboard/components/pages/PDF/PdfCreatePage";
 import PdfEditPage from "@/dashboard/components/pages/PDF/PdfEditPage";
 import PdfIndexPage from "@/dashboard/components/pages/PDF/PdfIdexPage";
+
+// category management
+import AdditionalPkgCatsPage from "@/dashboard/components/pages/categories/AdditionalPkgCatsPage";
+import ExamSubTypePage from "@/dashboard/components/pages/categories/ExamSubTypePage";
+import ExamTypePage from "@/dashboard/components/pages/categories/ExamTypePage";
+import GroupPage from "@/dashboard/components/pages/categories/GroupPage";
+import LessonPage from "@/dashboard/components/pages/categories/LessonPage";
+import LevelPage from "@/dashboard/components/pages/categories/LevelPage";
+import SectionPage from "@/dashboard/components/pages/categories/SectionPage";
+import SubTopicsPage from "@/dashboard/components/pages/categories/SubTopicsPage";
+import SubjectPage from "@/dashboard/components/pages/categories/SubjectPage";
+import TagsPage from "@/dashboard/components/pages/categories/TagsPage";
+import TopicsPage from "@/dashboard/components/pages/categories/TopicsPage";
+import YearPage from "@/dashboard/components/pages/categories/YearPage";
+
 import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
 import MTEditPage from "@/dashboard/components/pages/modelTests/MTEditPage";
 import MTExamListPage from "@/dashboard/components/pages/modelTests/MTExamListPage";
+import MTUnderPkgPage from "@/dashboard/components/pages/packages/MTUnderPkgPage";
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
 import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
 import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
-import ExamSubTypePage from "@/dashboard/components/pages/questioncategories/ExamSubTypePage";
-import ExamTypePage from "@/dashboard/components/pages/questioncategories/ExamTypePage";
-import GroupPage from "@/dashboard/components/pages/questioncategories/GroupPage";
-import LessonPage from "@/dashboard/components/pages/questioncategories/LessonPage";
-import LevelPage from "@/dashboard/components/pages/questioncategories/LevelPage";
-import SectionPage from "@/dashboard/components/pages/questioncategories/SectionPage";
-import SubTopicsPage from "@/dashboard/components/pages/questioncategories/SubTopicsPage";
-import SubjectPage from "@/dashboard/components/pages/questioncategories/SubjectPage";
-import TagsPage from "@/dashboard/components/pages/questioncategories/TagsPage";
-import TopicsPage from "@/dashboard/components/pages/questioncategories/TopicsPage";
-import YearPage from "@/dashboard/components/pages/questioncategories/YearPage";
 import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
 import PaymentListPage from "@/dashboard/components/pages/subscriptions/PaymentListPage";
-import QuotaSubscriptionRequestsPage from "@/dashboard/components/pages/subscriptions/QuotaSubscriptionRequestsPage";
 
 const router = createBrowserRouter([
   {
@@ -45,121 +49,132 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <AdminLoginPage />,
+        element: <AdminLoginPage />
       },
       {
         element: <PrivateRoutes />,
         children: [
           {
             path: "/admin",
-            element: <DashboardPage />,
+            element: <DashboardPage />
           },
           {
             path: "/admin/users",
-            element: <UserListForAdminPage />,
+            element: <UserListForAdminPage />
           },
           {
             path: "/admin/user/create",
-            element: <UserCreateForAdminPage />,
+            element: <UserCreateForAdminPage />
           },
           {
             path: "/admin/students",
-            element: <StudentListForAdminPage />,
+            element: <StudentListForAdminPage />
           },
           {
             path: "/admin/student/create",
-            element: <StudentCreateForAdminPage />,
+            element: <StudentCreateForAdminPage />
           },
+          // category management
           {
             path: "/admin/category/section",
-            element: <SectionPage />,
+            element: <SectionPage />
           },
           {
             path: "/admin/category/exam-type",
-            element: <ExamTypePage />,
-          },
-          {
-            path: "/admin/category/year",
-            element: <YearPage />,
-          },
-          {
-            path: "/admin/category/group",
-            element: <GroupPage />,
+            element: <ExamTypePage />
           },
           {
             path: "/admin/category/exam-sub-type",
-            element: <ExamSubTypePage />,
+            element: <ExamSubTypePage />
+          },
+          {
+            path: "/admin/category/group",
+            element: <GroupPage />
           },
           {
             path: "/admin/category/level",
-            element: <LevelPage />,
+            element: <LevelPage />
           },
           {
             path: "/admin/category/subject",
-            element: <SubjectPage />,
+            element: <SubjectPage />
           },
           {
             path: "/admin/category/lesson",
-            element: <LessonPage />,
+            element: <LessonPage />
           },
           {
             path: "/admin/category/topics",
-            element: <TopicsPage />,
+            element: <TopicsPage />
           },
           {
             path: "/admin/category/sub-topics",
-            element: <SubTopicsPage />,
+            element: <SubTopicsPage />
+          },
+          {
+            path: "/admin/category/year",
+            element: <YearPage />
           },
           {
             path: "/admin/category/tags",
-            element: <TagsPage />,
+            element: <TagsPage />
           },
           {
+            path: "/admin/category/additional-package-categories",
+            element: <AdditionalPkgCatsPage />
+          },
+          // question management
+          {
             path: "/admin/question/create",
-            element: <QuestionCreateForAdminPage />,
+            element: <QuestionCreateForAdminPage />
           },
           {
             path: "/admin/questions",
-            element: <QuestionListForAdminPage />,
+            element: <QuestionListForAdminPage />
           },
           {
             path: "/admin/question/edit/:questionId",
-            element: <QuestionEditPage />,
+            element: <QuestionEditPage />
           },
+          // package management
           {
             path: "/admin/package/create",
-            element: <PackageCreatePage />,
+            element: <PackageCreatePage />
           },
           {
             path: "/admin/package/edit/:packageId",
-            element: <PackageEditPage />,
+            element: <PackageEditPage />
           },
           {
             path: "/admin/packages",
-            element: <PackagesPage />,
+            element: <PackagesPage />
+          },
+          {
+            path: "/admin/package/:packageId/model-tests",
+            element: <MTUnderPkgPage />
           },
           // modeltest management
           {
             path: "/admin/model-tests/create",
-            element: <ModelTestCreatePage />,
+            element: <ModelTestCreatePage />
           },
           {
             path: "/admin/model-tests",
-            element: <ModelTestsPage />,
+            element: <ModelTestsPage />
           },
           {
             path: "/admin/model-test/:modelTestId",
-            element: <MTEditPage />,
+            element: <MTEditPage />
           },
           {
             path: "/admin/model-tests/:modelTestId/create-exam",
-            element: <CreateExamForModelTestPage />,
+            element: <CreateExamForModelTestPage />
           },
-          // pdf management
           {
             path: "/admin/model-tests/:modelTestId/exams",
-            element: <MTExamListPage />,
+            element: <MTExamListPage />
           },
+          // pdf management
           {
             path: "/admin/pdf",
             element: <PdfIndexPage />,
@@ -177,11 +192,7 @@ const router = createBrowserRouter([
             path: "/admin/payments",
             element: <PaymentListPage />,
           },
-          {
-            path: "/admin/quota-subscription-requests",
-            element: <QuotaSubscriptionRequestsPage />,
-          },
-        ],
+        ]
       },
     ],
   },

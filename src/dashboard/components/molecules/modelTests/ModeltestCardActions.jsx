@@ -8,7 +8,8 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useDeleteModelTestMutation } from '@/features/modelTests/modelTestApi';
-import { EllipsisVertical, FilePenIcon } from "lucide-react";
+import { EllipsisVertical, Eye, FilePenIcon } from "lucide-react";
+import { Link } from 'react-router-dom';
 
 export function ModeltestCardActions({ modelTestId, refetch }) {
     const [deleteModelTest] = useDeleteModelTestMutation();
@@ -28,14 +29,15 @@ export function ModeltestCardActions({ modelTestId, refetch }) {
             <DropdownMenuContent align="end">
                 {/* Edit Model test */}
                 <DropdownMenuItem>
-                    <button
-                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                    <Link
+                        to={`/admin/model-test/${modelTestId}`}
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
                     >
                         <IconMenu
                             text="Edit"
                             icon={<FilePenIcon className="h-4 w-4" />}
                         />
-                    </button>
+                    </Link>
                 </DropdownMenuItem>
 
                 {/* Delete model test */}
@@ -47,6 +49,20 @@ export function ModeltestCardActions({ modelTestId, refetch }) {
                         refetch={refetch}
                     />
                 </DropdownMenuItem>
+
+                {/* View Exams */}
+                <DropdownMenuItem>
+                    <Link
+                        to={`/admin/model-tests/${modelTestId}/exams`}
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75"
+                    >
+                        <IconMenu
+                            text="View Exams"
+                            icon={<Eye className="h-4 w-4" />}
+                        />
+                    </Link>
+                </DropdownMenuItem>
+
             </DropdownMenuContent>
         </DropdownMenu>
     );

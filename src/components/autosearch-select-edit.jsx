@@ -29,6 +29,7 @@ export const AutoSearchSelectForEdit = ({
     rules = {},
     onRemove,
     selectedValue,
+    showRemoveButton = true
 }) => {
 
     const [popoverOpen, setPopoverOpen] = useState(false);
@@ -94,7 +95,7 @@ export const AutoSearchSelectForEdit = ({
                                                         <Check
                                                             className={cn(
                                                                 "mr-2 h-4 w-4",
-                                                                selectedCatId === item?.id.toString() ? "opacity-100" : "opacity-0"
+                                                                selectedCatId == item?.id.toString() ? "opacity-100" : "opacity-0"
                                                             )}
                                                         />
 
@@ -107,7 +108,7 @@ export const AutoSearchSelectForEdit = ({
                                 </PopoverContent>
                             </Popover>
                             {
-                                field.value && (
+                                name !== "section" && name !== "group" && name !== "pkgSection" && showRemoveButton && field.value && (
                                     <button
                                         type="button"
                                         onClick={() => {

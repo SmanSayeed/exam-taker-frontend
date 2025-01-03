@@ -35,6 +35,7 @@ export const modelTestApi = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+
     // editModelTest: builder.mutation({
     //   query: ({ id, data }) => ({
     //     url: `/packages/${id}`,
@@ -60,6 +61,7 @@ export const modelTestApi = apiSlice.injectEndpoints({
     //     }
     //   },
     // }),
+    
     changeModelTestStatus: builder.mutation({
       query: ({id, data}) => ({
         url: `/model-tests/${id}/status`,
@@ -67,6 +69,19 @@ export const modelTestApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
+    createMTExam: builder.mutation({
+      query: ({id, data}) => ({
+        url: `exam/create/${id}`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    getAllMTExams: builder.query({
+      query: (id) => `/model-test-exams/${id}`,
+    }),
+
   }),
 });
 
@@ -75,5 +90,7 @@ export const {
     useGetSingleModelTestQuery,
     useGetAllModelTestsQuery,
     useDeleteModelTestMutation,
-    useChangeModelTestStatusMutation
+    useChangeModelTestStatusMutation,
+    useCreateMTExamMutation,
+    useGetAllMTExamsQuery,
 } = modelTestApi;

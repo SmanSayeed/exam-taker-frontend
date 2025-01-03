@@ -22,7 +22,7 @@ const QuestionListForAdminPage = () => {
         isFetching
     } = useGetQuestionsQuery({
         page: currentPage,
-        per_page: perPage,
+        perPage: perPage,
         ...filters,
     });
 
@@ -110,7 +110,7 @@ const QuestionListForAdminPage = () => {
                             setCurrentPage(newPage);
                             refetch({
                                 page: newPage,
-                                per_page: perPage,
+                                perPage: perPage,
                                 ...filters,
                             });
                         }}
@@ -118,7 +118,7 @@ const QuestionListForAdminPage = () => {
                             setPerPage(newPerPage);
                             refetch({
                                 page: currentPage,
-                                per_page: newPerPage,
+                                perPage: newPerPage,
                                 ...filters,
                             });
                         }}

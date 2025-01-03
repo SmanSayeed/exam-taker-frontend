@@ -23,6 +23,6 @@ export const useCategoryData = (category, storageKey) => {
         isLoading, 
         error, 
         categoryData, 
-        setCategoryData 
+        setCategoryData
     };
 };

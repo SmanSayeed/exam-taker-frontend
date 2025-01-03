@@ -6,6 +6,8 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
             query: (type) => {
                 if (type === "tags") {
                     return `/tags`;
+                } else if(type === "additional-package-categories") {
+                    return `/additional-package-categories`;
                 } else {
                     return `/questions/${type}`;
                 }
@@ -16,6 +18,8 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
             query: ({ type, id }) => {
                 if (type === "tags") {
                     return `/tags/${id}`;
+                } else if(type === "additional-package-categories") {
+                    return `/additional-package-categories/${id}`;
                 } else {
                     return `/questions/${type}/${id}`;
                 }
@@ -27,6 +31,12 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
                 if (type === "tags") {
                     return {
                         url: `/tags`,
+                        method: "POST",
+                        body: data,
+                    };
+                } else if(type === "additional-package-categories") {
+                    return {
+                        url: `/additional-package-categories`,
                         method: "POST",
                         body: data,
                     };
@@ -47,6 +57,11 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
                         url: `/tags/${id}`,
                         method: "DELETE",
                     };
+                } else if(type === "additional-package-categories") {
+                    return {
+                        url: `/additional-package-categories/${id}`,
+                        method: "DELETE",
+                    };
                 } else {
                     return {
                         url: `/questions/${type}/${id}`,
@@ -61,6 +76,12 @@ export const questionsCategoryApi = apiSlice.injectEndpoints({
                 if (type === "tags") {
                     return {
                         url: `/tags/${id}`,
+                        method: "PUT",
+                        body: data,
+                    };
+                } else if(type === "additional-package-categories") {
+                    return {
+                        url: `/additional-package-categories/${id}`,
                         method: "PUT",
                         body: data,
                     };

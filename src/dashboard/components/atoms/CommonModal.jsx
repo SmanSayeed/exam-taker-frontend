@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 
 const CommonModal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
