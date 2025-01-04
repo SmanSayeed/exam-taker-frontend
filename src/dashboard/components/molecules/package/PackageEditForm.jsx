@@ -21,6 +21,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { SelectCatForPkgEdit } from "./SelectCatForPkgEdit";
 
 export const PackageEditForm = ({ singlePackage }) => {
+    console.log("singlePackage", singlePackage);
+
     const dispatch = useDispatch();
     const selectedCategories = useSelector((state) => state.selectedCategories);
 
@@ -42,12 +44,17 @@ export const PackageEditForm = ({ singlePackage }) => {
             discount: singlePackage?.discount || "",
             discount_type: singlePackage?.discount_type || "amount",
             is_active: isActive,
-            img: singlePackage?.img || ""
+            img: singlePackage?.img || "",
+            pkgSection: singlePackage?.category.section_id || "",
+            pkgExamType: singlePackage?.category.exam_type_id || "",
+            pkgExamSubType: singlePackage?.category.exam_sub_type_id || ""
         }
     });
 
     useEffect(() => {
         if (singlePackage) {
+            const initialCategory = singlePackage?.category;
+
             reset({
                 name: singlePackage?.name || "",
                 description: singlePackage?.description || "",
@@ -56,16 +63,21 @@ export const PackageEditForm = ({ singlePackage }) => {
                 discount: singlePackage?.discount || "",
                 discount_type: singlePackage?.discount_type || "amount",
                 is_active: isActive,
-                img: singlePackage?.img || ""
+                img: singlePackage?.img || "",
+                pkgSection: initialCategory.section_id || "",
+                pkgExamType: initialCategory.exam_type_id || "",
+                pkgExamSubType: initialCategory.exam_sub_type_id || ""
             });
-
-            const initialCategory = singlePackage?.category;
 
             dispatch(setSelectedSection({ selectedSection: initialCategory.section_id || "" }));
             dispatch(setSelectedExamType({ selectedExamType: initialCategory.exam_type_id || "" }));
             dispatch(setSelectedExamSubType({ selectedExamSubType: initialCategory.exam_sub_type_id || "" }));
+
+            // setValue("pkgSection", initialCategory.section_id);
+            // setValue("pkgExamType", initialCategory.exam_type_id);
+            // setValue("pkgExamSubType", initialCategory.exam_sub_type_id);
         }
-    }, [singlePackage, reset, dispatch, isActive]);
+    }, [singlePackage, reset, dispatch, isActive, setValue]);
 
     // rich text editor options
     const toolbarOptions = [
