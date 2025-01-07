@@ -27,6 +27,7 @@ export const PackageEditForm = ({ singlePackage }) => {
     const selectedCategories = useSelector((state) => state.selectedCategories);
 
     const [isActive, setIsActive] = useState(singlePackage?.is_active === 1 ? true : false);
+    const initialCategory = singlePackage?.category;
 
     const {
         register,
@@ -45,16 +46,14 @@ export const PackageEditForm = ({ singlePackage }) => {
             discount_type: singlePackage?.discount_type || "amount",
             is_active: isActive,
             img: singlePackage?.img || "",
-            pkgSection: singlePackage?.category.section_id || "",
-            pkgExamType: singlePackage?.category.exam_type_id || "",
-            pkgExamSubType: singlePackage?.category.exam_sub_type_id || ""
+            pkgSection: initialCategory.section_id || "",
+            pkgExamType: initialCategory.exam_type_id || "",
+            pkgExamSubType: initialCategory.exam_sub_type_id || ""
         }
     });
 
     useEffect(() => {
         if (singlePackage) {
-            const initialCategory = singlePackage?.category;
-
             reset({
                 name: singlePackage?.name || "",
                 description: singlePackage?.description || "",
@@ -72,12 +71,8 @@ export const PackageEditForm = ({ singlePackage }) => {
             dispatch(setSelectedSection({ selectedSection: initialCategory.section_id || "" }));
             dispatch(setSelectedExamType({ selectedExamType: initialCategory.exam_type_id || "" }));
             dispatch(setSelectedExamSubType({ selectedExamSubType: initialCategory.exam_sub_type_id || "" }));
-
-            // setValue("pkgSection", initialCategory.section_id);
-            // setValue("pkgExamType", initialCategory.exam_type_id);
-            // setValue("pkgExamSubType", initialCategory.exam_sub_type_id);
         }
-    }, [singlePackage, reset, dispatch, isActive, setValue]);
+    }, [singlePackage, reset, dispatch, isActive, initialCategory]);
 
     // rich text editor options
     const toolbarOptions = [
@@ -281,7 +276,7 @@ export const PackageEditForm = ({ singlePackage }) => {
                     type="submit"
                     className="w-full"
                 >
-                    {isLoading ? "Creating..." : "Create Question"}
+                    {isLoading ? "Updating..." : "Update Package"}
                 </Button>
             </div>
         </form>

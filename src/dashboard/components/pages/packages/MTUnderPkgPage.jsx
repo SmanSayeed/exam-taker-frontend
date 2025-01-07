@@ -15,10 +15,8 @@ const MTUnderPkgPage = () => {
         isLoading,
         refetch,
     } = useGetAllModelTestsQuery();
-    console.log("allModelTests", allModelTests)
 
-    const allMTUnderPkg = allModelTests?.data.filter((item) => item?.package?.id === packageId);
-    console.log("allmtunderpkg", allMTUnderPkg)
+    const allMTUnderPkg = allModelTests?.data.filter((item) => item?.package?.id == packageId);
 
     if (isLoading) return <Loading />;
 

@@ -109,7 +109,7 @@ export function PackageCreateForm() {
 
     return (
         <form onSubmit={handleSubmit(handleCreate)} id="package-form">
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 my-4">
                 {/* Name */}
                 <div className="space-y-1">
                     <Label htmlFor="name" className="text-md font-semibold">
