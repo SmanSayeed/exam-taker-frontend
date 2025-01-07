@@ -27,6 +27,7 @@ export const PackageEditForm = ({ singlePackage }) => {
     const selectedCategories = useSelector((state) => state.selectedCategories);
 
     const [isActive, setIsActive] = useState(singlePackage?.is_active === 1 ? true : false);
+    const initialCategory = singlePackage?.category;
 
     const {
         register,
@@ -44,7 +45,10 @@ export const PackageEditForm = ({ singlePackage }) => {
             discount: singlePackage?.discount || "",
             discount_type: singlePackage?.discount_type || "amount",
             is_active: isActive,
-            img: singlePackage?.img || ""
+            img: singlePackage?.img || "",
+            pkgSection: initialCategory.section_id || "",
+            pkgExamType: initialCategory.exam_type_id || "",
+            pkgExamSubType: initialCategory.exam_sub_type_id || ""
         }
     });
 
@@ -58,16 +62,17 @@ export const PackageEditForm = ({ singlePackage }) => {
                 discount: singlePackage?.discount || "",
                 discount_type: singlePackage?.discount_type || "amount",
                 is_active: isActive,
-                img: singlePackage?.img || ""
+                img: singlePackage?.img || "",
+                pkgSection: initialCategory.section_id || "",
+                pkgExamType: initialCategory.exam_type_id || "",
+                pkgExamSubType: initialCategory.exam_sub_type_id || ""
             });
-
-            const initialCategory = singlePackage?.category;
 
             dispatch(setSelectedSection({ selectedSection: initialCategory.section_id || "" }));
             dispatch(setSelectedExamType({ selectedExamType: initialCategory.exam_type_id || "" }));
             dispatch(setSelectedExamSubType({ selectedExamSubType: initialCategory.exam_sub_type_id || "" }));
         }
-    }, [singlePackage, reset, dispatch, isActive]);
+    }, [singlePackage, reset, dispatch, isActive, initialCategory]);
 
     // rich text editor options
     const toolbarOptions = [
@@ -271,7 +276,7 @@ export const PackageEditForm = ({ singlePackage }) => {
                     type="submit"
                     className="w-full"
                 >
-                    {isLoading ? "Creating..." : "Create Question"}
+                    {isLoading ? "Updating..." : "Update Package"}
                 </Button>
             </div>
         </form>

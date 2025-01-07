@@ -10,13 +10,14 @@ import { updateField } from "@/features/modelTests/modelTestFormSlice";
 import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from "react-redux";
 import SelectCatForModelTest from "../../molecules/modelTests/SelectCatForModelTest";
 
-export function ModelTestCreateForm() {
+export function MTCreateForm() {
     const { data: allPackages } = useGetPackagesQuery();
     const [createModelTest, { isLoading }] = useCreateModelTestMutation();
 
@@ -63,25 +64,47 @@ export function ModelTestCreateForm() {
         toolbar: toolbarOptions
     }
 
-    const handleCreate = async (formData) => {
+    // Synchronize selectedPkg with Redux on mount
+    useEffect(() => {
+        const storedPkg = localStorage.getItem('package');
 
-        const categoriesPayload = {
-            group_id: selectedGroup || formData.group,
-            level_id: selectedLevel || formData.level,
-            subject_id: selectedSubject || formData.subject,
-            lesson_id: selectedLesson || formData.lesson,
-            topic_id: selectedTopic || formData.topic,
-            sub_topic_id: selectedSubTopic || formData.sub_topic,
+        if (storedPkg) {
+            dispatch(updateField({ field: 'package', value: storedPkg }));
         }
 
-        const payload = {
-            "package_id": modelTestForm.package || formData.package,
-            "title": formData.title,
-            "description": formData.description,
-            "start_time": formData.start_time,
-            "end_time": formData.end_time,
-            "is_active": modelTestForm.is_active,
-            "category": categoriesPayload
+        setValue('package', storedPkg);
+    }, [dispatch, setValue]);
+
+    const handleCreate = async (formData) => {
+        const payload = new FormData();
+
+        payload.append("package_id", modelTestForm.package || formData.package);
+        payload.append("title", formData.title);
+        payload.append("description", formData.description);
+        payload.append("start_time", formData.start_time);
+        payload.append("end_time", formData.end_time);
+        payload.append("pass_mark", formData.pass_mark);
+        payload.append("full_mark", formData.full_mark);
+        payload.append("is_active", modelTestForm.is_active ? 1 : 0);
+
+        // Append categories conditionally
+        if (selectedGroup || formData.group) {
+            payload.append("group_id", selectedGroup || formData.group);
+        }
+        if (selectedLevel || formData.level) {
+            payload.append("level_id", selectedLevel || formData.level);
+        }
+        if (selectedSubject || formData.subject) {
+            payload.append("subject_id", selectedSubject || formData.subject);
+        }
+        if (selectedLesson || formData.lesson) {
+            payload.append("lesson_id", selectedLesson || formData.lesson);
+        }
+        if (selectedTopic || formData.topic) {
+            payload.append("topic_id", selectedTopic || formData.topic);
+        }
+        if (selectedSubTopic || formData.sub_topic) {
+            payload.append("sub_topic_id", selectedSubTopic || formData.sub_topic);
         }
 
         try {
@@ -205,6 +228,52 @@ export function ModelTestCreateForm() {
                         )}
                     />
                     {errors.end_time && <p className="text-red-500">{errors.end_time.message}</p>}
+                </div>
+
+                {/* Pass Mark */}
+                <div className="space-y-1">
+                    <Label htmlFor="pass_mark" className="text-md font-bold">Pass Mark</Label>
+                    <Controller
+                        name="pass_mark"
+                        control={control}
+                        rules={{ required: "Pass mark is required", min: 1 }}
+                        render={({ field }) => (
+                            <Input
+                                type="number"
+                                id="pass_mark"
+                                {...field}
+                                onChange={(e) => {
+                                    field.onChange(e.target.value);
+                                    dispatch(updateField({ field: 'pass_mark', value: e.target.value }));
+                                }}
+                                className="w-full p-2 border border-gray-300 bg-inherit rounded"
+                            />
+                        )}
+                    />
+                    {errors.pass_mark && <p className="text-red-500">{errors.pass_mark.message}</p>}
+                </div>
+
+                {/* Full Mark */}
+                <div className="space-y-1">
+                    <Label htmlFor="full_mark" className="text-md font-bold">Full Mark</Label>
+                    <Controller
+                        name="full_mark"
+                        control={control}
+                        rules={{ required: "Full mark is required", min: 1 }}
+                        render={({ field }) => (
+                            <Input
+                                type="number"
+                                id="full_mark"
+                                {...field}
+                                onChange={(e) => {
+                                    field.onChange(e.target.value);
+                                    dispatch(updateField({ field: 'full_mark', value: e.target.value }));
+                                }}
+                                className="w-full p-2 border border-gray-300 bg-inherit rounded"
+                            />
+                        )}
+                    />
+                    {errors.full_mark && <p className="text-red-500">{errors.full_mark.message}</p>}
                 </div>
 
                 {/* is active */}

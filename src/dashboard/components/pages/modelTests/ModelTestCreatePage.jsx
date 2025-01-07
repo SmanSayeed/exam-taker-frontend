@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import { ModelTestCreateForm } from "../../organism/modelTests/ModelTestCreateForm";
+import { MTCreateForm } from "../../organism/modelTests/MTCreateForm";
 import UserNav from "../../organism/UserNav";
 import { Layout } from "../../templates/Layout";
 
@@ -24,7 +24,7 @@ const ModelTestCreatePage = () => {
                                 <p>Enter proper information to create a Model Test</p>
                             </div>
 
-                            <ModelTestCreateForm />
+                            <MTCreateForm />
                         </Card>
                     </div>
                 </div>
