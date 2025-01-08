@@ -1,4 +1,5 @@
 import { ImageUploader } from "@/components/atoms/ImageUploader";
+import { AutoSearchSelect } from "@/components/autosearch-select";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,9 @@ import {
 } from "@/components/ui/select";
 import { useCreatePackageMutation } from "@/features/packages/packageApi";
 import { updatePkgField } from "@/features/packages/packageFormSlice";
+import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
@@ -68,7 +71,12 @@ export function PackageCreateForm() {
         key: "pkgExamSubType",
         defaultValue: "",
     });
+    const [selectedAdditioanlPkgCat, setSelectedAdditioanlPkgCat] = useLocalStorage({
+        key: "additionalPkgCat",
+        defaultValue: "",
+    });
 
+    const { data: additionalPkgCats, isLoading: isAdiPkgLoading } = useGetQuestionsCategoryQuery("additional-package-categories");
     const [createPackage, { isLoading }] = useCreatePackageMutation();
 
     const handleCreate = async (formData) => {
@@ -79,7 +87,7 @@ export function PackageCreateForm() {
         formPayload.append("duration_days", formData.duration_days);
         formPayload.append("price", formData.price);
 
-        if (formData.img[0]) {
+        if (formData.img?.[0]) {
             formPayload.append("img", formData.img[0]);
         }
 
@@ -99,6 +107,10 @@ export function PackageCreateForm() {
             formPayload.append("exam_sub_type_id", selectedExamSubType || formData.pkgExamSubType);
         }
 
+        if (selectedAdditioanlPkgCat || formData.additionalPkgCat) {
+            formPayload.append("additional_package_category_id", selectedAdditioanlPkgCat || formData.additionalPkgCat);
+        }
+
         try {
             const response = await createPackage(formPayload).unwrap();
             toast.success(response?.message);
@@ -109,7 +121,7 @@ export function PackageCreateForm() {
 
     return (
         <form onSubmit={handleSubmit(handleCreate)} id="package-form">
-            <div className="space-y-4 my-4">
+            <div className="space-y-6 my-4">
                 {/* Name */}
                 <div className="space-y-1">
                     <Label htmlFor="name" className="text-md font-semibold">
@@ -262,6 +274,25 @@ export function PackageCreateForm() {
                     setSelectedSection={setSelectedSection}
                     setSelectedExamType={setSelectedExamType}
                     setSelectedExamSubType={setSelectedExamSubType}
+                />
+
+                {/* Select Additioanl Package Category */}
+                <AutoSearchSelect
+                    label="Select Additioanl Package Category"
+                    name="additionalPkgCat"
+                    control={control}
+                    options={
+                        additionalPkgCats?.data && additionalPkgCats?.data.map((item) => ({
+                            id: item.id.toString(),
+                            title: getPlainTextFromHtml(item.name),
+                        })) || []
+                    }
+                    placeholder="Select Additioanl Package Category"
+                    onChange={(addiPkgCatId) => {
+                        setSelectedAdditioanlPkgCat(addiPkgCatId);
+                    }}
+                    rules={{ required: "Package selection is required" }}
+                    showRemoveButton={false}
                 />
 
                 {/* Is Active */}

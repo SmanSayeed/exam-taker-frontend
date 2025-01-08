@@ -9,6 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import { toast } from "sonner";
 
+import { AutoSearchSelectForEdit } from "@/components/autosearch-select-edit";
 import {
     Select,
     SelectContent,
@@ -16,7 +17,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useGetQuestionsCategoryQuery } from "@/features/questions/questionsCategoryApi";
 import { setSelectedExamSubType, setSelectedExamType, setSelectedSection } from "@/features/questions/selectedCategoriesSlice";
+import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectCatForPkgEdit } from "./SelectCatForPkgEdit";
 
@@ -48,7 +51,8 @@ export const PackageEditForm = ({ singlePackage }) => {
             img: singlePackage?.img || "",
             pkgSection: initialCategory.section_id || "",
             pkgExamType: initialCategory.exam_type_id || "",
-            pkgExamSubType: initialCategory.exam_sub_type_id || ""
+            pkgExamSubType: initialCategory.exam_sub_type_id || "",
+            additionalPkgCat: initialCategory.additional_package_category_id,
         }
     });
 
@@ -65,7 +69,8 @@ export const PackageEditForm = ({ singlePackage }) => {
                 img: singlePackage?.img || "",
                 pkgSection: initialCategory.section_id || "",
                 pkgExamType: initialCategory.exam_type_id || "",
-                pkgExamSubType: initialCategory.exam_sub_type_id || ""
+                pkgExamSubType: initialCategory.exam_sub_type_id || "",
+                additionalPkgCat: initialCategory.additional_package_category_id,
             });
 
             dispatch(setSelectedSection({ selectedSection: initialCategory.section_id || "" }));
@@ -98,6 +103,7 @@ export const PackageEditForm = ({ singlePackage }) => {
         toolbar: toolbarOptions
     }
 
+    const { data: additionalPkgCats, isLoading: isAdiPkgLoading } = useGetQuestionsCategoryQuery("additional-package-categories");
     const [editPackage, { isLoading }] = useEditPackageMutation();
 
     const handleEditPackage = async (formData) => {
@@ -108,7 +114,7 @@ export const PackageEditForm = ({ singlePackage }) => {
         formPayload.append("duration_days", formData.duration_days);
         formPayload.append("price", formData.price);
 
-        if (formData.img[0]) {
+        if (formData.img?.[0]) {
             formPayload.append("img", formData.img[0]);
         }
 
@@ -126,6 +132,10 @@ export const PackageEditForm = ({ singlePackage }) => {
 
         if (selectedCategories.selectedExamSubType || formData.pkgExamSubType) {
             formPayload.append("exam_sub_type_id", selectedCategories.selectedExamSubType || formData.pkgExamSubType);
+        }
+
+        if (initialCategory?.additional_package_category_id || formData.additionalPkgCat) {
+            formPayload.append("additional_package_category_id", initialCategory?.additional_package_category_id || formData.additionalPkgCat);
         }
 
         try {
@@ -257,6 +267,22 @@ export const PackageEditForm = ({ singlePackage }) => {
                 <SelectCatForPkgEdit
                     setValue={setValue}
                     control={control}
+                />
+
+                {/* Select Additioanl Package Category */}
+                <AutoSearchSelectForEdit
+                    label="Select Additioanl Package Category"
+                    name="additionalPkgCat"
+                    control={control}
+                    options={
+                        additionalPkgCats?.data && additionalPkgCats?.data.map((item) => ({
+                            id: item.id,
+                            title: getPlainTextFromHtml(item.name),
+                        })) || []
+                    }
+                    placeholder="Select Additioanl Package Category"
+                    selectedValue={initialCategory.additional_package_category_id}
+                    showRemoveButton={false}
                 />
 
                 {/* Is Active */}
