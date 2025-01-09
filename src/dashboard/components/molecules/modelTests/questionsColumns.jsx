@@ -6,38 +6,64 @@ import { Check } from "lucide-react";
 export const questionsColumns = [
     {
         id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-                className="translate-y-[2px]"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={value => row.toggleSelected(!!value)}
-                aria-label="Select row"
-                className="translate-y-[2px]"
-            />
-        ),
+        header: ({ table }) => {
+            const rowSelection = table.getState().rowSelection;
+
+            return (
+                <Checkbox
+                    checked={Object.keys(rowSelection).length === table.getRowModel().rows.length}
+                    onCheckedChange={(value) => {
+                        const isChecked = !!value;
+                        const newSelection = {};
+
+                        if (isChecked) {
+                            table.getRowModel().rows.forEach((row) => {
+                                newSelection[row.original.id] = true;
+                            });
+                        }
+
+                        table.options.meta?.setRowSelection(isChecked ? newSelection : {});
+                    }}
+                    aria-label="Select all"
+                />
+            );
+        },
+        cell: ({ row, table }) => {
+            const rowSelection = table.getState().rowSelection;
+
+            return (
+                <Checkbox
+                    checked={!!rowSelection[row.original.id]}
+                    onCheckedChange={(value) => {
+                        const newSelection = { ...rowSelection };
+
+                        if (value) {
+                            newSelection[row.original.id] = true;
+                        } else {
+                            delete newSelection[row.original.id];
+                        }
+
+                        table.options.meta?.setRowSelection(newSelection);
+                    }}
+                    aria-label="Select row"
+                />
+            );
+        },
         enableSorting: false,
-        enableHiding: false
+        enableHiding: false,
     },
     {
         accessorKey: "id",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Serial No" />
         ),
-        cell: ({ row }) => {
-            const index = row.index + 1;
+        cell: ({ row, table }) => {
+            const { pageIndex, pageSize } = table.getState().pagination;
+            const index = row.index + 1 + pageIndex * pageSize;
+
             return (
                 <div className="w-[80px]">{index}</div>
-            )
+            );
         },
         enableSorting: false,
         enableHiding: false

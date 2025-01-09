@@ -12,7 +12,13 @@ import {
 } from "@radix-ui/react-icons";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export function DataTablePagination({ table }) {
+export function DataTablePagination({ table, totalRecords, fromQuestionTable }) {
+    // console.log("table", table.getFilteredRowModel());
+
+    // const rowSelection = table.getState().rowSelection;
+    // const filteredRows = table.getFilteredRowModel().rows;
+    // const filteredSelectedRows = filteredRows.filter(row => rowSelection[row.original.id]);
+
     return (
         <div className="flex items-center justify-between overflow-auto px-2">
             <div className="hidden flex-1 text-sm text-muted-foreground sm:block">
@@ -32,7 +38,7 @@ export function DataTablePagination({ table }) {
                             <SelectValue placeholder={table.getState().pagination.pageSize} />
                         </SelectTrigger>
                         <SelectContent side="top">
-                            {[10, 20, 30, 40, 50].map(pageSize => (
+                            {[10, 20, 30, 40, 50, 100].map(pageSize => (
                                 <SelectItem key={pageSize} value={`${pageSize}`}>
                                     {pageSize}
                                 </SelectItem>

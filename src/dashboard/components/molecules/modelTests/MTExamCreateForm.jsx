@@ -143,6 +143,7 @@ export default function MTExamCreateForm({ modelTestId }) {
                     data={questionsData?.data?.data || []}
                     // onRowSelectionChange={handleSelectedRowIds}
                     columns={questionsColumns}
+                    filters={filters}
                 />
 
                 {/* Action Buttons */}
