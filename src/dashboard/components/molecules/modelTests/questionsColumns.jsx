@@ -49,7 +49,6 @@ export const questionsColumns = [
         ),
         cell: ({ row }) => {
             const mcqOptions = row.original.mcq_questions || [];
-            console.log("mcqoptions", mcqOptions)
 
             return (
                 <div className="flex flex-col space-y-2">
@@ -69,7 +68,7 @@ export const questionsColumns = [
                                     {parseHtmlContent(option.mcq_question_text)}
                                 </span>
                                 {
-                                    option?.is_correct && <Check className="text-green-600" />
+                                    !!option?.is_correct && <Check className="text-green-600" />
                                 }
                             </div>
                         ))}

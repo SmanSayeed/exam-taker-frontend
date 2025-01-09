@@ -194,6 +194,17 @@ export function DataTableForExamCreate({ columns = [], data = [] }) {
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
+    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 15 });
+
+    // const {
+    //     data: questionsData,
+    //     refetch,
+    //     isLoadingQuestions
+    // } = useGetQuestionsQuery({
+    //     page: currentPage,
+    //     perPage: perPage,
+    //     ...filters
+    // });
 
     const table = useReactTable({
         data,
@@ -202,7 +213,8 @@ export function DataTableForExamCreate({ columns = [], data = [] }) {
             sorting,
             columnVisibility,
             rowSelection,
-            columnFilters
+            columnFilters,
+            pagination
         },
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
@@ -214,7 +226,16 @@ export function DataTableForExamCreate({ columns = [], data = [] }) {
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
-        getFacetedUniqueValues: getFacetedUniqueValues()
+        getFacetedUniqueValues: getFacetedUniqueValues(),
+        onPaginationChange: setPagination,
+        // onPaginationChange: (updater) => {
+        //     setPagination(old => {
+        //         const newPaginationValue = updater instanceof Function ? updater(old) : updater
+        //         //do something with the new pagination value
+        //         //...
+        //         return newPaginationValue
+        //     })
+        // },
     });
 
     return (
