@@ -23,19 +23,23 @@ import { useState } from "react";
 import { DataTablePagination } from "../../organism/datatable/DataTablePagination";
 import { DataTableToolbar } from "../../organism/datatable/DataTableToolbar";
 
-export function DataTableForExamCreate({ columns = [], data = [], filters = {} }) {
-    const [rowSelection, setRowSelection] = useState({});
+export function QuestionsDataTable({
+    columns = [],
+    filters = {},
+    pagination,
+    setPagination,
+    rowSelection,
+    setRowSelection
+}) {
+
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
-    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
 
     const {
         data: questionsData,
-        refetch,
-        isLoadingQuestions
     } = useGetQuestionsQuery({
-        page: pagination.pageIndex,
+        page: pagination.pageIndex + 1,
         perPage: pagination.pageSize,
         ...filters
     });
@@ -53,10 +57,10 @@ export function DataTableForExamCreate({ columns = [], data = [], filters = {} }
         pageCount: Math.ceil((questionsData?.data?.total || 1) / pagination.pageSize),
         manualPagination: true,
         onPaginationChange: setPagination,
+        getPaginationRowModel: getPaginationRowModel(),
         enableRowSelection: true,
         meta: {
             setRowSelection: (newSelection) => {
-                console.log("New row selection:", newSelection);
                 setRowSelection(newSelection);
             },
         },
@@ -66,7 +70,6 @@ export function DataTableForExamCreate({ columns = [], data = [], filters = {} }
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
         getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
@@ -137,6 +140,9 @@ export function DataTableForExamCreate({ columns = [], data = [], filters = {} }
             <DataTablePagination
                 table={table}
                 totalRecords={questionsData?.data?.total}
+                lastPage={questionsData?.data?.last_page}
+                fromQuestionTable={true}
+                filters={filters}
             />
         </div>
     )

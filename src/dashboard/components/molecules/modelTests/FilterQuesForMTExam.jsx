@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
 import FilterQuestionsByCategory from "../questionList/FilterQuestionsByCategory";
 
-export default function FilterQuesForMTExam({ onFilter, isLoading }) {
-    const { control, setValue, handleSubmit } = useForm();
+export default function FilterQuesForMTExam({ onFilter, form }) {
+    const { isSubmitting } = form.formState;
 
     const handleSubmitFilter = (formData) => {
         const rawPayload = {
@@ -31,17 +30,17 @@ export default function FilterQuesForMTExam({ onFilter, isLoading }) {
     return (
         <>
             <FilterQuestionsByCategory
-                control={control}
-                setValue={setValue}
+                control={form.control}
+                setValue={form.setValue}
             />
 
             <div className="text-end">
                 <Button
                     type="button"
-                    onClick={handleSubmit(handleSubmitFilter)}
-                    disabled={isLoading}
+                    onClick={form.handleSubmit(handleSubmitFilter)}
+                    disabled={isSubmitting}
                 >
-                    {isLoading ? "Filtering..." : "Filter"}
+                    {isSubmitting ? "Filtering..." : "Filter"}
                 </Button>
             </div>
         </>

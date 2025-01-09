@@ -6,24 +6,28 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
+import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
 import {
     DoubleArrowLeftIcon,
     DoubleArrowRightIcon
 } from "@radix-ui/react-icons";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export function DataTablePagination({ table, totalRecords, fromQuestionTable }) {
-    // console.log("table", table.getFilteredRowModel());
+export function DataTablePagination({ table, totalRecords, lastPage, filters, fromQuestionTable = false }) {
+    const { data: allQuestionsData } = useGetQuestionsQuery({
+        ...filters,
+        perPage: lastPage,
+    });
 
-    // const rowSelection = table.getState().rowSelection;
-    // const filteredRows = table.getFilteredRowModel().rows;
-    // const filteredSelectedRows = filteredRows.filter(row => rowSelection[row.original.id]);
+    const rowSelection = table.getState().rowSelection;
+    const filteredSelectedRows = allQuestionsData?.data?.data && allQuestionsData?.data?.data?.filter(question => rowSelection[question?.id]);
 
     return (
         <div className="flex items-center justify-between overflow-auto px-2">
             <div className="hidden flex-1 text-sm text-muted-foreground sm:block">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
+                {
+                    !fromQuestionTable ? `${table.getFilteredSelectedRowModel().rows.length} of ${" "} ${table.getFilteredRowModel().rows.length} row(s) selected.` : `${filteredSelectedRows?.length} of ${" "} ${totalRecords} row(s) selected.`
+                }
             </div>
             <div className="flex items-center sm:space-x-6 lg:space-x-8">
                 <div className="flex items-center space-x-2">
@@ -56,6 +60,7 @@ export function DataTablePagination({ table, totalRecords, fromQuestionTable }) 
                         className="hidden h-8 w-8 p-0 lg:flex"
                         onClick={() => table.setPageIndex(0)}
                         disabled={!table.getCanPreviousPage()}
+                        type="button"
                     >
                         <span className="sr-only">Go to first page</span>
                         <DoubleArrowLeftIcon className="h-4 w-4" />
@@ -65,6 +70,7 @@ export function DataTablePagination({ table, totalRecords, fromQuestionTable }) 
                         className="h-8 w-8 p-0"
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
+                        type="button"
                     >
                         <span className="sr-only">Go to previous page</span>
                         <ChevronLeft className="h-4 w-4" />
@@ -74,6 +80,7 @@ export function DataTablePagination({ table, totalRecords, fromQuestionTable }) 
                         className="h-8 w-8 p-0"
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
+                        type="button"
                     >
                         <span className="sr-only">Go to next page</span>
                         <ChevronRight className="h-4 w-4" />
@@ -83,6 +90,7 @@ export function DataTablePagination({ table, totalRecords, fromQuestionTable }) 
                         className="hidden h-8 w-8 p-0 lg:flex"
                         onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                         disabled={!table.getCanNextPage()}
+                        type="button"
                     >
                         <span className="sr-only">Go to last page</span>
                         <DoubleArrowRightIcon className="h-4 w-4" />
