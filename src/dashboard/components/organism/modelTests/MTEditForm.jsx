@@ -7,6 +7,7 @@ import { useEditModelTestMutation } from "@/features/modelTests/modelTestApi";
 import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
@@ -16,6 +17,7 @@ import SelectCatForModelTest from "../../molecules/modelTests/SelectCatForModelT
 
 export function MTEditForm({ isFetching, modelTestData, modelTestId }) {
     console.log(modelTestData)
+    const [isActive, setIsActive] = useState(modelTestData?.is_active === 1 ? true : false);
     const [updateModelTest, { isLoading: isUpdating }] = useEditModelTestMutation();
     const { data: allPackages } = useGetPackagesQuery();
 
@@ -76,24 +78,11 @@ export function MTEditForm({ isFetching, modelTestData, modelTestId }) {
             description: formData.description,
             start_time: formData.start_time,
             end_time: formData.end_time,
-            pass_mark: 30,
-            full_mark: 100,
-            is_active: formData.is_active,
-            category: categoriesPayload,
+            pass_mark: formData.pass_mark,
+            full_mark: formData.full_mark,
+            is_active: isActive ? 1 : 0,
+            // category: categoriesPayload,
         };
-
-        // payload example
-        // {
-        //     "package_id": 22,
-        //     "title": "Creative Model Test",
-        //     "description": "This is an updated model test",
-        //     "start_time": "2025-01-10 21:55:00",
-        //     "end_time": "2025-01-12 22:06:00",
-        //     "pass_mark": 30,
-        //     "full_mark": 100,
-        //     "is_active": true,
-        //     "group_id": 4
-        // }
 
         try {
             const response = await updateModelTest({ id: modelTestId, data: payload }).unwrap();
@@ -196,12 +185,56 @@ export function MTEditForm({ isFetching, modelTestData, modelTestId }) {
                     {errors.end_time && <p className="text-red-500">{errors.end_time.message}</p>}
                 </div>
 
+                {/* Pass Mark */}
+                <div className="space-y-1">
+                    <Label htmlFor="pass_mark" className="text-md font-bold">Pass Mark</Label>
+                    <Controller
+                        name="pass_mark"
+                        control={control}
+                        rules={{ required: "Pass mark is required", min: 1 }}
+                        render={({ field }) => (
+                            <Input
+                                type="number"
+                                id="pass_mark"
+                                {...field}
+                                onChange={(e) => {
+                                    field.onChange(e.target.value);
+                                }}
+                                className="w-full p-2 border border-gray-300 bg-inherit rounded"
+                            />
+                        )}
+                    />
+                    {errors.pass_mark && <p className="text-red-500">{errors.pass_mark.message}</p>}
+                </div>
+
+                {/* Full Mark */}
+                <div className="space-y-1">
+                    <Label htmlFor="full_mark" className="text-md font-bold">Full Mark</Label>
+                    <Controller
+                        name="full_mark"
+                        control={control}
+                        rules={{ required: "Full mark is required", min: 1 }}
+                        render={({ field }) => (
+                            <Input
+                                type="number"
+                                id="full_mark"
+                                {...field}
+                                onChange={(e) => {
+                                    field.onChange(e.target.value);
+                                }}
+                                className="w-full p-2 border border-gray-300 bg-inherit rounded"
+                            />
+                        )}
+                    />
+                    {errors.full_mark && <p className="text-red-500">{errors.full_mark.message}</p>}
+                </div>
+
                 {/* Is Active */}
                 <div className="flex items-center">
                     <Checkbox
                         id="status"
-                        checked={modelTestData?.is_active}
-                        onCheckedChange={(checked) => setValue('is_active', checked)}
+                        checked={isActive}
+                        onCheckedChange={(checked) => setIsActive(checked)}
                     />
                     <Label htmlFor="status" className="ml-2">Status</Label>
                 </div>
@@ -219,11 +252,11 @@ export function MTEditForm({ isFetching, modelTestData, modelTestId }) {
                 />
 
                 <Button
-                    // disabled={isUpdating}
+                    disabled={isUpdating}
                     type="submit"
                     className="w-full"
                 >
-                    Update Model Test
+                    {isUpdating ? "Updating..." : "Update Model Test"}
                 </Button>
             </div>
         </form>
