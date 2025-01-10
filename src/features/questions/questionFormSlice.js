@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     title: '',
+    description: '',
     mcq_options: [
         // Example structure for mcq_options
         // { mcq_question_text: '', is_correct: false, description: '' }
@@ -14,7 +15,9 @@ const questionFormSlice = createSlice({
     reducers: {
         updateField: (state, action) => {
             const { field, value, index } = action.payload;
-
+            if(field==="description"){
+                state[field] = value
+            }
             if (field === "title") {
                 state[field] = value;
             }  else if (field.startsWith("mcq_options")) { 

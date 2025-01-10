@@ -71,6 +71,7 @@ export default function QuestionCreateForm() {
 
     const dispatch = useDispatch();
     const { title } = useSelector((state) => state.questionForm);
+    const { description } = useSelector((state) => state.questionForm);
 
     const {
         register,
@@ -82,6 +83,7 @@ export default function QuestionCreateForm() {
     } = useForm({
         defaultValues: {
             title: title,
+            description: description,
             type: selectedQuesType
         },
     });
@@ -180,6 +182,7 @@ export default function QuestionCreateForm() {
 
         const payload = {
             title: formData.title,
+            description: formData.description,
             type: selectedQuesType || formData.type,
             mark: formData.mark,
             is_paid: isPaid,
@@ -197,6 +200,7 @@ export default function QuestionCreateForm() {
             toast.success(response?.message);
             reset();
             setValue("title", "");
+            setValue("description", "");
             setTags([]);
             setImage(null);
             setImagePreview("");
@@ -233,6 +237,23 @@ export default function QuestionCreateForm() {
                             }}
                         />
                     </div>
+
+                    {
+                        selectedQuesType==="normal" && (
+                            <div className="space-y-1">
+                                <CInput
+                            name="description"
+                            label="description"
+                            control={control}
+                            // rules={{ required: "Title is required" }}
+                            errors={errors}
+                            onChange={(e) => {
+                                dispatch(updateField({ field: 'description', value: e.target.value }));
+                            }}
+                        />
+                            </div>
+                        )
+                    }
 
                     {/* Image Upload */}
                     {/* Image Upload */}

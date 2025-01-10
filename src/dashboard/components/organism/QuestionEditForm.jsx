@@ -227,6 +227,19 @@ export default function QuestionEditForm() {
                         errors={errors}
                     />
                 </div>
+                {
+                    type==="normal" && (
+                        <div className="space-y-1">
+                        <CInput
+                            name="description"
+                            label="description"
+                            control={control}
+                            // rules={{ required: "Title is required" }}
+                            errors={errors}
+                        />
+                    </div>
+                    )
+                }
 
                 {/* mcq question */}
                 {type === "mcq" && (
