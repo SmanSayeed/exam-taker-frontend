@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCreateMTExamMutation } from "@/features/modelTests/modelTestApi";
 import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +22,12 @@ const formSchema = z.object({
         message: "Exam title is required",
     }),
     description: z.string().optional(),
+    exam_type: z.string().min(1, {
+        message: "Exam type is required",
+    }),
+    time_limit: z.string().min(1, {
+        message: "Time limit is required",
+    }),
 });
 
 export default function MTExamCreateForm({ modelTestId }) {
@@ -29,6 +37,7 @@ export default function MTExamCreateForm({ modelTestId }) {
     const [isPaid, setIsPaid] = useState(true);
     const [isOptional, setIsOptional] = useState(true);
     const [isNegativeMarking, setIsNegativeMarking] = useState(true);
+    const [examType, setExamType] = useState("mcq");
 
     const [filters, setFilters] = useState({});
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
@@ -40,7 +49,9 @@ export default function MTExamCreateForm({ modelTestId }) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             exam_title: "",
-            description: ""
+            description: "",
+            exam_type: "mcq",
+            time_limit: "60"  // Default time limit of 60 minutes
         },
         mode: "onChange",
     });
@@ -81,7 +92,8 @@ export default function MTExamCreateForm({ modelTestId }) {
             description: data.description,
             created_by: auth.admin_user.id,
             created_by_role: "admin",
-            type: "mcq",
+            type: data.exam_type,
+            time_limit: parseInt(data.time_limit),
             is_optional: isOptional,
             is_active: isActive,
             is_paid: isPaid,
@@ -121,6 +133,36 @@ export default function MTExamCreateForm({ modelTestId }) {
                     isOptional={isOptional} setIsOptional={setIsOptional}
                     isNegativeMarking={isNegativeMarking} setIsNegativeMarking={setIsNegativeMarking}
                 />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Exam Type Select */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Exam Type</label>
+                        <Select 
+                            onValueChange={(value) => form.setValue("exam_type", value)} 
+                            defaultValue="mcq"
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select exam type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="mcq">MCQ</SelectItem>
+                                <SelectItem value="creative">Creative</SelectItem>
+                                <SelectItem value="normal">Normal</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Time Limit Input */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Time Limit (minutes)</label>
+                        <Input
+                            type="number"
+                            {...form.register("time_limit")}
+                            placeholder="Enter time limit in minutes"
+                        />
+                    </div>
+                </div>
 
                 {/* filtering catgeory */}
                 <FilterQuesForMTExam
