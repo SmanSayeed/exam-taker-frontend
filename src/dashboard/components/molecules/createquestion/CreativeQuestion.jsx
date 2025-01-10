@@ -106,7 +106,6 @@ const CreativeQuestion = ({ control, queTypeIndex }) => {
                 <Controller
                     name={`explanation${queTypeIndex}`}
                     control={control}
-                    rules={{ required: "Explanation is required" }}
                     render={({ field }) => (
                         <ReactQuill
                             theme="snow"
