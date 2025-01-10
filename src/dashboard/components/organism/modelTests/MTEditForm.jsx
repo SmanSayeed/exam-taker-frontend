@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useEditModelTestMutation } from "@/features/modelTests/modelTestApi";
 import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
@@ -13,9 +14,9 @@ import { toast } from "sonner";
 import { AutoSearchSelectForEdit } from "../../../../components/autosearch-select-edit";
 import SelectCatForModelTest from "../../molecules/modelTests/SelectCatForModelTest";
 
-export function MTEditForm({ isFetching, modelTestData }) {
+export function MTEditForm({ isFetching, modelTestData, modelTestId }) {
     console.log(modelTestData)
-    // const [updateModelTest, { isLoading: isUpdating }] = useUpdateModelTestMutation();
+    const [updateModelTest, { isLoading: isUpdating }] = useEditModelTestMutation();
     const { data: allPackages } = useGetPackagesQuery();
 
     const {
@@ -70,18 +71,32 @@ export function MTEditForm({ isFetching, modelTestData }) {
         };
 
         const payload = {
-            id: modelTestData?.id,
-            package_id: formData.package,
+            package_id: formData.package.id,
             title: formData.title,
             description: formData.description,
             start_time: formData.start_time,
             end_time: formData.end_time,
+            pass_mark: 30,
+            full_mark: 100,
             is_active: formData.is_active,
             category: categoriesPayload,
         };
 
+        // payload example
+        // {
+        //     "package_id": 22,
+        //     "title": "Creative Model Test",
+        //     "description": "This is an updated model test",
+        //     "start_time": "2025-01-10 21:55:00",
+        //     "end_time": "2025-01-12 22:06:00",
+        //     "pass_mark": 30,
+        //     "full_mark": 100,
+        //     "is_active": true,
+        //     "group_id": 4
+        // }
+
         try {
-            const response = await updateModelTest(payload).unwrap();
+            const response = await updateModelTest({ id: modelTestId, data: payload }).unwrap();
             toast.success(response.message);
         } catch (error) {
             console.error(error);

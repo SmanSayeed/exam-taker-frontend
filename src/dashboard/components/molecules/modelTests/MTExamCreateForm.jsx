@@ -40,7 +40,7 @@ export default function MTExamCreateForm({ modelTestId }) {
     const [examType, setExamType] = useState("mcq");
 
     const [filters, setFilters] = useState({});
-    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
+    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 100 });
     const [rowSelection, setRowSelection] = useState({});
 
     const selectedRowIds = Object.keys(rowSelection);
@@ -50,7 +50,8 @@ export default function MTExamCreateForm({ modelTestId }) {
         defaultValues: {
             exam_title: "",
             description: "",
-            exam_type: "mcq",
+            exam_type: examType,
+            // exam_type: "mcq",
             time_limit: "60"  // Default time limit of 60 minutes
         },
         mode: "onChange",
@@ -92,7 +93,8 @@ export default function MTExamCreateForm({ modelTestId }) {
             description: data.description,
             created_by: auth.admin_user.id,
             created_by_role: "admin",
-            type: data.exam_type,
+            type: examType,
+            // type: data.exam_type,
             time_limit: parseInt(data.time_limit),
             is_optional: isOptional,
             is_active: isActive,
@@ -138,8 +140,11 @@ export default function MTExamCreateForm({ modelTestId }) {
                     {/* Exam Type Select */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Exam Type</label>
-                        <Select 
-                            onValueChange={(value) => form.setValue("exam_type", value)} 
+                        <Select
+                            onValueChange={(value) => {
+                                form.setValue("exam_type", value);
+                                setExamType(value);
+                            }}
                             defaultValue="mcq"
                         >
                             <SelectTrigger>

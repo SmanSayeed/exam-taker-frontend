@@ -31,6 +31,7 @@ const MTEditPage = () => {
                             <MTEditForm
                                 modelTestData={modelTestData?.data}
                                 isFetching={isFetching}
+                                modelTestId={modelTestId}
                             />
                         </Card>
                     </div>
