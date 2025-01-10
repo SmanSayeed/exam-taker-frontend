@@ -304,9 +304,9 @@ export default function QuestionCreateForm() {
                                         <SelectValue placeholder="Type" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {/* <SelectItem value="normal">Normal</SelectItem> */}
+                                        <SelectItem value="normal">Normal</SelectItem>
                                         <SelectItem value="mcq">MCQ</SelectItem>
-                                        {/* <SelectItem value="creative">Creative</SelectItem> */}
+                                        <SelectItem value="creative">Creative</SelectItem>
                                     </SelectContent>
                                 </Select>
                             )}

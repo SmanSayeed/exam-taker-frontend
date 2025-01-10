@@ -6,7 +6,7 @@ import { QueCardActions } from "./QueCardActions";
 import TagsTitle from "./TagsTitle";
 
 export default function QuestionCard({ data: questionData, refetch }) {
-    const { id, title, mcq_questions, tags, images } = questionData || {};
+    const { id, title, mcq_questions,creative_questions, tags, images } = questionData || {};
 
     const tagIds = tags ? tags.split(",").map(tagId => parseInt(tagId, 10)) : [];
 
@@ -57,6 +57,11 @@ export default function QuestionCard({ data: questionData, refetch }) {
                                 )
                             }
                             <p>{parseHtmlContent(option.mcq_question_text)}</p>
+                        </li>
+                    ))}
+                     {creative_questions?.map((option, index) => (
+                        <li key={option.id} className="flex items-center gap-3 border rounded-sm p-2">
+                            <p>{parseHtmlContent(option.creative_question_text)}</p>
                         </li>
                     ))}
                 </ul>
