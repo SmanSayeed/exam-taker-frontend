@@ -209,32 +209,31 @@ export function MTCreateForm() {
 
                 {/* end time */}
                 <div className="inline-block space-y-1">
-    <Label htmlFor="end_time" className="text-md font-bold">
-        End Time
-    </Label>
-    <div className="relative">
-        <Controller
-            name="end_time"
-            control={control}
-            rules={{ required: "End time is required" }}
-            render={({ field }) => (
-                <Input
-                    type="datetime-local"
-                    id="end_time"
-                    {...field}
-                    onChange={(e) => {
-                        field.onChange(e.target.value);
-                        dispatch(updateField({ field: 'end_time', value: e.target.value }));
-                    }}
-                    className="p-2 border border-gray-300 bg-inherit rounded pr-10"
-                />
-            )}
-        />
-      
-    </div>
-    {errors.end_time && <p className="text-red-500">{errors.end_time.message}</p>}
-</div>
+                    <Label htmlFor="end_time" className="text-md font-bold">
+                        End Time
+                    </Label>
+                    <div className="relative">
+                        <Controller
+                            name="end_time"
+                            control={control}
+                            rules={{ required: "End time is required" }}
+                            render={({ field }) => (
+                                <Input
+                                    type="datetime-local"
+                                    id="end_time"
+                                    {...field}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value);
+                                        dispatch(updateField({ field: 'end_time', value: e.target.value }));
+                                    }}
+                                    className="p-2 border border-gray-300 bg-inherit rounded pr-10"
+                                />
+                            )}
+                        />
 
+                    </div>
+                    {errors.end_time && <p className="text-red-500">{errors.end_time.message}</p>}
+                </div>
 
                 {/* Pass Mark */}
                 <div className="space-y-1">
