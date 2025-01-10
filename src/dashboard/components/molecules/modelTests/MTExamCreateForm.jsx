@@ -4,15 +4,16 @@ import { useCreateMTExamMutation } from "@/features/modelTests/modelTestApi";
 import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import * as z from "zod";
-import { DataTableForExamCreate } from "./DataTableForExamCreate";
+import { TableSkeleton } from "../../atoms/TableSkeleton";
 import FilterQuesForMTExam from "./FilterQuesForMTExam";
 import MTExamDetailsForm from "./MTExamDetailsForm";
 import { questionsColumns } from "./questionsColumns";
+import { QuestionsDataTable } from "./QuestionsDataTable";
 
 const formSchema = z.object({
     exam_title: z.string().min(1, {
@@ -22,21 +23,18 @@ const formSchema = z.object({
 });
 
 export default function MTExamCreateForm({ modelTestId }) {
+    const auth = useSelector(state => state.auth);
+
     const [isActive, setIsActive] = useState(true);
     const [isPaid, setIsPaid] = useState(true);
     const [isOptional, setIsOptional] = useState(true);
     const [isNegativeMarking, setIsNegativeMarking] = useState(true);
 
     const [filters, setFilters] = useState({});
-    const [selectedRowIds, setSelectedRowIds] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(10);
+    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
+    const [rowSelection, setRowSelection] = useState({});
 
-    const handleSelectedRowIds = (ids) => {
-        setSelectedRowIds(ids);
-    };
-
-    const auth = useSelector(state => state.auth);
+    const selectedRowIds = Object.keys(rowSelection);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -48,18 +46,12 @@ export default function MTExamCreateForm({ modelTestId }) {
     });
     const { isValid, isSubmitting } = form.formState;
 
-    // Watch for changes in selectedRowIds
-    useEffect(() => {
-        console.log("Selected IDs in Form:", selectedRowIds);
-    }, [selectedRowIds]);
-
     const {
-        data: questionsData,
         refetch,
-        isLoadingQuestions
+        isLoading: isLoadingQuestions
     } = useGetQuestionsQuery({
-        page: currentPage,
-        perPage: perPage,
+        page: pagination.pageIndex,
+        perPage: pagination.pageSize,
         ...filters
     });
 
@@ -68,8 +60,8 @@ export default function MTExamCreateForm({ modelTestId }) {
 
         try {
             refetch({
-                page: currentPage,
-                perPage: perPage,
+                page: pagination.pageIndex + 1,
+                perPage: pagination.pageSize,
                 ...payload,
             });
         } catch (err) {
@@ -107,10 +99,9 @@ export default function MTExamCreateForm({ modelTestId }) {
             sub_topic_categories: filters.sub_topic_id || []
         };
 
-        console.log("Submitting exam data:", payload);
-
         try {
             const response = await createMTExam({ id: modelTestId, data: payload }).unwrap();
+            console.log("response", response)
             toast.success(response?.message || "Exam created successfully!");
         } catch (error) {
             toast.error(
@@ -135,21 +126,25 @@ export default function MTExamCreateForm({ modelTestId }) {
                 <FilterQuesForMTExam
                     form={form}
                     onFilter={handleFilterQuestions}
-                    isLoading={isLoadingQuestions}
                 />
 
                 {/* question list table */}
-                <DataTableForExamCreate
-                    data={questionsData?.data?.data}
-                    currentPage={currentPage}
-                    perPage={perPage}
-                    setCurrentPage={setCurrentPage}
-                    setPerPage={setPerPage}
-                    columns={questionsColumns}
-                    onSelectRowIds={handleSelectedRowIds}
-                    refetch={refetch}
-                    totalRecords={questionsData?.data?.total}
-                />
+                {
+                    isLoadingQuestions ? (
+                        <div className="mt-6">
+                            <TableSkeleton />
+                        </div>
+                    ) : (
+                        <QuestionsDataTable
+                            columns={questionsColumns}
+                            filters={filters}
+                            pagination={pagination}
+                            setPagination={setPagination}
+                            rowSelection={rowSelection}
+                            setRowSelection={setRowSelection}
+                        />
+                    )
+                }
 
                 {/* Action Buttons */}
                 <div className="flex justify-center space-x-4">

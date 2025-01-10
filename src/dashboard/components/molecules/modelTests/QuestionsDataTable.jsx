@@ -18,65 +18,66 @@ import {
     TableRow
 } from "@/components/ui/table";
 
+import { useGetQuestionsQuery } from "@/features/questions/questionsApi";
 import { useState } from "react";
+import { DataTablePagination } from "../../organism/datatable/DataTablePagination";
 import { DataTableToolbar } from "../../organism/datatable/DataTableToolbar";
-import PaginationForQuesTable from "./PaginationForQuesTable";
 
-export function DataTableForExamCreate({
-    columns,
-    data,
-    currentPage,
-    perPage,
-    onSelectRowIds,
-    setPerPage,
-    setCurrentPage,
-    refetch,
-    totalRecords
+export function QuestionsDataTable({
+    columns = [],
+    filters = {},
+    pagination,
+    setPagination,
+    rowSelection,
+    setRowSelection
 }) {
 
-    const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState({});
     const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
 
-    console.log("ROW SELECTION", rowSelection)
+    const {
+        data: questionsData,
+    } = useGetQuestionsQuery({
+        page: pagination.pageIndex + 1,
+        perPage: pagination.pageSize,
+        ...filters
+    });
 
     const table = useReactTable({
-        data: data || [],
-        columns: columns || [],
+        data: questionsData?.data?.data || [],
+        columns,
         state: {
             sorting,
             columnVisibility,
             rowSelection,
-            columnFilters
+            columnFilters,
+            pagination
         },
+        pageCount: Math.ceil((questionsData?.data?.total || 1) / pagination.pageSize),
+        manualPagination: true,
+        onPaginationChange: setPagination,
+        getPaginationRowModel: getPaginationRowModel(),
         enableRowSelection: true,
-        onRowSelectionChange: (newSelection) => {
-            setRowSelection(newSelection);
-            console.log("new selection", newSelection)
-            const selectedRows = table.getSelectedRowModel().rows;
-            const selectedIds = selectedRows.map((row) => row.original.id);
-
-            onSelectRowIds(selectedIds);
+        meta: {
+            setRowSelection: (newSelection) => {
+                setRowSelection(newSelection);
+            },
         },
-        // onRowSelectionChange: setRowSelection,
+        getCoreRowModel: getCoreRowModel(),
+        onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
-        getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
-        getFacetedUniqueValues: getFacetedUniqueValues()
+        getFacetedUniqueValues: getFacetedUniqueValues(),
     });
 
     return (
-        <div className="space-y-4 py-4">
-            <DataTableToolbar
-                table={table}
-            />
-
+        <div className="space-y-4">
+            <DataTableToolbar table={table} />
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -136,27 +137,12 @@ export function DataTableForExamCreate({
                 </Table>
             </div>
 
-            <PaginationForQuesTable
+            <DataTablePagination
                 table={table}
-                data={data}
-                currentPage={currentPage}
-                perPage={perPage}
-                refetch={refetch}
-                onPageChange={(newPage) => {
-                    setCurrentPage(newPage);
-                    refetch({
-                        page: newPage,
-                        perPage: perPage
-                    });
-                }}
-                onPerPageChange={(newPageSize) => {
-                    setPerPage(newPageSize);
-                    refetch({
-                        page: currentPage,
-                        perPage: newPageSize,
-                    });
-                }}
-                totalRecords={totalRecords}
+                totalRecords={questionsData?.data?.total}
+                lastPage={questionsData?.data?.last_page}
+                fromQuestionTable={true}
+                filters={filters}
             />
         </div>
     )
