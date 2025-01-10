@@ -28,7 +28,7 @@ export function ApproveSubscription({ row }) {
     const handleApprove = async () => {
         const payload = {
             student_id: row.original.student_id,
-            package_id: row.original.package_id,
+            package_id: row.original.package.id,
             is_active: true,
         };
 
