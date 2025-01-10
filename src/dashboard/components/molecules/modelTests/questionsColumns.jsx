@@ -103,4 +103,20 @@ export const questionsColumns = [
             )
         }
     },
+    {
+        accessorKey: "Type",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Type" />
+        ),
+        cell: ({ row }) => {
+            console.log("row-------",row);
+            return (
+                <div className="flex flex-col space-y-2">
+                    <span className="font-medium">
+                        {row.getValue("type")}
+                    </span>
+                </div>
+            )
+        }
+    },
 ]
