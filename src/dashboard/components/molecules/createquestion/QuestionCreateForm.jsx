@@ -143,7 +143,6 @@ export default function QuestionCreateForm() {
     const [createQuestion, { isLoading }] = useCreateQuestionMutation();
 
     const handleCreate = async (formData) => {
-        console.log("form data - ", formData);
         const mcqOptions = options.map((optionIndex) => {
             const optionText = formData[`mcq_question_text${optionIndex}`];
             const explanation = formData[`explanation${optionIndex}`] || null;
@@ -239,18 +238,18 @@ export default function QuestionCreateForm() {
                     </div>
 
                     {
-                        selectedQuesType==="normal" && (
+                        selectedQuesType === "normal" && (
                             <div className="space-y-1">
                                 <CInput
-                            name="description"
-                            label="description"
-                            control={control}
-                            // rules={{ required: "Title is required" }}
-                            errors={errors}
-                            onChange={(e) => {
-                                dispatch(updateField({ field: 'description', value: e.target.value }));
-                            }}
-                        />
+                                    name="description"
+                                    label="description"
+                                    control={control}
+                                    // rules={{ required: "Title is required" }}
+                                    errors={errors}
+                                    onChange={(e) => {
+                                        dispatch(updateField({ field: 'description', value: e.target.value }));
+                                    }}
+                                />
                             </div>
                         )
                     }

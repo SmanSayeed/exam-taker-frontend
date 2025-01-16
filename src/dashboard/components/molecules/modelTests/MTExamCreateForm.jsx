@@ -40,7 +40,7 @@ export default function MTExamCreateForm({ modelTestId }) {
     const [examType, setExamType] = useState("mcq");
 
     const [filters, setFilters] = useState({});
-    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 100 });
+    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
     const [rowSelection, setRowSelection] = useState({});
 
     const selectedRowIds = Object.keys(rowSelection);
