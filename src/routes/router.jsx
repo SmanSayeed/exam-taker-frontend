@@ -43,6 +43,8 @@ import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
 import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
 import PaymentListPage from "@/dashboard/components/pages/subscriptions/PaymentListPage";
 import QuotaSubscriptionsPage from "@/dashboard/components/pages/subscriptions/QuotaSubscriptionsPage";
+import MTSubmissionsTable from "@/dashboard/components/pages/modelTests/MTSubmissionsTable";
+import MTSubmissionView from "@/dashboard/components/pages/modelTests/MTSubmissionView";
 
 const router = createBrowserRouter([
   {
@@ -174,6 +176,14 @@ const router = createBrowserRouter([
           {
             path: "/admin/model-tests/:modelTestId/exams",
             element: <MTExamListPage />,
+          },
+          {
+            path: "/admin/model-tests/:modelTestId/exams/:examId/submissions",
+            element: <MTSubmissionsTable />,
+          },
+          {
+            path: "/admin/model-tests/:modelTestId/exams/:examId/submissions/:answerId",
+            element: <MTSubmissionView />,
           },
           // pdf management
           {
