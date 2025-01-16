@@ -17,17 +17,14 @@ export const modelTestApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["ModelTests"],
 
-    // Refetch the list of model tests after creation
-    async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-      try {
-        await queryFulfilled;
-
-        // Manually refetch the model tests list
-        dispatch(modelTestApi.util.invalidateTags(["ModelTests"]));
-      } catch (err) {
-        console.log("Error from createModelTest", err);
-      }
-    },
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+          dispatch(modelTestApi.util.invalidateTags(["ModelTests"]));
+        } catch (err) {
+          console.log("Error from createModelTest", err);
+        }
+      },
     }),
     deleteModelTest: builder.mutation({
       query: (id) => ({
@@ -35,7 +32,6 @@ export const modelTestApi = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
-
     editModelTest: builder.mutation({
       query: ({ id, data }) => ({
         url: `/model-tests/${id}`,
@@ -43,7 +39,6 @@ export const modelTestApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    
     changeModelTestStatus: builder.mutation({
       query: ({id, data}) => ({
         url: `/model-tests/${id}/status`,
@@ -51,7 +46,6 @@ export const modelTestApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-
     createMTExam: builder.mutation({
       query: ({id, data}) => ({
         url: `exam/create/${id}`,
@@ -59,12 +53,33 @@ export const modelTestApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-
     getAllMTExams: builder.query({
       query: (id) => `/model-test-exams/${id}`,
     }),
+    // New endpoint for getting submissions
+    getMTSubmissions: builder.query({
+      query: ({ modelTestId, examId }) => `/mt-submissions/${modelTestId}/${examId}`,
+    }),
 
+    getSingleSubmission: builder.query({
+      query: ({ modelTestId, examId, studentId }) => 
+        `/mt-submissions/${modelTestId}/${examId}/${studentId}`,
+      providesTags: ['SingleSubmission']
+    }),
+
+    updateSubmissionReview: builder.mutation({
+      query: ({ modelTestId, examId, studentId, data }) => ({
+        url: `/mt-submissions/${modelTestId}/${examId}/${studentId}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ['Submissions', 'SingleSubmission']
+    }),
   }),
+
+  
+
+  
 });
 
 export const {
@@ -75,5 +90,8 @@ export const {
     useChangeModelTestStatusMutation,
     useCreateMTExamMutation,
     useGetAllMTExamsQuery,
-    useEditModelTestMutation
+    useEditModelTestMutation,
+    useGetMTSubmissionsQuery,
+    useGetSingleSubmissionQuery,
+    useUpdateSubmissionReviewMutation,
 } = modelTestApi;
