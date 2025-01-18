@@ -1,8 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useForm } from "react-hook-form";
 import FilterQuestionsByCategory from "../questionList/FilterQuestionsByCategory";
 
-export default function FilterQuesForMTExam({ onFilter, form }) {
-    const { isSubmitting } = form.formState;
+export default function FilterQuesForMTExam({ onFilter, form, setQuestionType }) {
+    const {
+        handleSubmit,
+        control,
+        setValue,
+        formState: { isSubmitting }
+    } = useForm();
+
+    // const { isSubmitting } = form.formState;
 
     const handleSubmitFilter = (formData) => {
         const rawPayload = {
@@ -15,6 +24,7 @@ export default function FilterQuesForMTExam({ onFilter, form }) {
             lesson_id: formData.lesson || [],
             topic_id: formData.topic || [],
             sub_topic_id: formData.sub_topic || [],
+            type: [formData.type]
         };
 
         // Remove empty values
@@ -28,21 +38,44 @@ export default function FilterQuesForMTExam({ onFilter, form }) {
     };
 
     return (
-        <>
+        <div className="py-6">
+            <h1 className="text-xl font-bold mb-3">Filtering Questions:</h1>
+
+            {/* Question Type Select */}
+            <div className="space-y-2">
+                <label className="text-sm font-medium">Question Type</label>
+                <Select
+                    onValueChange={(value) => {
+                        setValue("type", value);
+                        setQuestionType(value);
+                    }}
+                    defaultValue="mcq"
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select exam type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="mcq">MCQ</SelectItem>
+                        <SelectItem value="creative">Creative</SelectItem>
+                        <SelectItem value="normal">Normal</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
             <FilterQuestionsByCategory
-                control={form.control}
-                setValue={form.setValue}
+                control={control}
+                setValue={setValue}
             />
 
             <div className="text-end">
                 <Button
                     type="button"
-                    onClick={form.handleSubmit(handleSubmitFilter)}
+                    onClick={handleSubmit(handleSubmitFilter)}
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? "Filtering..." : "Filter"}
                 </Button>
             </div>
-        </>
+        </div>
     );
 }
