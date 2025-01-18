@@ -66,7 +66,9 @@ export function MTCreateForm() {
 
     // Synchronize selectedPkg with Redux on mount
     useEffect(() => {
-        const storedPkg = localStorage.getItem('package');
+        let storedPkg = localStorage.getItem('package');
+        storedPkg = JSON.parse(storedPkg);
+        storedPkg = parseInt(storedPkg);
 
         if (storedPkg) {
             dispatch(updateField({ field: 'package', value: storedPkg }));
@@ -127,7 +129,7 @@ export function MTCreateForm() {
                     control={control}
                     options={
                         allPackages?.data.map((pkg) => ({
-                            id: pkg.id.toString(),
+                            id: pkg.id,
                             title: getPlainTextFromHtml(pkg.name),
                         })) || []
                     }

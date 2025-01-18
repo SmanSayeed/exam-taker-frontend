@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 
@@ -39,11 +38,10 @@ export default function MTExamCard({ exam }) {
                         <strong>Negative Marking:</strong> {exam.is_negative_mark_applicable ? "Yes" : "No"}
                     </p>
                 </div>
-                <div className="col-span-2 border-t border-gray-200 mt-4 pt-4 "> 
+                <div className="col-span-2 border-t border-gray-200 mt-4 pt-4 ">
                     <Link className="text-blue-500" to={`/admin/model-tests/${exam.model_test_id}/exams/${exam.id}/submissions`}>
-                    View submissions
+                        View submissions
                     </Link>
-                
                 </div>
             </div>
 

@@ -1,5 +1,10 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -8,15 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 import { useGetMTSubmissionsQuery, useGetSingleModelTestQuery } from "@/features/modelTests/modelTestApi";
+import { Eye } from "lucide-react";
+import { useNavigate, useParams } from 'react-router-dom';
 
 const MTSubmissionsTable = () => {
   const { modelTestId, examId } = useParams();

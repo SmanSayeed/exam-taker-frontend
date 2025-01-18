@@ -34,9 +34,9 @@ const PaymentListPage = () => {
                         isLoading ? (
                             <Loading />
                         ) : (
-                            isSuccess && allPayments?.data && (
+                            isSuccess && allPayments?.data?.data && (
                                 <DataTable
-                                    data={allPayments?.data}
+                                    data={allPayments?.data?.data}
                                     columns={paymentColumns}
                                 />
                             )
