@@ -7,7 +7,7 @@ import { useEditModelTestMutation } from "@/features/modelTests/modelTestApi";
 import { useGetPackagesQuery } from "@/features/packages/packageApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { getPlainTextFromHtml } from "@/utils/getPlainTextFromHtml";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
@@ -16,7 +16,7 @@ import { AutoSearchSelectForEdit } from "../../../../components/autosearch-selec
 import SelectCatForModelTest from "../../molecules/modelTests/SelectCatForModelTest";
 
 export function MTEditForm({ isFetching, modelTestData, modelTestId }) {
-    console.log(modelTestData)
+    console.log("modelTestData", modelTestData)
     const [isActive, setIsActive] = useState(modelTestData?.is_active === 1 ? true : false);
     const [updateModelTest, { isLoading: isUpdating }] = useEditModelTestMutation();
     const { data: allPackages } = useGetPackagesQuery();
@@ -30,6 +30,12 @@ export function MTEditForm({ isFetching, modelTestData, modelTestId }) {
         defaultValues: modelTestData || {},
         values: modelTestData || {},
     });
+
+    useEffect(() => {
+        if (modelTestData) {
+            setIsActive(modelTestData?.is_active === 1 ? true : false)
+        }
+    }, [modelTestData]);
 
     const [selectedGroup, setSelectedGroup] = useLocalStorage({ key: 'group', defaultValue: modelTestData?.category?.group_id || "" });
     const [selectedLevel, setSelectedLevel] = useLocalStorage({ key: 'level', defaultValue: modelTestData?.category?.level_id || "" });

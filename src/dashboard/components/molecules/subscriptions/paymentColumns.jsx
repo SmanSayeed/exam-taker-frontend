@@ -3,6 +3,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/dashboard/components/organism/datatable/DataTableColumnHeader";
 import { PaymentTableRowActions } from "./PaymentTableRowActions";
 
+// student name, email, package name
+
 export const paymentColumns = [
     {
         id: "select",

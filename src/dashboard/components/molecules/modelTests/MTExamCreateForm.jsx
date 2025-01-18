@@ -21,8 +21,8 @@ const formSchema = z.object({
         message: "Exam title is required",
     }),
     description: z.string().optional(),
-    exam_type: z.string().min(1, {
-        message: "Exam type is required",
+    type: z.string().min(1, {
+        message: "Question type is required",
     }),
     time_limit: z.string().min(1, {
         message: "Time limit is required",
@@ -115,6 +115,7 @@ export default function MTExamCreateForm({ modelTestId }) {
         try {
             const response = await createMTExam({ id: modelTestId, data: payload }).unwrap();
             toast.success(response?.message || "Exam created successfully!");
+            form.reset();
         } catch (error) {
             toast.error(
                 error?.data?.message || "An error occurred while creating the exam"
@@ -147,6 +148,7 @@ export default function MTExamCreateForm({ modelTestId }) {
                 {/* filtering catgeory */}
                 <FilterQuesForMTExam
                     form={form}
+                    questionType={questionType}
                     setQuestionType={setQuestionType}
                     onFilter={handleFilterQuestions}
                 />

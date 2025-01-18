@@ -3,13 +3,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useForm } from "react-hook-form";
 import FilterQuestionsByCategory from "../questionList/FilterQuestionsByCategory";
 
-export default function FilterQuesForMTExam({ onFilter, form, setQuestionType }) {
+export default function FilterQuesForMTExam({ onFilter, form, setQuestionType, questionType }) {
     const {
         handleSubmit,
         control,
         setValue,
         formState: { isSubmitting }
-    } = useForm();
+    } = useForm({
+        defaultValues: { type: questionType }
+    });
 
     // const { isSubmitting } = form.formState;
 
@@ -49,7 +51,7 @@ export default function FilterQuesForMTExam({ onFilter, form, setQuestionType })
                         setValue("type", value);
                         setQuestionType(value);
                     }}
-                    defaultValue="mcq"
+                    defaultValue={questionType}
                 >
                     <SelectTrigger>
                         <SelectValue placeholder="Select exam type" />
