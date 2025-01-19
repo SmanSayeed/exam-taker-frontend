@@ -1,15 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/dashboard/components/organism/datatable/DataTableColumnHeader";
-import { useGetPackagesQuery } from "@/features/packages/packageApi";
-import { useGetStudentsQuery } from "@/features/studentsApi/studentsApi";
+import { useGetAllSubscriptionQuery } from "@/features/subscriptions/subscriptionsApi";
 import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { PaymentTableRowActions } from "./PaymentTableRowActions";
 
 export const usePaymentColumns = () => {
-    const { data: allStudents } = useGetStudentsQuery();
-    const { data: allPackages } = useGetPackagesQuery();
-    console.log("allpackages", allPackages)
+    const { data: subscribedData } = useGetAllSubscriptionQuery();
 
     return [
         {
@@ -47,44 +44,37 @@ export const usePaymentColumns = () => {
         },
         // student name
         {
-            accessorKey: "student_id",
+            accessorKey: "student",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Name" />
             ),
             cell: ({ row }) => {
-                const foundStudent = allStudents?.data?.find(stu => stu?.id === row.original.student_id);
-
                 return (
-                    <div>{foundStudent?.name}</div>
+                    <div>{row.original.student?.name}</div>
                 )
             },
         },
         // student email
         {
-            accessorKey: "student_id",
+            accessorKey: "student",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Email" />
             ),
             cell: ({ row }) => {
-                const foundStudent = allStudents?.data?.find(stu => stu?.id === row.original.student_id);
-
                 return (
-                    <div>{foundStudent?.email}</div>
+                    <div>{row.original.student?.email}</div>
                 )
             },
         },
         // package name
         {
-            accessorKey: "package",
+            accessorKey: "package_details",
             header: ({ column }) => (
                 <DataTableColumnHeader column={column} title="Package" />
             ),
             cell: ({ row }) => {
-                const foundPkg = allPackages?.data?.find(pkg => pkg?.id === row.original.package.id);
-                console.log("foundPkg", foundPkg)
-
                 return (
-                    <div>{parseHtmlContent(foundPkg?.name)}</div>
+                    <div>{parseHtmlContent(row.original.package_details?.name)}</div>
                 )
             },
         },
@@ -120,30 +110,26 @@ export const usePaymentColumns = () => {
             ),
             cell: ({ row }) => <div>{row.getValue("amount")}</div>,
         },
-        // verified status
+        // subscribtion status
         {
-            accessorKey: "verified",
+            accessorKey: "status",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Verified" />
+                <DataTableColumnHeader column={column} title="Status" />
             ),
-            cell: ({ row }) => (
-                <Badge variant={row.getValue("verified") ? "success" : "destructive"}>
-                    {row.getValue("verified") ? "Yes" : "No"}
-                </Badge>
-            ),
-        },
-        // verified time
-        {
-            accessorKey: "verified_at",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Verified At" />
-            ),
-            cell: ({ row }) =>
-                row.getValue("verified_at") ? (
-                    <div>{new Date(row.getValue("verified_at")).toLocaleString()}</div>
-                ) : (
-                    <div>Not Verified</div>
-                ),
+            cell: ({ row }) => {
+                const hasSubscribedToPkg = subscribedData?.data?.some((sub) => {
+                    return (
+                        sub?.student_id === row.original.student?.id &&
+                        sub?.package_id === row.original.package_details?.id
+                    );
+                });
+
+                return (
+                    <Badge variant={hasSubscribedToPkg ? "success" : "destructive"}>
+                        {hasSubscribedToPkg ? "Approved" : "Pending"}
+                    </Badge>
+                )
+            },
         },
         // payment time
         {

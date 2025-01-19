@@ -2,7 +2,6 @@ import { apiSlice } from "../api/apiSlice";
 
 export const subscriptionsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-
         getAllPayments: builder.query({
             query: () => "/manage/student-payments",
         }),
@@ -24,10 +23,9 @@ export const subscriptionsApi = apiSlice.injectEndpoints({
         }),
         
         declineSubscription: builder.mutation({
-            query: ({id, data}) => ({
+            query: (id) => ({
                 url: `manage/subscriptions/${id}`,
-                method: "PUT",
-                body: data,
+                method: "DELETE"
             }),
         }),
 

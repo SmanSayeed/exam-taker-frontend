@@ -9,7 +9,6 @@ import { Layout } from "../../templates/Layout";
 
 const PaymentListPage = () => {
     const { data: allPayments, isLoading, isSuccess } = useGetAllPaymentsQuery();
-    console.log("all payments", allPayments?.data?.data)
     const paymentColumns = usePaymentColumns();
 
     return (
