@@ -2,13 +2,14 @@ import { useGetAllPaymentsQuery } from "@/features/subscriptions/subscriptionsAp
 import Loading from "../../atoms/Loading";
 import PageTitle from "../../atoms/PageTitle";
 import ThemeSwitch from "../../atoms/ThemeSwitch";
-import { paymentColumns } from "../../molecules/subscriptions/paymentColumns";
+import { usePaymentColumns } from "../../molecules/subscriptions/paymentColumns";
 import UserNav from "../../organism/UserNav";
 import { DataTable } from "../../templates/DataTable";
 import { Layout } from "../../templates/Layout";
 
 const PaymentListPage = () => {
     const { data: allPayments, isLoading, isSuccess } = useGetAllPaymentsQuery();
+    const paymentColumns = usePaymentColumns();
 
     return (
         <Layout>

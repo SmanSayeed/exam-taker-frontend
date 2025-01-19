@@ -15,8 +15,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export function ApproveSubscription({ row }) {
-    console.log("payment row data: ", row.original)
-
     const [open, setOpen] = useState(false);
     const handleOpen = (event) => {
         event.preventDefault();
@@ -52,7 +50,7 @@ export function ApproveSubscription({ row }) {
                 <AlertDialogHeader>
                     <AlertDialogTitle>Approve Subscription?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to approve this subscription for Student ID: {row.original.student_id}?
+                        Are you sure you want to approve this subscription for Student: {row.original.student?.name}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

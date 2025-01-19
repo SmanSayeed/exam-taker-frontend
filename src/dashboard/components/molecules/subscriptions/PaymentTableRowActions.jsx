@@ -14,7 +14,6 @@ import {
 } from "@/features/subscriptions/subscriptionsApi";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { ApproveSubscription } from "./ApproveSubscrption";
-import { DeclineSubscription } from "./DeclineSubscrption";
 
 export function PaymentTableRowActions({ row }) {
     const [deletePayment] = useDeletePaymentMutation();
@@ -22,9 +21,11 @@ export function PaymentTableRowActions({ row }) {
     const { data: subscribedData } = useGetAllSubscriptionQuery();
 
     // check student has subscribed to a package
-    const hasSubscribedToPkg = subscribedData?.data?.every((sub) => {
-        sub?.student_id === row.original.student_id &&
-            sub?.package_id === row?.original.package_id
+    const hasSubscribedToPkg = subscribedData?.data?.some((sub) => {
+        return (
+            sub?.student_id === row.original.student?.id &&
+            sub?.package_id === row.original.package_details?.id
+        );
     });
 
     return (
@@ -53,7 +54,7 @@ export function PaymentTableRowActions({ row }) {
                 }
 
                 {/* Decline Subscrption */}
-                {
+                {/* {
                     hasSubscribedToPkg && (
                         <>
                             <DropdownMenuItem className="cursor-pointer">
@@ -63,7 +64,7 @@ export function PaymentTableRowActions({ row }) {
                             <DropdownMenuSeparator />
                         </>
                     )
-                }
+                } */}
 
                 {/* Delete Payment */}
                 <DropdownMenuItem className="cursor-pointer">
