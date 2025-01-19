@@ -1,67 +1,57 @@
 import { apiSlice } from "@/features/api/apiSlice";
-// import { saveStudent, deleteStudent } from "./studentsSlice";
 
 export const studentsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getStudents: builder.query({
-      query: () => "/students",
+      query: (page = 1) => `/students?page=${page}`,
+      providesTags: ['Students'],
+      transformResponse: (response) => {
+        return {
+          data: response.data,
+          message: response.message,
+          status: response.status
+        };
+      },
     }),
+
     getSingleStudent: builder.query({
       query: (id) => `/students/${id}`,
+      providesTags: (result, error, id) => [{ type: 'Students', id }],
     }),
+
     createStudent: builder.mutation({
       query: (data) => ({
         url: "/students",
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ['Students'],
     }),
+
     editStudent: builder.mutation({
       query: ({ id, data }) => ({
         url: `/students/${id}`,
         method: "PUT",
         body: data,
       }),
-    //   async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-    //     try {
-    //       const { data: result } = await queryFulfilled;
-    //       dispatch(
-    //         saveStudent({
-    //           id: result.data.id,
-    //           name: result.data.name,
-    //           email: result.data.email,
-    //           phone: result.data.phone,
-    //           country: result.data.country,
-    //           country_code: result.data.country_code,
-    //           address: result.data.address,
-    //           active_status: result.data.active_status,
-    //         })
-    //       );
-    //     } catch (err) {
-    //       console.error("Error updating student", err);
-    //     }
-    //   },
+      invalidatesTags: ['Students'],
     }),
+
     deleteStudent: builder.mutation({
       query: (id) => ({
         url: `/students/${id}`,
         method: "DELETE",
       }),
-    //   async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-    //     try {
-    //       await queryFulfilled;
-    //       dispatch(deleteStudent(arg.id));
-    //     } catch (err) {
-    //       console.error("Error deleting student", err);
-    //     }
-    //   },
+      invalidatesTags: ['Students'],
     }),
+
     changeStudentStatus: builder.mutation({
       query: ({ id, status }) => ({
         url: `/students/${id}/status`,
         method: "PATCH",
         body: { active_status: status },
       }),
+      invalidatesTags: ['Students'],
     }),
   }),
 });
