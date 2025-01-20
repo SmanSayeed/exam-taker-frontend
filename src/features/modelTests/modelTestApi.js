@@ -76,9 +76,6 @@ export const modelTestApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Submissions', 'SingleSubmission']
     }),
   }),
-
-  
-
   
 });
 

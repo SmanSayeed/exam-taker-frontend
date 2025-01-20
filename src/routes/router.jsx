@@ -36,6 +36,8 @@ import YearPage from "@/dashboard/components/pages/categories/YearPage";
 import CreateExamForModelTestPage from "@/dashboard/components/pages/modelTests/CreateExamForModelTestPage";
 import MTEditPage from "@/dashboard/components/pages/modelTests/MTEditPage";
 import MTExamListPage from "@/dashboard/components/pages/modelTests/MTExamListPage";
+import MTSubmissionViewPage from "@/dashboard/components/pages/modelTests/MTSubmissionViewPage";
+import MTSubmissionsPage from "@/dashboard/components/pages/modelTests/MTSubmissionsPage";
 import MTUnderPkgPage from "@/dashboard/components/pages/packages/MTUnderPkgPage";
 import PackageCreatePage from "@/dashboard/components/pages/packages/PackageCreatePage";
 import PackageEditPage from "@/dashboard/components/pages/packages/PackageEditPage";
@@ -43,8 +45,6 @@ import PackagesPage from "@/dashboard/components/pages/packages/PackagesPage";
 import QuestionEditPage from "@/dashboard/components/pages/questions/QuestionEditPage";
 import PaymentListPage from "@/dashboard/components/pages/subscriptions/PaymentListPage";
 import QuotaSubscriptionsPage from "@/dashboard/components/pages/subscriptions/QuotaSubscriptionsPage";
-import MTSubmissionsTable from "@/dashboard/components/pages/modelTests/MTSubmissionsTable";
-import MTSubmissionView from "@/dashboard/components/pages/modelTests/MTSubmissionView";
 
 const router = createBrowserRouter([
   {
@@ -179,11 +179,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/admin/model-tests/:modelTestId/exams/:examId/submissions",
-            element: <MTSubmissionsTable />,
+            element: <MTSubmissionsPage />,
           },
           {
-            path: "/admin/model-tests/:modelTestId/exams/:examId/submissions/:answerId",
-            element: <MTSubmissionView />,
+            path: "/admin/model-tests/:modelTestId/exams/:examId/submissions/:studentId",
+            element: <MTSubmissionViewPage />,
           },
           // pdf management
           {
