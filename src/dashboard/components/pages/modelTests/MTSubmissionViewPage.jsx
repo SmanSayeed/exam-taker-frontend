@@ -65,6 +65,7 @@ const MTSubmissionViewPage = () => {
               studentAnswer={studentAnswer}
               onReviewClick={() => setIsModalOpen(true)}
               submittedFile={submittedFile}
+              questionType={examination?.type}
             />
           </div>
         </div>

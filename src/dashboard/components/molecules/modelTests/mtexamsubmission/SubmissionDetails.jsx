@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText } from "lucide-react";
+import { CreativeQuesForSubmissionView } from "./CreativeQuesForSubmissionView";
+import { McqQuesForSubmissionView } from "./McqQuesForSubmissionView";
+import { NormalQuesForSubmissionView } from "./NormalQuesForSubmissionView";
 
-export const SubmissionDetails = ({ questions, studentAnswer, onReviewClick, submittedFile }) => {
+export const SubmissionDetails = ({ questions, studentAnswer, onReviewClick, submittedFile, questionType }) => {
     const handleViewPDF = (url) => window.open(url, "_blank");
 
     return (
@@ -31,19 +34,52 @@ export const SubmissionDetails = ({ questions, studentAnswer, onReviewClick, sub
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">Questions & Answer Sheet</h3>
+                <div className="flex flex-col">
+                    <h3 className="text-xl font-semibold">Questions & Answer Sheet</h3>
                     {
                         submittedFile?.file_url && submittedFile?.cdn_url && (
                             <Button
                                 variant="outline"
                                 onClick={() => handleViewPDF(submittedFile?.cdn_url)}
+                                className="my-6"
                             >
                                 <FileText className="w-4 h-4 mr-2" />
                                 View Answer Sheet
                             </Button>
                         )
                     }
+
+                    {/* mcq exam question */}
+                    <div className="text-center">
+                        {questionType === "mcq" &&
+                            questions?.map((question, index) => (
+                                <McqQuesForSubmissionView
+                                    key={question?.id}
+                                    queIndex={index}
+                                    question={question}
+                                />
+                            ))}
+
+                        {/* creative question exam question */}
+                        {questionType === "creative" &&
+                            questions.map((question, index) => (
+                                <CreativeQuesForSubmissionView
+                                    key={question?.id}
+                                    queIndex={index}
+                                    question={question}
+                                />
+                            ))}
+
+                        {/* normal question exam question */}
+                        {questionType === "normal" &&
+                            questions.map((question, index) => (
+                                <NormalQuesForSubmissionView
+                                    key={question?.id}
+                                    queIndex={index}
+                                    question={question}
+                                />
+                            ))}
+                    </div>
                 </div>
             </CardContent>
         </Card>
