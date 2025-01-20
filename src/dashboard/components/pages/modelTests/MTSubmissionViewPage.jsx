@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { useGetSingleModelTestQuery, useGetSingleSubmissionQuery, useUpdateSubmissionReviewMutation } from "@/features/modelTests/modelTestApi";
+import { useGetSingleModelTestQuery, useGetSingleSubmissionQuery } from "@/features/modelTests/modelTestApi";
 import { useGetSingleStudentQuery } from "@/features/studentsApi/studentsApi";
 import { ArrowLeft } from "lucide-react";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "sonner";
 import { ExaminationDetails } from "../../molecules/modelTests/mtexamsubmission/ExaminationDetails";
 import { ReviewModal } from "../../molecules/modelTests/mtexamsubmission/ReviewModal";
 import { StudentDetails } from "../../molecules/modelTests/mtexamsubmission/StudentDetails";
@@ -18,17 +17,6 @@ const MTSubmissionViewPage = () => {
   const { data: modelTest } = useGetSingleModelTestQuery(modelTestId);
   const { data: studentData } = useGetSingleStudentQuery(studentId);
   const { data: submissionData, isLoading } = useGetSingleSubmissionQuery({ modelTestId, examId, studentId });
-  const [updateReview] = useUpdateSubmissionReviewMutation();
-
-  const handleReviewSubmit = async (formData) => {
-    try {
-      await updateReview({ modelTestId, examId, studentId, data: formData }).unwrap();
-      toast.success("Review updated successfully");
-      setIsModalOpen(false);
-    } catch (error) {
-      toast.error("Failed to update review");
-    }
-  };
 
   if (isLoading) {
     return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
@@ -74,8 +62,10 @@ const MTSubmissionViewPage = () => {
       <ReviewModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleReviewSubmit}
         initialData={{ total_marks: studentAnswer?.total_marks, comments: studentAnswer?.comments }}
+        modelTestId={modelTestId}
+        examId={examId}
+        studentId={studentId}
       />
     </div>
   );
