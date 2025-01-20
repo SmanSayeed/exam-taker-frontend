@@ -1,24 +1,25 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, FileText } from "lucide-react";
-import { 
+import {
   useGetSingleModelTestQuery,
   useGetSingleSubmissionQuery,
   useUpdateSubmissionReviewMutation
 } from "@/features/modelTests/modelTestApi";
 import { useGetSingleStudentQuery } from '@/features/studentsApi/studentsApi';
+import { parseHtmlContent } from "@/utils/parseHtmlContent";
+import { ArrowLeft, FileText } from "lucide-react";
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from "sonner";
 import ReviewModal from './ReviewModal';
 
-const MTSubmissionView = () => {
-  const { modelTestId, examId, answerId: studentId } = useParams();
+const MTSubmissionViewPage = () => {
+  const { modelTestId, examId, studentId } = useParams();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -69,8 +70,8 @@ const MTSubmissionView = () => {
     <div className="h-[90vh] overflow-hidden">
       <div className="h-full overflow-y-auto px-6">
         <div className="container mx-auto py-6 max-w-7xl">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="mb-6"
             onClick={() => navigate(-1)}
           >
@@ -88,11 +89,11 @@ const MTSubmissionView = () => {
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   <div>
                     <p className="text-sm text-gray-500">Model Test</p>
-                    <p className="font-medium">{modelTest?.data?.title}</p>
+                    <p className="font-medium">{parseHtmlContent(modelTest?.data?.title)}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Examination</p>
-                    <p className="font-medium">{examination?.title}</p>
+                    <p className="font-medium">{parseHtmlContent(examination?.title)}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Type</p>
@@ -139,21 +140,21 @@ const MTSubmissionView = () => {
               </CardHeader>
               <CardContent>
                 {/* Results Summary */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg mb-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-lg mb-6">
                   <div>
-                    <p className="text-sm text-gray-500">Total Questions</p>
+                    <p className="">Total Questions</p>
                     <p className="font-medium">{questions?.length}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Total Marks</p>
+                    <p className="">Total Marks</p>
                     <p className="font-medium">{studentAnswer?.total_marks || '0'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Start Time</p>
+                    <p className="">Start Time</p>
                     <p className="font-medium">{studentAnswer?.exam_start_time}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Submission Time</p>
+                    <p className="">Submission Time</p>
                     <p className="font-medium">{studentAnswer?.submission_time}</p>
                   </div>
                 </div>
@@ -180,7 +181,7 @@ const MTSubmissionView = () => {
                         <div className="flex items-start gap-2">
                           <span className="text-gray-600 min-w-[24px]">Q{index + 1}.</span>
                           <div className="flex-1">
-                            <p className="font-medium mb-2">{question.description || 'No question description'}</p>
+                            <p className="font-medium mb-2">{question?.title || 'No question description'}</p>
                             <div className="flex justify-between text-sm text-gray-600">
                               <span>Marks: {question.mark}</span>
                             </div>
@@ -204,7 +205,7 @@ const MTSubmissionView = () => {
         </div>
       </div>
 
-      <ReviewModal 
+      <ReviewModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleReviewSubmit}
@@ -217,4 +218,4 @@ const MTSubmissionView = () => {
   );
 };
 
-export default MTSubmissionView;
+export default MTSubmissionViewPage;
