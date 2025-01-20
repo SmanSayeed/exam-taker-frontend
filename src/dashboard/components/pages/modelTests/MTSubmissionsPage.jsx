@@ -14,10 +14,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetMTSubmissionsQuery, useGetSingleModelTestQuery } from "@/features/modelTests/modelTestApi";
+import { parseHtmlContent } from "@/utils/parseHtmlContent";
 import { Eye } from "lucide-react";
 import { useNavigate, useParams } from 'react-router-dom';
 
-const MTSubmissionsTable = () => {
+const MTSubmissionsPage = () => {
   const { modelTestId, examId } = useParams();
   const navigate = useNavigate();
 
@@ -40,10 +41,10 @@ const MTSubmissionsTable = () => {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">
-            {modelTest?.data?.title}
+            {parseHtmlContent(modelTest?.data?.title)}
           </CardTitle>
           <p className="text-gray-600">
-            Examination: {examination?.title}
+            Examination: {parseHtmlContent(examination?.title)}
           </p>
         </CardHeader>
         <CardContent>
@@ -84,26 +85,28 @@ const MTSubmissionsTable = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {submissions.map((submission, index) => (
-                <TableRow key={submission.answer_id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell className="font-medium">
-                    {submission.student.name}
-                  </TableCell>
-                  <TableCell>{submission.student.email}</TableCell>
-                  <TableCell>{submission.submission_details.total_marks}</TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate(`/admin/model-tests/${modelTestId}/exams/${examId}/submissions/${submission.answer_id}`)}
-                    >
-                      <Eye className="w-4 h-4 mr-2" />
-                      View Exam
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {
+                submissions?.map((submission, index) => (
+                  <TableRow key={submission?.answer_id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell className="font-medium">
+                      {submission?.student?.name}
+                    </TableCell>
+                    <TableCell>{submission?.student?.email}</TableCell>
+                    <TableCell>{submission?.submission_details?.total_marks}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => navigate(`/admin/model-tests/${modelTestId}/exams/${examId}/submissions/${submission?.student?.id}`)}
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Exam
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </CardContent>
@@ -112,4 +115,4 @@ const MTSubmissionsTable = () => {
   );
 };
 
-export default MTSubmissionsTable;
+export default MTSubmissionsPage;

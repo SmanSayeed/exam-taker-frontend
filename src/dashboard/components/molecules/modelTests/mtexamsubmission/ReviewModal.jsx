@@ -1,30 +1,32 @@
-import React from 'react';
+import CInput from "@/components/atoms/CInput";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useUpdateSubmissionReviewMutation } from "@/features/modelTests/modelTestApi";
 import { X } from "lucide-react";
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-const ReviewModal = ({ isOpen, onClose, onSubmit, initialData }) => {
-  const { register, handleSubmit, setValue } = useForm({
+export const ReviewModal = ({ isOpen, onClose, initialData, modelTestId, examId, studentId }) => {
+  const { register, handleSubmit, setValue, control } = useForm({
     defaultValues: {
       total_marks: initialData?.total_marks || '',
       comments: initialData?.comments || ''
     }
   });
 
+  const [updateReview] = useUpdateSubmissionReviewMutation();
+
   const handleFormSubmit = async (data) => {
     try {
-      await onSubmit(data);
-      toast.success('Review updated successfully');
+      await updateReview({ modelTestId, examId, studentId, data }).unwrap();
+      toast.success("Review updated successfully");
       onClose();
     } catch (error) {
       toast.error('Failed to update review');
@@ -51,14 +53,13 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, initialData }) => {
               className="mt-1"
             />
           </div>
-          <div>
-            <label className="text-sm font-medium">Comments</label>
-            <Textarea
-              {...register('comments')}
-              className="mt-1"
-              placeholder="Enter your comments here..."
-            />
-          </div>
+
+          <CInput
+            name="comments"
+            label="Comments"
+            control={control}
+          />
+
           <Button type="submit" className="w-full">
             Update Review
           </Button>
@@ -67,5 +68,3 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     </Dialog>
   );
 };
-
-export default ReviewModal;
