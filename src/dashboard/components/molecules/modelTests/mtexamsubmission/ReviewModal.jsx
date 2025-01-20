@@ -1,19 +1,18 @@
-import React from 'react';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-const ReviewModal = ({ isOpen, onClose, onSubmit, initialData }) => {
+export const ReviewModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
       total_marks: initialData?.total_marks || '',
@@ -67,5 +66,3 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     </Dialog>
   );
 };
-
-export default ReviewModal;
